@@ -1,4 +1,4 @@
-<!-- === НАЧАЛО ЧАСТИ 1 из 13 === -->
+<!-- === НАЧАЛО ЧАСТИ 1 из 14 === -->
 <!doctype html>
 <html lang="ru">
   <head>
@@ -55,8 +55,8 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       }
-      /* === КОНЕЦ ЧАСТИ 1 из 13 === */
-      /* === НАЧАЛО ЧАСТИ 2 из 13 === */
+      /* === КОНЕЦ ЧАСТИ 1 из 14 === */
+      /* === НАЧАЛО ЧАСТИ 2 из 14 === */
       body {
         background-color: var(--bg-main);
         color: var(--text-main);
@@ -117,9 +117,8 @@
       .logo span {
         color: var(--primary);
       }
-      /* === КОНЕЦ ЧАСТИ 2 из 13 === */
-      /* === НАЧАЛО ЧАСТИ 3 из 13 === */
-      /* Абсолютно флэтовая монохромная кнопка темы на базе одного SVG-знака */
+      /* === КОНЕЦ ЧАСТИ 2 из 14 === */
+      /* === НАЧАЛО ЧАСТИ 3 из 14 === */
       .theme-toggle-btn {
         background: transparent;
         border: none;
@@ -144,17 +143,30 @@
         color: var(--text-main);
       }
 
+      /* 🌟 ИСПРАВЛЕНО: Адаптивный гибкий контейнер вместо капризного Grid */
+      .tab-dir-flex-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 14px;
+        gap: 12px;
+      }
+
       /* Пропорциональные радиусы вложенности: 11px внешний, 6px внутренний при 5px паддинге */
       .tab-group {
         display: flex;
+        flex-grow: 1;
         background: var(--glass-bg);
         border: 1px solid var(--glass-border);
         border-radius: 11px;
         padding: 5px;
-        margin-bottom: 14px;
         backdrop-filter: blur(5px);
         -webkit-backdrop-filter: blur(5px);
         gap: 4px;
+        transition:
+          width 0.3s ease,
+          flex-grow 0.3s ease;
       }
 
       .tab-btn {
@@ -183,8 +195,8 @@
         box-shadow: 0 0 12px rgba(243, 166, 59, 0.15);
         border-color: rgba(243, 166, 59, 0.25);
       }
-      /* === КОНЕЦ ЧАСТИ 3 из 13 === */
-      /* === НАЧАЛО ЧАСТИ 4 из 13 === */
+      /* === КОНЕЦ ЧАСТИ 3 из 14 === */
+      /* === НАЧАЛО ЧАСТИ 4 из 14 === */
       .form-group {
         margin-bottom: 10px;
       }
@@ -204,7 +216,6 @@
         width: 100%;
       }
 
-      /* Полное удаление стрелок во всех темах и браузерах */
       .input-wrapper input[type="number"]::-webkit-outer-spin-button,
       .input-wrapper input[type="number"]::-webkit-inner-spin-button {
         -webkit-appearance: none !important;
@@ -242,8 +253,8 @@
         border-color: var(--primary);
         box-shadow: 0 0 10px rgba(243, 166, 59, 0.15);
       }
-      /* === КОНЕЦ ЧАСТИ 4 из 13 === */
-      /* === НАЧАЛО ЧАСТИ 5 из 13 === */
+      /* === КОНЕЦ ЧАСТИ 4 из 14 === */
+      /* === НАЧАЛО ЧАСТИ 5 из 14 === */
       .custom-select-container {
         position: relative;
         width: 100%;
@@ -277,7 +288,7 @@
         transform: translateY(-50%);
         width: 14px;
         height: 14px;
-        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzcwN2E4YSI+PHBhdGggZD0iTTcgMTBsNSA1IDUtNUg3eiIvPjwvc3ZnPg==");
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2I0YmNjYiI+PHBhdGggZD0iTTcgMTBsNSA1IDUtNUg3eiIvPjwvc3ZnPg==");
         background-repeat: no-repeat;
         background-size: contain;
         transition: transform 0.2s;
@@ -297,8 +308,8 @@
         transform: translateY(-50%) rotate(180deg);
         background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2YzYTYzYiI+PHBhdGggZD0iTTcgMTBsNSA1IDUtNUg3eiIvPjwvc3ZnPg==");
       }
-      /* === КОНЕЦ ЧАСТИ 5 из 13 === */
-      /* === НАЧАЛО ЧАСТИ 6 из 13 === */
+      /* === КОНЕЦ ЧАСТИ 5 из 14 === */
+      /* === НАЧАЛО ЧАСТИ 6 из 14 === */
       .select-options-dropdown {
         position: absolute;
         top: calc(100% + 5px);
@@ -401,8 +412,8 @@
         color: var(--red);
         border-color: rgba(246, 70, 93, 0.4);
       }
-      /* === КОНЕЦ ЧАСТИ 6 из 13 === */
-      /* === НАЧАЛО ЧАСТИ 7 из 13 === */
+      /* === КОНЕЦ ЧАСТИ 6 из 14 === */
+      /* === НАЧАЛО ЧАСТИ 7 из 14 === */
       .simulator-box {
         background: rgba(243, 166, 59, 0.02);
         border: 1px solid rgba(243, 166, 59, 0.1);
@@ -433,6 +444,15 @@
         margin-top: 4px;
         display: block;
         font-weight: 500;
+      }
+
+      /* Стили динамического фильтра макроэкономических рисков */
+      .filter-warning {
+        background: rgba(246, 70, 93, 0.04) !important;
+        border-color: rgba(246, 70, 93, 0.3) !important;
+      }
+      .filter-warning .simulator-title {
+        color: var(--red) !important;
       }
 
       .risk-box {
@@ -615,8 +635,8 @@
     </style>
   </head>
   <body>
-    <!-- === КОНЕЦ ЧАСТИ 7 из 13 === -->
-    <!-- === НАЧАЛО ЧАСТИ 8 из 13 === -->
+    <!-- === КОНЕЦ ЧАСТИ 7 из 14 === -->
+    <!-- === НАЧАЛО ЧАСТИ 8 из 14 === -->
     <div class="terminal-container">
       <div class="header">
         <div class="logo">BYBIT<span>.pro</span></div>
@@ -636,13 +656,34 @@
 
       <!-- ЛЕВАЯ КОЛОНКА (Интерфейс трейдера) -->
       <div class="left-panel">
-        <div class="tab-group">
-          <button class="tab-btn active" onclick="switchMarket('spot')">
-            Спот (Spot)
-          </button>
-          <button class="tab-btn" onclick="switchMarket('linear')">
-            Фьючерсы (Futures)
-          </button>
+        <!-- 🌟 ПЕРЕМЕЩЕНО: Позиция (Направление) теперь встроена в один ряд с рынками -->
+        <div class="tab-dir-flex-row">
+          <div class="tab-group">
+            <button class="tab-btn active" onclick="switchMarket('spot')">
+              Спот (Spot)
+            </button>
+            <button class="tab-btn" onclick="switchMarket('linear')">
+              Фьючерсы (Futures)
+            </button>
+          </div>
+          <div class="direction-group" id="trade-direction-group">
+            <button
+              type="button"
+              id="dir-long-btn"
+              class="dir-btn active-long"
+              onclick="setDirection('long')"
+            >
+              LONG
+            </button>
+            <button
+              type="button"
+              id="dir-short-btn"
+              class="dir-btn"
+              onclick="setDirection('short')"
+            >
+              SHORT
+            </button>
+          </div>
         </div>
 
         <div class="grid-2">
@@ -713,11 +754,21 @@
           </div>
         </div>
 
-        <div class="simulator-box" id="simulator-price-box">
-          <div class="simulator-title">
-            🤖 Симулятор рыночной цены (Поток Bybit)
-          </div>
-          <div class="form-group" style="margin-bottom: 0">
+        <!-- Единая динамическая зона переключения цены -->
+        <div
+          class="full-width-column"
+          id="dynamic-price-zone"
+          style="margin-bottom: 10px"
+        >
+          <!-- 🌟 МОДЕРНИЗИРОВАНО: Блок симулятора приведен к единому плоскому стилю обычного инпута -->
+          <div
+            class="form-group"
+            id="simulator-price-box"
+            style="margin-bottom: 0"
+          >
+            <label for="sim-market-price"
+              >Симулятор рыночной цены (Поток Bybit)</label
+            >
             <div class="input-wrapper">
               <input
                 type="number"
@@ -725,12 +776,31 @@
                 placeholder="Задайте текущую цену"
                 oninput="updateCalculations()"
               />
-              <span class="input-suffix" id="sim-price-suffix">USDT</span>
+              <span class="input-suffix">USDT</span>
+            </div>
+          </div>
+
+          <!-- Инпут Цена входа для Лимитного ордера -->
+          <div
+            class="form-group hidden"
+            id="entry-price-box"
+            style="margin-bottom: 0"
+          >
+            <label for="entry-price">Цена лимитного входа</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="entry-price"
+                placeholder="Цена лимита ордера"
+                oninput="updateCalculations()"
+              />
+              <span class="input-suffix">USDT</span>
             </div>
           </div>
         </div>
-        <!-- === КОНЕЦ ЧАСТИ 8 из 13 === -->
-        <!-- === НАЧАЛО ЧАСТИ 9 из 13 === -->
+        <!-- === КОНЕЦ ЧАСТИ 8 из 14 === -->
+        <!-- === НАЧАЛО ЧАСТИ 9 из 14 === -->
+        <!-- 🌟 ПОДТЯНУТО В ОДИН РЯД: Пара и заблокированное поле округления лота -->
         <div class="grid-2">
           <div class="form-group">
             <label>Торговая пара</label>
@@ -746,25 +816,21 @@
               </div>
             </div>
           </div>
-          <div class="form-group" id="trade-direction-group">
-            <label>Позиция (Направление)</label>
-            <div class="direction-group">
-              <button
-                type="button"
-                id="dir-long-btn"
-                class="dir-btn active-long"
-                onclick="setDirection('long')"
-              >
-                LONG
-              </button>
-              <button
-                type="button"
-                id="dir-short-btn"
-                class="dir-btn"
-                onclick="setDirection('short')"
-              >
-                SHORT
-              </button>
+          <div class="form-group">
+            <label for="qty-rounding-display">Округление Qty</label>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="qty-rounding-display"
+                value="0.001 (BTC)"
+                disabled
+                style="
+                  cursor: not-allowed;
+                  opacity: 0.85;
+                  font-weight: 600;
+                  color: var(--primary);
+                "
+              />
             </div>
           </div>
         </div>
@@ -809,40 +875,6 @@
           </div>
         </div>
 
-        <div class="grid-2">
-          <!-- 🌟 ИСПРАВЛЕНО: Вместо капризного селектора установлен бронебойный инпут disabled -->
-          <div class="form-group">
-            <label for="qty-rounding-display">Округление Qty</label>
-            <div class="input-wrapper">
-              <input
-                type="text"
-                id="qty-rounding-display"
-                value="0.001 (BTC)"
-                disabled
-                style="
-                  cursor: not-allowed;
-                  opacity: 0.85;
-                  font-weight: 600;
-                  color: var(--primary);
-                "
-              />
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="entry-price">Цена входа</label>
-            <div class="input-wrapper">
-              <input
-                type="number"
-                id="entry-price"
-                placeholder="Рыночная цена"
-                disabled
-                oninput="updateCalculations()"
-              />
-              <span class="input-suffix">USDT</span>
-            </div>
-          </div>
-        </div>
-
         <div class="form-group" style="margin-bottom: 0">
           <label for="sl-step-percent">Шаг стопа (отступ от входа)</label>
           <div class="input-wrapper">
@@ -859,6 +891,88 @@
           <span class="hint-text" style="cursor: pointer" id="sl-rec-box"
             >Рекомендация: <span id="rec-sl-value">1.5</span>%</span
           >
+        </div>
+
+        <!-- Интеллектуальный фильтр рыночных условий и календаря -->
+        <div
+          class="simulator-box"
+          id="trade-filter-box"
+          style="
+            margin-top: 10px;
+            border-color: rgba(246, 70, 93, 0.15);
+            background: rgba(246, 70, 93, 0.01);
+          "
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 6px;
+            "
+          >
+            <div
+              class="simulator-title"
+              id="filter-title"
+              style="color: var(--text-muted); margin-bottom: 0"
+            >
+              🛡️ Интеллектуальный фильтр рынка
+            </div>
+            <button
+              type="button"
+              id="toggle-calendar-btn"
+              onclick="toggleCalendarView()"
+              style="
+                background: transparent;
+                border: none;
+                color: var(--primary);
+                font-size: 10px;
+                font-weight: bold;
+                cursor: pointer;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+              "
+            >
+              🗓️ События
+            </button>
+          </div>
+          <span
+            class="hint-text"
+            id="filter-status"
+            style="color: var(--text-muted); font-weight: 500"
+            >Ожидание ввода параметров сделки...</span
+          >
+
+          <div
+            id="macro-schedule-list"
+            class="hidden"
+            style="
+              margin-top: 10px;
+              border-top: 1px dashed var(--border);
+              padding-top: 8px;
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+              font-size: 10px;
+              color: var(--text-muted);
+              font-family: monospace;
+            "
+          >
+            <div
+              style="
+                color: var(--primary);
+                font-weight: bold;
+                margin-bottom: 2px;
+              "
+            >
+              ⚠️ Критические триггеры волатильности 2026:
+            </div>
+            <div>• 26.08.2026 — Публикация ВВП США (GDP Q2)</div>
+            <div>• 04.09.2026 — Данные по рынку труда США (NFP)</div>
+            <div>• 11.09.2026 — Инфляция в США (CPI)</div>
+            <div>• 16.09.2026 — Решение по процентной ставке ФРС (FOMC)</div>
+            <div>• 25.09.2026 — Квартальная экспирация деривативов Bybit</div>
+          </div>
         </div>
 
         <div class="trade-buttons">
@@ -879,14 +993,14 @@
           </button>
         </div>
       </div>
-      <!-- === КОНЕЦ ЧАСТИ 9 из 13 === -->
-      <!-- === НАЧАЛО ЧАСТИ 10 из 13 === -->
-      <!-- ПРАВАЯ КОЛОНКА -->
+      <!-- === КОНЕЦ ЧАСТИ 9 из 14 === -->
+      <!-- === НАЧАЛО ЧАСТИ 10 из 14 === -->
+      <!-- ПРАВАЯ КОЛОНКА (Информационная панель рисков и логи ордеров) -->
       <div class="right-panel">
         <div class="risk-box">
           <div class="risk-row row-sl">
-            <span class="risk-label">Выход по Stop-Loss (SL)</span
-            ><span
+            <span class="risk-label">Выход по Stop-Loss (SL)</span>
+            <span
               class="risk-value"
               id="calc-sl-price"
               style="color: var(--red)"
@@ -894,25 +1008,34 @@
             >
           </div>
           <div class="risk-row row-tp">
-            <span class="risk-label">Цель Тейк-Профит (TP)</span
-            ><span
+            <span class="risk-label">Цель Тейк-Профит (TP)</span>
+            <span
               class="risk-value"
               id="calc-tp-price"
               style="color: var(--green)"
               >-</span
             >
           </div>
+          <div class="risk-row" id="notional-row">
+            <span class="risk-label">Номинальный объем (Notional Value)</span>
+            <span
+              class="risk-value"
+              id="calc-notional"
+              style="color: var(--primary)"
+              >-</span
+            >
+          </div>
           <div class="risk-row" id="leverage-row">
-            <span class="risk-label">Требуемое плечо (Leverage)</span
-            ><span class="risk-value" id="calc-leverage">-</span>
+            <span class="risk-label">Требуемое плечо (Leverage)</span>
+            <span class="risk-value" id="calc-leverage">-</span>
           </div>
           <div class="risk-row">
-            <span class="risk-label">Количество монет (Qty)</span
-            ><span class="risk-value" id="calc-qty">-</span>
+            <span class="risk-label">Количество монет (Qty)</span>
+            <span class="risk-value" id="calc-qty">-</span>
           </div>
           <div class="risk-row highlight-row">
-            <span class="risk-label">Стоимость для Bybit (Маржа)</span
-            ><span class="risk-value" id="calc-bybit-cost">-</span>
+            <span class="risk-label">Стоимость для Bybit (Маржа)</span>
+            <span class="risk-value" id="calc-bybit-cost">-</span>
           </div>
         </div>
 
@@ -957,16 +1080,22 @@
         ETHUSDT: "0.01_ETH",
         SOLUSDT: "0.1_SOL",
       };
-
-      /* Словарь для мгновенного вывода человеческого текста в наш заблокированный инпут */
       const qtyValuesToText = {
         "0.001_BTC": "0.001 (BTC)",
         "0.001_XAUT": "0.001 (XAUT)",
         "0.01_ETH": "0.01 (ETH)",
         "0.1_SOL": "0.1 (SOL)",
       };
-      /* === КОНЕЦ ЧАСТИ 10 из 13 === */
-      /* === НАЧАЛО ЧАСТИ 11 из 13 === */
+
+      // Округление цен Bybit по тикерам для защиты от ошибок API
+      const tickerPriceDecimals = {
+        BTCUSDT: 1,
+        ETHUSDT: 2,
+        SOLUSDT: 2,
+        XAUTUSDT: 2,
+      };
+      /* === КОНЕЦ ЧАСТИ 10 из 14 === */
+      /* === НАЧАЛО ЧАСТИ 11 из 14 === */
       const tickerToRecommendedSL = {
         spot: { BTCUSDT: 2.5, ETHUSDT: 3.0, SOLUSDT: 4.0, XAUTUSDT: 1.0 },
         linear: { BTCUSDT: 1.0, ETHUSDT: 1.5, SOLUSDT: 2.0, XAUTUSDT: 0.3 },
@@ -1010,7 +1139,8 @@
           );
         });
       }
-
+      /* === КОНЕЦ ЧАСТИ 11 из 14 === */
+      /* === НАЧАЛО ЧАСТИ 12 из 14 === */
       function initCustomSelect(containerId, storageKey, callback) {
         const container = document.getElementById(containerId);
         if (!container) return;
@@ -1037,13 +1167,13 @@
           });
         });
       }
+
       document.addEventListener("click", () => {
         document
           .querySelectorAll(".custom-select-container")
           .forEach((el) => el.classList.remove("open"));
       });
-      /* === КОНЕЦ ЧАСТИ 11 из 13 === */
-      /* === НАЧАЛО ЧАСТИ 12 из 13 === */
+
       function setDirection(direction, isSystem = false) {
         if (!isSystem && currentDirection === direction) return;
         currentDirection = direction;
@@ -1091,7 +1221,8 @@
           recSlValue.innerText =
             tickerToRecommendedSL[marketKey][selectedTicker] || 2.0;
       }
-
+      /* === КОНЕЦ ЧАСТИ 12 из 14 === */
+      /* === НАЧАЛО ЧАСТИ 13 из 14 === */
       function applySLRecommendation() {
         const selectedTicker = selectValues["ticker"];
         const marketKey = currentMarket === "spot" ? "spot" : "linear";
@@ -1107,17 +1238,20 @@
       }
 
       function handleOrderTypeChange(val) {
+        const entryPriceBox = document.getElementById("entry-price-box");
+        if (!entryPriceBox || !simulatorPriceBox) return;
+
         if (val === "market") {
-          entryPriceInput.disabled = true;
+          simulatorPriceBox.classList.remove("hidden");
+          entryPriceBox.classList.add("hidden");
           entryPriceInput.value = "";
-          entryPriceInput.placeholder = "Рыночная цена";
-          if (simulatorPriceBox) simulatorPriceBox.classList.remove("hidden");
           logMessage(`[Инфо]: Включен симулятор рыночного входа.`);
         } else {
-          entryPriceInput.disabled = false;
-          entryPriceInput.placeholder = "Цена лимита";
-          if (simulatorPriceBox) simulatorPriceBox.classList.add("hidden");
-          logMessage(`[Инфо]: Переключено на лимитный вход.`);
+          simulatorPriceBox.classList.add("hidden");
+          entryPriceBox.classList.remove("hidden");
+          logMessage(
+            `[Инфо]: Переключено на лимитный вход. Введите цену вручную.`,
+          );
         }
         updateCalculations();
       }
@@ -1133,23 +1267,15 @@
         updateCalculations();
       }
 
-      /* 👑 РЕШЕНИЕ ПРОБЛЕМЫ НА 100%: Прямое, мгновенное впечатывание текста в инпут disabled. Никаких пустых полей! */
       function handleTickerChange(val) {
         if (slStepPercentInput) slStepPercentInput.value = "";
         selectValues["ticker"] = val;
-
-        // 1. Извлекаем строгое биржевое значение округления (например, 0.01_ETH)
         const targetQtyValue = tickerToQtyValue[val];
-
-        // 2. Пишем новое значение в память калькулятора
         selectValues["qty"] = targetQtyValue;
-
-        // 3. Мгновенно выводим понятный красивый текст в наш заблокированный инпут
         const roundedInput = document.getElementById("qty-rounding-display");
         if (roundedInput) {
           roundedInput.value = qtyValuesToText[targetQtyValue];
         }
-
         logMessage(
           `[Инфо]: Пара изменена на ${tickerNames[currentMarket][val]}. Шаг округления зафиксирован.`,
         );
@@ -1157,8 +1283,8 @@
         updateSLRecommendationText();
         updateCalculations();
       }
-      /* === КОНЕЦ ЧАСТИ 12 из 13 === */
-      // === НАЧАЛО ЧАСТИ 13 из 13 ===
+
+      // 🌟 МОДЕРНИЗИРОВАНО: Корректное скрытие направления без деформации табов
       function switchMarket(market) {
         currentMarket = market;
         const tabs = document.querySelectorAll(".tab-btn");
@@ -1179,15 +1305,20 @@
         }
         if (slStepPercentInput) slStepPercentInput.value = "";
         const levRow = document.getElementById("leverage-row");
+
         if (market === "spot") {
           if (levRow) levRow.classList.add("hidden");
           if (marginModeGroup) marginModeGroup.classList.add("hidden");
+
+          // Полностью скрываем блок LONG/SHORT, чтобы флекс-табы растянулись на 100%
           if (tradeDirectionGroup) tradeDirectionGroup.classList.add("hidden");
           if (orderTypeGroup) orderTypeGroup.classList.add("full-width-column");
           setDirection("long", true);
         } else {
           if (levRow) levRow.classList.remove("hidden");
           if (marginModeGroup) marginModeGroup.classList.remove("hidden");
+
+          // Возвращаем блок LONG/SHORT на законное место справа
           if (tradeDirectionGroup)
             tradeDirectionGroup.classList.remove("hidden");
           if (orderTypeGroup)
@@ -1203,6 +1334,23 @@
         updateCalculations();
       }
 
+      function toggleCalendarView() {
+        const scheduleList = document.getElementById("macro-schedule-list");
+        const toggleBtn = document.getElementById("toggle-calendar-btn");
+        if (!scheduleList || !toggleBtn) return;
+
+        if (scheduleList.classList.contains("hidden")) {
+          scheduleList.classList.remove("hidden");
+          toggleBtn.innerText = "Скрыть";
+          logMessage(
+            "[Инфо]: Развернут список критических макроэкономических дат.",
+          );
+        } else {
+          scheduleList.classList.add("hidden");
+          toggleBtn.innerText = "События";
+        }
+      }
+
       function logMessage(text) {
         const logBox = document.getElementById("terminal-logs");
         if (!logBox) return;
@@ -1215,7 +1363,8 @@
         else logBox.innerHTML += `<br>${stamp} ${text}`;
         logBox.scrollTop = logBox.scrollHeight;
       }
-
+      /* === КОНЕЦ ЧАСТИ 13 из 14 === */
+      /* === НАЧАЛО ЧАСТИ 14 из 14 === */
       function updateCalculations() {
         const balance =
           parseFloat(document.getElementById("current-balance").value) || 0;
@@ -1225,16 +1374,21 @@
           parseFloat(document.getElementById("risk-usdt").value) || 0;
         const rr = parseFloat(selectValues["rr"]) || 1;
         const slPercent = parseFloat(slStepPercentInput.value) || 0;
-        const qtyStep = parseFloat(selectValues["qty"].split("_")) || 0.001;
+
+        const qtyString = selectValues["qty"].split("_");
+        const qtyStep = parseFloat(qtyString) || 0.001;
+
         if (document.getElementById("rec-margin"))
           document.getElementById("rec-margin").innerText = (
             balance / 4
           ).toFixed(2);
+
         let entryPrice =
           selectValues["order-type"] === "market"
             ? parseFloat(simMarketPriceInput.value) ||
               marketPrices[selectValues["ticker"]]
             : parseFloat(entryPriceInput.value) || 0;
+
         if (
           entryPrice <= 0 ||
           slPercent <= 0 ||
@@ -1242,8 +1396,19 @@
           marginLimit <= 0
         ) {
           resetCalculations();
+          const filterBox = document.getElementById("trade-filter-box");
+          if (filterBox) {
+            filterBox.classList.remove("filter-warning");
+            document.getElementById("filter-title").style.color =
+              "var(--text-muted)";
+            document.getElementById("filter-status").innerText =
+              "Ожидание ввода параметров сделки...";
+            document.getElementById("filter-status").style.color =
+              "var(--text-muted)";
+          }
           return;
         }
+
         const slDist = entryPrice * (slPercent / 100);
         let slP, tpP;
         if (currentDirection === "long") {
@@ -1253,43 +1418,115 @@
           slP = entryPrice + slDist;
           tpP = entryPrice - slDist * rr;
         }
+
+        const pDecs = tickerPriceDecimals[selectValues["ticker"]] || 2;
+
         document.getElementById("calc-sl-price").innerText =
-          `${slP.toFixed(2)} USDT (${currentDirection === "long" ? "-" : "+"}${slPercent}%)`;
+          `${slP.toFixed(pDecs)} USDT (${currentDirection === "long" ? "-" : "+"}${slPercent}%)`;
+
+        const potentialProfitUsdt = (riskUsdt * rr).toFixed(2);
         document.getElementById("calc-tp-price").innerText =
-          `${tpP.toFixed(2)} USDT (${currentDirection === "long" ? "+" : "-"}${(slPercent * rr).toFixed(1)}%)`;
+          `${tpP.toFixed(pDecs)} USDT (${currentDirection === "long" ? "+" : "-"}${(slPercent * rr).toFixed(1)}%) | +${potentialProfitUsdt} USDT`;
+
         let qty = riskUsdt / slDist;
-        const decs = Math.max(0, Math.round(Math.log10(1 / qtyStep)));
+
+        const decs = qtyString.includes(".") ? qtyString.split(".").length : 0;
         qty = Math.floor(qty / qtyStep) * qtyStep;
         if (qty <= 0) qty = qtyStep;
-        const totalNotional = qty * entryPrice;
+
+        let totalNotional = qty * entryPrice;
+        document.getElementById("calc-notional").innerText =
+          `${totalNotional.toFixed(2)} USDT`;
+
+        let calculatedLeverage = 1;
+        let finalCost = 0;
+
         if (currentMarket === "spot") {
-          let fCost = totalNotional;
-          if (fCost > marginLimit || fCost > balance) {
-            fCost = Math.min(marginLimit, balance);
-            qty = Math.floor(fCost / entryPrice / qtyStep) * qtyStep;
-            fCost = qty * entryPrice;
+          finalCost = totalNotional;
+          if (finalCost > marginLimit || finalCost > balance) {
+            finalCost = Math.min(marginLimit, balance);
+            qty = Math.floor(finalCost / entryPrice / qtyStep) * qtyStep;
+            finalCost = qty * entryPrice;
+            document.getElementById("calc-notional").innerText =
+              `${finalCost.toFixed(2)} USDT`;
           }
           document.getElementById("calc-qty").innerText =
             `${qty.toFixed(decs)} монеты`;
           document.getElementById("calc-bybit-cost").innerText =
-            `${fCost.toFixed(2)} USDT`;
+            `${finalCost.toFixed(2)} USDT`;
         } else {
-          let fCost = Math.min(marginLimit, balance);
-          let reqLev = totalNotional / fCost;
+          finalCost = Math.min(marginLimit, balance);
+          let reqLev = totalNotional / finalCost;
           if (reqLev < 1) {
             reqLev = 1;
-            fCost = totalNotional;
+            finalCost = totalNotional;
           }
           if (reqLev > 50) {
             reqLev = 50;
-            qty = Math.floor((fCost * reqLev) / entryPrice / qtyStep) * qtyStep;
+            qty =
+              Math.floor((finalCost * reqLev) / entryPrice / qtyStep) * qtyStep;
+            document.getElementById("calc-notional").innerText =
+              `${(qty * entryPrice).toFixed(2)} USDT`;
           }
+          calculatedLeverage = Math.ceil(reqLev);
           document.getElementById("calc-qty").innerText =
-            `${qty.toFixed(decs)} монеты (~${(qty * entryPrice).toFixed(2)} USDT)`;
+            `${qty.toFixed(decs)} монеты`;
           document.getElementById("calc-leverage").innerText =
-            `${Math.ceil(reqLev)} x`;
+            `${calculatedLeverage} x`;
           document.getElementById("calc-bybit-cost").innerText =
-            `${fCost.toFixed(2)} USDT`;
+            `${finalCost.toFixed(2)} USDT`;
+        }
+
+        const filterBox = document.getElementById("trade-filter-box");
+        const filterTitle = document.getElementById("filter-title");
+        const filterStatus = document.getElementById("filter-status");
+
+        if (filterBox && filterStatus && filterTitle) {
+          let warningMessage = "";
+
+          const now = new Date();
+          const currentDay = now.getDay();
+          const currentHour = now.getHours();
+          const currentMonth = now.getMonth() + 1;
+          const currentDate = now.getDate();
+
+          const pad = (n) => String(n).padStart(2, "0");
+          const dateStr = `${pad(currentDate)}.${pad(currentMonth)}`;
+
+          const blacklistedMacroDates2026 = [
+            "26.08", // GDP США
+            "04.09", // Non-Farm Payrolls
+            "11.09", // CPI США
+            "16.09", // FOMC
+            "25.09", // Квартальная экспирация фьючерсов
+          ];
+
+          if (blacklistedMacroDates2026.includes(dateStr)) {
+            warningMessage = `❌ НЕ ТОРГОВАТЬ (Критический день новостей): Сегодня (${dateStr}) публикация важных макроданных США. Книга ордеров Bybit пустеет, велик риск проскальзывания стоп-лосса!`;
+          } else if (currentDay === 6 || currentDay === 0) {
+            warningMessage = `❌ НЕ ТОРГОВАТЬ (Выходные дни): Ликвидность снижена. Высокая вероятность ложных пробоев и ценовых "вертолетов" маркетмейкеров.`;
+          } else if (currentDay === 1 && currentHour < 15) {
+            warningMessage = `⚠️ НЕ РЕКОМЕНДУЕТСЯ (Утро понедельника): Американская сессия еще не открылась, хаотичное распределение объемов.`;
+          } else if (currentDay === 5 && currentHour >= 18) {
+            warningMessage = `⚠️ ВНИМАНИЕ (Вечер пятницы): Крупные фонды фиксируют позиции перед выходными. Опасность непредсказуемых ложных выносов.`;
+          } else if (riskUsdt > balance * 0.05) {
+            warningMessage = `❌ НЕ ТОРГОВАТЬ (Критический риск): Риск сделки (${riskUsdt} USDT) выше безопасных 5% от депо. Серия стопов сольет баланс.`;
+          } else if (currentMarket === "linear" && calculatedLeverage > 25) {
+            warningMessage = `❌ НЕ ТОРГОВАТЬ (Высокое плечо): Расчетное плечо ${calculatedLeverage}x слишком опасно для внутридневных сделок.`;
+          }
+
+          if (warningMessage !== "") {
+            filterBox.classList.add("filter-warning");
+            filterTitle.style.color = "var(--red)";
+            filterStatus.innerText = warningMessage;
+            filterStatus.style.color = "var(--red)";
+          } else {
+            filterBox.classList.remove("filter-warning");
+            filterTitle.style.color = "var(--primary)";
+            filterStatus.innerText =
+              "✅ Рыночное окно оптимально. Торговые объемы в стаканах Bybit стабильны, критические новости отсутствуют.";
+            filterStatus.style.color = "var(--green)";
+          }
         }
       }
 
@@ -1299,6 +1536,7 @@
         document.getElementById("calc-leverage").innerText = "-";
         document.getElementById("calc-bybit-cost").innerText = "-";
         document.getElementById("calc-qty").innerText = "-";
+        document.getElementById("calc-notional").innerText = "-";
       }
 
       function executeTrade(side) {
@@ -1311,7 +1549,7 @@
           return;
         }
         alert(
-          `Параметры Bybit:\nТип ордера: ${selectValues["order-type"].toUpperCase()}\nНаправление: ${side}\nПара: ${tickerNames[currentMarket][selectValues["ticker"]]}\nРежим: ${(currentMarket === "linear" ? selectValues["margin-mode"] : "SPOT").toUpperCase()}\nМаржа: ${document.getElementById("calc-bybit-cost").innerText}\nSL: ${document.getElementById("calc-sl-price").innerText}\nTP: ${document.getElementById("calc-tp-price").innerText}`,
+          `Параметры Bybit:\nТип ордера: ${selectValues["order-type"].toUpperCase()}\nНаправление: ${side}\nПара: ${tickerNames[currentMarket][selectValues["ticker"]]}\nРежим: ${(currentMarket === "linear" ? selectValues["margin-mode"] : "SPOT").toUpperCase()}\nНоминал: ${document.getElementById("calc-notional").innerText}\nМаржа: ${document.getElementById("calc-bybit-cost").innerText}\nSL: ${document.getElementById("calc-sl-price").innerText}\nTP: ${document.getElementById("calc-tp-price").innerText}`,
         );
       }
 
@@ -1333,4 +1571,4 @@
     </script>
   </body>
 </html>
-<!-- === КОНЕЦ ЧАСТИ 13 из 13 === -->
+<!-- === КОНЕЦ ЧАСТИ 14 из 14 === -->
