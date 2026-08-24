@@ -1,0 +1,1336 @@
+<!-- === НАЧАЛО ЧАСТИ 1 из 13 === -->
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bybit Risk Pro Terminal</title>
+    <style>
+      /* Переменные для ТЕМНОЙ ТЕМЫ (по умолчанию) */
+      :root {
+        --bg-main: #0c0e12;
+        --bg-card: #161a1e;
+        --bg-input: #20262d;
+        --text-main: #ffffff;
+        --text-muted: #707a8a;
+        --primary: #f3a63b;
+        --green: #0ecb81;
+        --red: #f6465d;
+        --border: #2b3139;
+        --glass-bg: rgba(255, 255, 255, 0.02);
+        --glass-border: rgba(255, 255, 255, 0.07);
+        --glass-shadow: rgba(0, 0, 0, 0.37);
+        --dropdown-bg: #1a1f26;
+        --dropdown-hover: rgba(243, 166, 59, 0.08);
+        --dropdown-selected: rgba(243, 166, 59, 0.15);
+        --input-disabled: #14181e;
+        --input-disabled-border: #1c222a;
+      }
+
+      /* Переменные для СВЕТЛОЙ ТЕМЫ (Повышенный контраст) */
+      [data-theme="light"] {
+        --bg-main: #f0f2f5;
+        --bg-card: #ffffff;
+        --bg-input: #f8f9fa;
+        --text-main: #11161c;
+        --text-muted: #4e5562;
+        --primary: #df8f1c;
+        --green: #03a66d;
+        --red: #e63946;
+        --border: #eaecef;
+        --glass-bg: rgba(0, 0, 0, 0.01);
+        --glass-border: rgba(0, 0, 0, 0.08);
+        --glass-shadow: rgba(0, 0, 0, 0.06);
+        --dropdown-bg: #ffffff;
+        --dropdown-hover: rgba(223, 143, 28, 0.06);
+        --dropdown-selected: rgba(223, 143, 28, 0.12);
+        --input-disabled: #f1f2f4;
+        --input-disabled-border: #e2e4e8;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      /* === КОНЕЦ ЧАСТИ 1 из 13 === */
+      /* === НАЧАЛО ЧАСТИ 2 из 13 === */
+      body {
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      .terminal-container {
+        width: 100%;
+        max-width: 920px;
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 20px;
+        border: 1px solid var(--border);
+        box-shadow: 0px 15px 35px var(--glass-shadow);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        transition:
+          background-color 0.3s ease,
+          border-color 0.3s ease;
+      }
+
+      .left-panel {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .right-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+      }
+
+      .header {
+        grid-column: span 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 10px;
+        margin-bottom: 5px;
+      }
+
+      .logo {
+        font-weight: bold;
+        font-size: 18px;
+        letter-spacing: 0.5px;
+      }
+      .logo span {
+        color: var(--primary);
+      }
+      /* === КОНЕЦ ЧАСТИ 2 из 13 === */
+      /* === НАЧАЛО ЧАСТИ 3 из 13 === */
+      /* Абсолютно флэтовая монохромная кнопка темы на базе одного SVG-знака */
+      .theme-toggle-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.15s ease;
+        user-select: none;
+      }
+
+      .theme-toggle-btn svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+      }
+
+      .theme-toggle-btn:hover {
+        color: var(--text-main);
+      }
+
+      /* Пропорциональные радиусы вложенности: 11px внешний, 6px внутренний при 5px паддинге */
+      .tab-group {
+        display: flex;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 11px;
+        padding: 5px;
+        margin-bottom: 14px;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        gap: 4px;
+      }
+
+      .tab-btn {
+        flex: 1;
+        background: transparent;
+        border: 1px solid transparent;
+        color: var(--text-muted);
+        padding: 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 13px;
+        transition:
+          all 0.2s ease,
+          border-color 0s;
+      }
+
+      .tab-btn:hover:not(.active) {
+        color: var(--text-main);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .tab-btn.active {
+        background: rgba(243, 166, 59, 0.1);
+        color: var(--primary);
+        box-shadow: 0 0 12px rgba(243, 166, 59, 0.15);
+        border-color: rgba(243, 166, 59, 0.25);
+      }
+      /* === КОНЕЦ ЧАСТИ 3 из 13 === */
+      /* === НАЧАЛО ЧАСТИ 4 из 13 === */
+      .form-group {
+        margin-bottom: 10px;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-bottom: 4px;
+        font-weight: 500;
+      }
+
+      .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+      }
+
+      /* Полное удаление стрелок во всех темах и браузерах */
+      .input-wrapper input[type="number"]::-webkit-outer-spin-button,
+      .input-wrapper input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none !important;
+        margin: 0 !important;
+      }
+      .input-wrapper input[type="number"] {
+        -moz-appearance: textfield !important;
+        appearance: textfield !important;
+      }
+
+      .input-wrapper input {
+        width: 100%;
+        background: var(--bg-input);
+        border: 1px solid var(--border);
+        color: var(--text-main);
+        padding: 9px 50px 9px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        outline: none;
+        transition:
+          opacity 0.2s,
+          background-color 0.2s,
+          border-color 0.2s;
+      }
+
+      .input-wrapper input:disabled {
+        background-color: var(--input-disabled);
+        border-color: var(--input-disabled-border);
+        color: var(--text-muted);
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      .input-wrapper input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 10px rgba(243, 166, 59, 0.15);
+      }
+      /* === КОНЕЦ ЧАСТИ 4 из 13 === */
+      /* === НАЧАЛО ЧАСТИ 5 из 13 === */
+      .custom-select-container {
+        position: relative;
+        width: 100%;
+        user-select: none;
+      }
+
+      .select-trigger {
+        width: 100%;
+        background: var(--bg-input);
+        border: 1px solid var(--border);
+        color: var(--text-main);
+        padding: 9px 35px 9px 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s,
+          background-color 0.2s;
+        position: relative;
+      }
+
+      .select-trigger::after {
+        content: "";
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 14px;
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzcwN2E4YSI+PHBhdGggZD0iTTcgMTBsNSA1IDUtNUg3eiIvPjwvc3ZnPg==");
+        background-repeat: no-repeat;
+        background-size: contain;
+        transition: transform 0.2s;
+      }
+
+      .select-trigger:hover:not(:disabled) {
+        border-color: rgba(243, 166, 59, 0.4);
+        box-shadow: 0 0 8px rgba(243, 166, 59, 0.05);
+      }
+
+      .custom-select-container.open .select-trigger {
+        border-color: var(--primary);
+        box-shadow: 0 0 10px rgba(243, 166, 59, 0.15);
+      }
+
+      .custom-select-container.open .select-trigger::after {
+        transform: translateY(-50%) rotate(180deg);
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2YzYTYzYiI+PHBhdGggZD0iTTcgMTBsNSA1IDUtNUg3eiIvPjwvc3ZnPg==");
+      }
+      /* === КОНЕЦ ЧАСТИ 5 из 13 === */
+      /* === НАЧАЛО ЧАСТИ 6 из 13 === */
+      .select-options-dropdown {
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        width: 100%;
+        background: var(--dropdown-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.3);
+        z-index: 999;
+        max-height: 220px;
+        overflow-y: auto;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition:
+          opacity 0.2s,
+          transform 0.2s,
+          visibility 0.2s;
+        padding: 4px;
+      }
+
+      .custom-select-container.open .select-options-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .select-item {
+        padding: 10px 12px;
+        color: var(--text-main);
+        font-size: 13.5px;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background-color 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2px;
+      }
+
+      .select-item:last-child {
+        margin-bottom: 0;
+      }
+      .select-item:hover {
+        background-color: var(--dropdown-hover);
+        color: var(--primary);
+      }
+      .select-item.selected {
+        background-color: var(--dropdown-selected);
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      .input-suffix {
+        position: absolute;
+        right: 12px;
+        color: var(--text-muted);
+        font-size: 12px;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .full-width-column {
+        grid-column: span 2;
+      }
+
+      .direction-group {
+        display: flex;
+        background: var(--bg-input);
+        border-radius: 6px;
+        padding: 2px;
+        gap: 2px;
+        height: 38px;
+        border: 1px solid var(--border);
+      }
+      .dir-btn {
+        flex: 1;
+        background: transparent;
+        border: 1px solid transparent;
+        color: var(--text-muted);
+        padding: 0 6px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 11px;
+        transition: all 0.2s;
+      }
+      .dir-btn.active-long {
+        background: rgba(14, 203, 129, 0.12);
+        color: var(--green);
+        border-color: rgba(14, 203, 129, 0.4);
+      }
+      .dir-btn.active-short {
+        background: rgba(246, 70, 93, 0.12);
+        color: var(--red);
+        border-color: rgba(246, 70, 93, 0.4);
+      }
+      /* === КОНЕЦ ЧАСТИ 6 из 13 === */
+      /* === НАЧАЛО ЧАСТИ 7 из 13 === */
+      .simulator-box {
+        background: rgba(243, 166, 59, 0.02);
+        border: 1px solid rgba(243, 166, 59, 0.1);
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .simulator-title {
+        font-size: 10px;
+        color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        font-weight: bold;
+      }
+      .hint-text {
+        font-size: 10px;
+        color: var(--text-muted);
+        margin-top: 3px;
+        display: block;
+      }
+      .hint-text span {
+        color: var(--primary);
+      }
+      .danger-text {
+        font-size: 10px;
+        color: var(--red);
+        margin-top: 4px;
+        display: block;
+        font-weight: 500;
+      }
+
+      .risk-box {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: 0 6px 24px 0 var(--glass-shadow);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .risk-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        padding-bottom: 2px;
+      }
+      .risk-row:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          var(--glass-border) 0%,
+          rgba(255, 255, 255, 0) 100%
+        );
+      }
+      .risk-label {
+        color: var(--text-muted);
+        font-size: 12px;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .risk-label::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--text-muted);
+      }
+      .row-sl .risk-label::before {
+        background: var(--red);
+        box-shadow: 0 0 5px var(--red);
+      }
+      .row-tp .risk-label::before {
+        background: var(--green);
+        box-shadow: 0 0 5px var(--green);
+      }
+      .risk-value {
+        font-weight: 600;
+        font-size: 13px;
+        letter-spacing: 0.2px;
+      }
+
+      .risk-row.highlight-row {
+        margin-top: 4px;
+        padding: 4px 0 0 0;
+      }
+      .risk-row.highlight-row::after {
+        display: none;
+      }
+      .risk-row.highlight-row .risk-label {
+        color: var(--text-main);
+        font-weight: 600;
+        font-size: 13px;
+      }
+      .risk-row.highlight-row .risk-label::before {
+        background: var(--primary);
+        box-shadow: 0 0 6px var(--primary);
+      }
+      .risk-row.highlight-row .risk-value {
+        font-size: 16px;
+        font-weight: 700;
+        background: linear-gradient(
+          45deg,
+          var(--text-main) 0%,
+          var(--primary) 100%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0px 2px 6px rgba(243, 166, 59, 0.25));
+      }
+
+      .trade-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: auto;
+        padding-top: 10px;
+      }
+      .btn-action {
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        transition:
+          opacity 0.2s,
+          background-color 0.2s;
+      }
+      .btn-action:hover:not(:disabled) {
+        opacity: 0.9;
+      }
+      .btn-action:disabled {
+        background-color: var(--border) !important;
+        color: var(--text-muted) !important;
+        cursor: not-allowed;
+        opacity: 0.2;
+      }
+      .btn-buy {
+        background: var(--green);
+      }
+      .btn-sell {
+        background: var(--red);
+      }
+
+      .logs-container {
+        width: 100%;
+        background: var(--bg-card);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        padding: 12px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .logs-title {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        font-weight: bold;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 6px;
+      }
+      .logs-content {
+        font-family: monospace;
+        font-size: 11px;
+        color: var(--text-main);
+        opacity: 0.85;
+        flex-grow: 1;
+        height: 100px;
+        overflow-y: auto;
+        overflow-y: overlay;
+        line-height: 1.5;
+      }
+      .logs-content::-webkit-scrollbar,
+      .select-options-dropdown::-webkit-scrollbar {
+        width: 4px;
+      }
+      .logs-content::-webkit-scrollbar-thumb,
+      .select-options-dropdown::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 10px;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+      @media (max-width: 768px) {
+        .terminal-container {
+          grid-template-columns: 1fr;
+        }
+        .header {
+          grid-column: span 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- === КОНЕЦ ЧАСТИ 7 из 13 === -->
+    <!-- === НАЧАЛО ЧАСТИ 8 из 13 === -->
+    <div class="terminal-container">
+      <div class="header">
+        <div class="logo">BYBIT<span>.pro</span></div>
+        <button
+          type="button"
+          class="theme-toggle-btn"
+          id="theme-toggle"
+          title="Сменить тему оформления"
+        >
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2zm0 2a8 8 0 0 1 8 8 8 8 0 0 1-8 8V4z"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- ЛЕВАЯ КОЛОНКА (Интерфейс трейдера) -->
+      <div class="left-panel">
+        <div class="tab-group">
+          <button class="tab-btn active" onclick="switchMarket('spot')">
+            Спот (Spot)
+          </button>
+          <button class="tab-btn" onclick="switchMarket('linear')">
+            Фьючерсы (Futures)
+          </button>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="current-balance">Текущий баланс</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="current-balance"
+                value="100"
+                min="1"
+                oninput="updateCalculations()"
+              />
+              <span class="input-suffix">USDT</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="margin-limit">Лимит маржи на сделку</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="margin-limit"
+                placeholder="Например: 25"
+                oninput="updateCalculations()"
+              />
+              <span class="input-suffix">USDT</span>
+            </div>
+            <span class="hint-text"
+              >Рекомендация: <span id="rec-margin">25.00</span> USDT</span
+            >
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group" id="margin-mode-group">
+            <label>Режим маржи</label>
+            <div class="custom-select-container" id="ds-margin-mode">
+              <div class="select-trigger" id="margin-mode-trigger">
+                Изолированная
+              </div>
+              <div class="select-options-dropdown">
+                <div class="select-item selected" data-value="isolated">
+                  Изолированная
+                </div>
+                <div class="select-item" data-value="cross">Кросс-маржа</div>
+              </div>
+            </div>
+            <span id="cross-warning" class="danger-text hidden"
+              >⚠️ Риск: Ликвидация всего баланса!</span
+            >
+          </div>
+
+          <div class="form-group" id="order-type-group">
+            <label>Тип ордера</label>
+            <div class="custom-select-container" id="ds-order-type">
+              <div class="select-trigger" id="order-type-trigger">
+                Рыночный (Market)
+              </div>
+              <div class="select-options-dropdown">
+                <div class="select-item selected" data-value="market">
+                  Рыночный (Market)
+                </div>
+                <div class="select-item" data-value="limit">
+                  Лимитный (Limit)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="simulator-box" id="simulator-price-box">
+          <div class="simulator-title">
+            🤖 Симулятор рыночной цены (Поток Bybit)
+          </div>
+          <div class="form-group" style="margin-bottom: 0">
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="sim-market-price"
+                placeholder="Задайте текущую цену"
+                oninput="updateCalculations()"
+              />
+              <span class="input-suffix" id="sim-price-suffix">USDT</span>
+            </div>
+          </div>
+        </div>
+        <!-- === КОНЕЦ ЧАСТИ 8 из 13 === -->
+        <!-- === НАЧАЛО ЧАСТИ 9 из 13 === -->
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Торговая пара</label>
+            <div class="custom-select-container" id="ds-ticker">
+              <div class="select-trigger" id="ticker-trigger">BTC / USDT</div>
+              <div class="select-options-dropdown">
+                <div class="select-item selected" data-value="BTCUSDT">
+                  BTC / USDT
+                </div>
+                <div class="select-item" data-value="ETHUSDT">ETH / USDT</div>
+                <div class="select-item" data-value="SOLUSDT">SOL / USDT</div>
+                <div class="select-item" data-value="XAUTUSDT">XAUT / USDT</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group" id="trade-direction-group">
+            <label>Позиция (Направление)</label>
+            <div class="direction-group">
+              <button
+                type="button"
+                id="dir-long-btn"
+                class="dir-btn active-long"
+                onclick="setDirection('long')"
+              >
+                LONG
+              </button>
+              <button
+                type="button"
+                id="dir-short-btn"
+                class="dir-btn"
+                onclick="setDirection('short')"
+              >
+                SHORT
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="risk-usdt">Риск на сделку</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="risk-usdt"
+                placeholder="В USDT"
+                oninput="updateCalculations()"
+              />
+              <span class="input-suffix">USDT</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Соотношение R:R</label>
+            <div class="custom-select-container" id="ds-rr">
+              <div class="select-trigger" id="rr-trigger">
+                1 : 3.0 (Классический)
+              </div>
+              <div class="select-options-dropdown">
+                <div class="select-item" data-value="1.5">
+                  1 : 1.5 (Скальпинг)
+                </div>
+                <div class="select-item" data-value="2">
+                  1 : 2.0 (Умеренный)
+                </div>
+                <div class="select-item selected" data-value="3">
+                  1 : 3.0 (Классический)
+                </div>
+                <div class="select-item" data-value="4">
+                  1 : 4.0 (Агрессивный)
+                </div>
+                <div class="select-item" data-value="5">
+                  1 : 5.0 (Трендовый)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- 🌟 ИСПРАВЛЕНО: Вместо капризного селектора установлен бронебойный инпут disabled -->
+          <div class="form-group">
+            <label for="qty-rounding-display">Округление Qty</label>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="qty-rounding-display"
+                value="0.001 (BTC)"
+                disabled
+                style="
+                  cursor: not-allowed;
+                  opacity: 0.85;
+                  font-weight: 600;
+                  color: var(--primary);
+                "
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="entry-price">Цена входа</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="entry-price"
+                placeholder="Рыночная цена"
+                disabled
+                oninput="updateCalculations()"
+              />
+              <span class="input-suffix">USDT</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0">
+          <label for="sl-step-percent">Шаг стопа (отступ от входа)</label>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              id="sl-step-percent"
+              placeholder="Ширина стопа в %"
+              min="0.1"
+              step="0.1"
+              oninput="updateCalculations()"
+            />
+            <span class="input-suffix">%</span>
+          </div>
+          <span class="hint-text" style="cursor: pointer" id="sl-rec-box"
+            >Рекомендация: <span id="rec-sl-value">1.5</span>%</span
+          >
+        </div>
+
+        <div class="trade-buttons">
+          <button
+            id="main-buy-btn"
+            class="btn-action btn-buy"
+            onclick="executeTrade('Buy')"
+          >
+            Long / Buy
+          </button>
+          <button
+            id="main-sell-btn"
+            class="btn-action btn-sell"
+            disabled
+            onclick="executeTrade('Sell')"
+          >
+            Short / Sell
+          </button>
+        </div>
+      </div>
+      <!-- === КОНЕЦ ЧАСТИ 9 из 13 === -->
+      <!-- === НАЧАЛО ЧАСТИ 10 из 13 === -->
+      <!-- ПРАВАЯ КОЛОНКА -->
+      <div class="right-panel">
+        <div class="risk-box">
+          <div class="risk-row row-sl">
+            <span class="risk-label">Выход по Stop-Loss (SL)</span
+            ><span
+              class="risk-value"
+              id="calc-sl-price"
+              style="color: var(--red)"
+              >-</span
+            >
+          </div>
+          <div class="risk-row row-tp">
+            <span class="risk-label">Цель Тейк-Профит (TP)</span
+            ><span
+              class="risk-value"
+              id="calc-tp-price"
+              style="color: var(--green)"
+              >-</span
+            >
+          </div>
+          <div class="risk-row" id="leverage-row">
+            <span class="risk-label">Требуемое плечо (Leverage)</span
+            ><span class="risk-value" id="calc-leverage">-</span>
+          </div>
+          <div class="risk-row">
+            <span class="risk-label">Количество монет (Qty)</span
+            ><span class="risk-value" id="calc-qty">-</span>
+          </div>
+          <div class="risk-row highlight-row">
+            <span class="risk-label">Стоимость для Bybit (Маржа)</span
+            ><span class="risk-value" id="calc-bybit-cost">-</span>
+          </div>
+        </div>
+
+        <div class="logs-container">
+          <div class="logs-title">📋 Окно логов и истории ордеров</div>
+          <div class="logs-content" id="terminal-logs"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentMarket = "spot";
+      let currentDirection = "long";
+
+      // Внутреннее независимое ядро памяти терминала
+      const selectValues = {
+        "margin-mode": "isolated",
+        "order-type": "market",
+        ticker: "BTCUSDT",
+        rr: "3",
+        qty: "0.001_BTC",
+      };
+
+      const tickerNames = {
+        spot: {
+          BTCUSDT: "BTC / USDT",
+          ETHUSDT: "ETH / USDT",
+          SOLUSDT: "SOL / USDT",
+          XAUTUSDT: "XAUT / USDT",
+        },
+        linear: {
+          BTCUSDT: "BTCUSDT",
+          ETHUSDT: "ETHUSDT",
+          SOLUSDT: "SOLUSDT",
+          XAUTUSDT: "XAUTUSDT",
+        },
+      };
+
+      const tickerToQtyValue = {
+        BTCUSDT: "0.001_BTC",
+        XAUTUSDT: "0.001_XAUT",
+        ETHUSDT: "0.01_ETH",
+        SOLUSDT: "0.1_SOL",
+      };
+
+      /* Словарь для мгновенного вывода человеческого текста в наш заблокированный инпут */
+      const qtyValuesToText = {
+        "0.001_BTC": "0.001 (BTC)",
+        "0.001_XAUT": "0.001 (XAUT)",
+        "0.01_ETH": "0.01 (ETH)",
+        "0.1_SOL": "0.1 (SOL)",
+      };
+      /* === КОНЕЦ ЧАСТИ 10 из 13 === */
+      /* === НАЧАЛО ЧАСТИ 11 из 13 === */
+      const tickerToRecommendedSL = {
+        spot: { BTCUSDT: 2.5, ETHUSDT: 3.0, SOLUSDT: 4.0, XAUTUSDT: 1.0 },
+        linear: { BTCUSDT: 1.0, ETHUSDT: 1.5, SOLUSDT: 2.0, XAUTUSDT: 0.3 },
+      };
+      const marketPrices = {
+        BTCUSDT: 95000,
+        ETHUSDT: 2700,
+        SOLUSDT: 180,
+        XAUTUSDT: 2400,
+      };
+
+      const entryPriceInput = document.getElementById("entry-price");
+      const slStepPercentInput = document.getElementById("sl-step-percent");
+      const simMarketPriceInput = document.getElementById("sim-market-price");
+      const simulatorPriceBox = document.getElementById("simulator-price-box");
+      const crossWarning = document.getElementById("cross-warning");
+      const marginModeGroup = document.getElementById("margin-mode-group");
+      const orderTypeGroup = document.getElementById("order-type-group");
+      const tradeDirectionGroup = document.getElementById(
+        "trade-direction-group",
+      );
+      const recSlValue = document.getElementById("rec-sl-value");
+      const slRecBox = document.getElementById("sl-rec-box");
+      const dirLongBtn = document.getElementById("dir-long-btn");
+      const dirShortBtn = document.getElementById("dir-short-btn");
+      const mainBuyBtn = document.getElementById("main-buy-btn");
+      const mainSellBtn = document.getElementById("main-sell-btn");
+      const themeToggleBtn = document.getElementById("theme-toggle");
+
+      function initThemeEngine() {
+        const savedTheme = localStorage.getItem("bybit-pro-theme") || "dark";
+        document.documentElement.setAttribute("data-theme", savedTheme);
+        themeToggleBtn.addEventListener("click", () => {
+          const currentTheme =
+            document.documentElement.getAttribute("data-theme");
+          const newTheme = currentTheme === "light" ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", newTheme);
+          localStorage.setItem("bybit-pro-theme", newTheme);
+          logMessage(
+            `[Тема]: Изменено оформление интерфейса на ${newTheme === "light" ? "СВЕТЛОЕ" : "ТЕМНОЕ"}.`,
+          );
+        });
+      }
+
+      function initCustomSelect(containerId, storageKey, callback) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const trigger = container.querySelector(".select-trigger");
+        const items = container.querySelectorAll(".select-item");
+        trigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+          document
+            .querySelectorAll(".custom-select-container")
+            .forEach((el) => {
+              if (el !== container) el.classList.remove("open");
+            });
+          container.classList.toggle("open");
+        });
+        items.forEach((item) => {
+          item.addEventListener("click", (e) => {
+            e.stopPropagation();
+            items.forEach((i) => i.classList.remove("selected"));
+            item.classList.add("selected");
+            trigger.innerText = item.innerText;
+            selectValues[storageKey] = item.getAttribute("data-value");
+            container.classList.remove("open");
+            if (callback) callback(selectValues[storageKey]);
+          });
+        });
+      }
+      document.addEventListener("click", () => {
+        document
+          .querySelectorAll(".custom-select-container")
+          .forEach((el) => el.classList.remove("open"));
+      });
+      /* === КОНЕЦ ЧАСТИ 11 из 13 === */
+      /* === НАЧАЛО ЧАСТИ 12 из 13 === */
+      function setDirection(direction, isSystem = false) {
+        if (!isSystem && currentDirection === direction) return;
+        currentDirection = direction;
+        if (direction === "long") {
+          dirLongBtn.classList.add("active-long");
+          dirShortBtn.classList.remove("active-short");
+          mainBuyBtn.disabled = false;
+          mainSellBtn.disabled = true;
+          if (!isSystem) logMessage(`[Инфо]: Направление переключено в LONG.`);
+        } else {
+          dirShortBtn.classList.add("active-short");
+          dirLongBtn.classList.remove("active-long");
+          mainBuyBtn.disabled = true;
+          mainSellBtn.disabled = false;
+          if (!isSystem) logMessage(`[Инфо]: Направление переключено в SHORT.`);
+        }
+        updateCalculations();
+      }
+
+      function syncSimulatorPlaceholder() {
+        const selectedTicker = selectValues["ticker"];
+        if (simMarketPriceInput)
+          simMarketPriceInput.placeholder = `Тек. цена ${selectedTicker.replace("USDT", "")}: ${marketPrices[selectedTicker]}`;
+      }
+
+      function updateTickerDisplayNames() {
+        const container = document.getElementById("ds-ticker");
+        if (!container) return;
+        const trigger = document.getElementById("ticker-trigger");
+        const items = container.querySelectorAll(".select-item");
+        items.forEach((item) => {
+          const val = item.getAttribute("data-value");
+          if (tickerNames[currentMarket][val]) {
+            item.innerText = tickerNames[currentMarket][val];
+            if (val === selectValues["ticker"])
+              trigger.innerText = tickerNames[currentMarket][val];
+          }
+        });
+      }
+
+      function updateSLRecommendationText() {
+        const selectedTicker = selectValues["ticker"];
+        const marketKey = currentMarket === "spot" ? "spot" : "linear";
+        if (recSlValue)
+          recSlValue.innerText =
+            tickerToRecommendedSL[marketKey][selectedTicker] || 2.0;
+      }
+
+      function applySLRecommendation() {
+        const selectedTicker = selectValues["ticker"];
+        const marketKey = currentMarket === "spot" ? "spot" : "linear";
+        const recommendedVal =
+          tickerToRecommendedSL[marketKey][selectedTicker] || 2.0;
+        if (slStepPercentInput) {
+          slStepPercentInput.value = recommendedVal;
+          logMessage(
+            `[Инфо]: Установлен рекомендуемый стоп: ${recommendedVal}%`,
+          );
+          updateCalculations();
+        }
+      }
+
+      function handleOrderTypeChange(val) {
+        if (val === "market") {
+          entryPriceInput.disabled = true;
+          entryPriceInput.value = "";
+          entryPriceInput.placeholder = "Рыночная цена";
+          if (simulatorPriceBox) simulatorPriceBox.classList.remove("hidden");
+          logMessage(`[Инфо]: Включен симулятор рыночного входа.`);
+        } else {
+          entryPriceInput.disabled = false;
+          entryPriceInput.placeholder = "Цена лимита";
+          if (simulatorPriceBox) simulatorPriceBox.classList.add("hidden");
+          logMessage(`[Инфо]: Переключено на лимитный вход.`);
+        }
+        updateCalculations();
+      }
+
+      function handleMarginModeChange(val) {
+        if (val === "cross") {
+          crossWarning.classList.remove("hidden");
+          logMessage(`[⚠️ РИСК]: Включен режим Кросс-маржи!`);
+        } else {
+          crossWarning.classList.add("hidden");
+          logMessage(`[Инфо]: Установлен режим Изолированной маржи.`);
+        }
+        updateCalculations();
+      }
+
+      /* 👑 РЕШЕНИЕ ПРОБЛЕМЫ НА 100%: Прямое, мгновенное впечатывание текста в инпут disabled. Никаких пустых полей! */
+      function handleTickerChange(val) {
+        if (slStepPercentInput) slStepPercentInput.value = "";
+        selectValues["ticker"] = val;
+
+        // 1. Извлекаем строгое биржевое значение округления (например, 0.01_ETH)
+        const targetQtyValue = tickerToQtyValue[val];
+
+        // 2. Пишем новое значение в память калькулятора
+        selectValues["qty"] = targetQtyValue;
+
+        // 3. Мгновенно выводим понятный красивый текст в наш заблокированный инпут
+        const roundedInput = document.getElementById("qty-rounding-display");
+        if (roundedInput) {
+          roundedInput.value = qtyValuesToText[targetQtyValue];
+        }
+
+        logMessage(
+          `[Инфо]: Пара изменена на ${tickerNames[currentMarket][val]}. Шаг округления зафиксирован.`,
+        );
+        syncSimulatorPlaceholder();
+        updateSLRecommendationText();
+        updateCalculations();
+      }
+      /* === КОНЕЦ ЧАСТИ 12 из 13 === */
+      // === НАЧАЛО ЧАСТИ 13 из 13 ===
+      function switchMarket(market) {
+        currentMarket = market;
+        const tabs = document.querySelectorAll(".tab-btn");
+        tabs.forEach((btn) => btn.classList.remove("active"));
+        if (
+          window.event &&
+          window.event.target &&
+          window.event.target.classList
+        )
+          window.event.target.classList.add("active");
+        else {
+          tabs.forEach((btn) => {
+            if (market === "spot" && btn.innerText.includes("Спот"))
+              btn.classList.add("active");
+            if (market === "linear" && btn.innerText.includes("Фьючерсы"))
+              btn.classList.add("active");
+          });
+        }
+        if (slStepPercentInput) slStepPercentInput.value = "";
+        const levRow = document.getElementById("leverage-row");
+        if (market === "spot") {
+          if (levRow) levRow.classList.add("hidden");
+          if (marginModeGroup) marginModeGroup.classList.add("hidden");
+          if (tradeDirectionGroup) tradeDirectionGroup.classList.add("hidden");
+          if (orderTypeGroup) orderTypeGroup.classList.add("full-width-column");
+          setDirection("long", true);
+        } else {
+          if (levRow) levRow.classList.remove("hidden");
+          if (marginModeGroup) marginModeGroup.classList.remove("hidden");
+          if (tradeDirectionGroup)
+            tradeDirectionGroup.classList.remove("hidden");
+          if (orderTypeGroup)
+            orderTypeGroup.classList.remove("full-width-column");
+          setDirection("long", true);
+        }
+        updateTickerDisplayNames();
+        syncSimulatorPlaceholder();
+        updateSLRecommendationText();
+        logMessage(
+          `[Режим]: Переключено на рынок ${market === "spot" ? "СПОТ" : "ФЬЮЧЕРСЫ"}.`,
+        );
+        updateCalculations();
+      }
+
+      function logMessage(text) {
+        const logBox = document.getElementById("terminal-logs");
+        if (!logBox) return;
+        const now = new Date();
+        const pad = (num) => String(num).padStart(2, "0");
+        const dStr = `${pad(now.getDate())}.${pad(now.getMonth() + 1)}.${now.getFullYear()}`;
+        const tStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        const stamp = `<span style="color: var(--text-muted); font-size: 10px;">[${dStr} ${tStr}]</span>`;
+        if (logBox.innerHTML === "") logBox.innerHTML = `${stamp} ${text}`;
+        else logBox.innerHTML += `<br>${stamp} ${text}`;
+        logBox.scrollTop = logBox.scrollHeight;
+      }
+
+      function updateCalculations() {
+        const balance =
+          parseFloat(document.getElementById("current-balance").value) || 0;
+        const marginLimit =
+          parseFloat(document.getElementById("margin-limit").value) || 0;
+        const riskUsdt =
+          parseFloat(document.getElementById("risk-usdt").value) || 0;
+        const rr = parseFloat(selectValues["rr"]) || 1;
+        const slPercent = parseFloat(slStepPercentInput.value) || 0;
+        const qtyStep = parseFloat(selectValues["qty"].split("_")) || 0.001;
+        if (document.getElementById("rec-margin"))
+          document.getElementById("rec-margin").innerText = (
+            balance / 4
+          ).toFixed(2);
+        let entryPrice =
+          selectValues["order-type"] === "market"
+            ? parseFloat(simMarketPriceInput.value) ||
+              marketPrices[selectValues["ticker"]]
+            : parseFloat(entryPriceInput.value) || 0;
+        if (
+          entryPrice <= 0 ||
+          slPercent <= 0 ||
+          riskUsdt <= 0 ||
+          marginLimit <= 0
+        ) {
+          resetCalculations();
+          return;
+        }
+        const slDist = entryPrice * (slPercent / 100);
+        let slP, tpP;
+        if (currentDirection === "long") {
+          slP = entryPrice - slDist;
+          tpP = entryPrice + slDist * rr;
+        } else {
+          slP = entryPrice + slDist;
+          tpP = entryPrice - slDist * rr;
+        }
+        document.getElementById("calc-sl-price").innerText =
+          `${slP.toFixed(2)} USDT (${currentDirection === "long" ? "-" : "+"}${slPercent}%)`;
+        document.getElementById("calc-tp-price").innerText =
+          `${tpP.toFixed(2)} USDT (${currentDirection === "long" ? "+" : "-"}${(slPercent * rr).toFixed(1)}%)`;
+        let qty = riskUsdt / slDist;
+        const decs = Math.max(0, Math.round(Math.log10(1 / qtyStep)));
+        qty = Math.floor(qty / qtyStep) * qtyStep;
+        if (qty <= 0) qty = qtyStep;
+        const totalNotional = qty * entryPrice;
+        if (currentMarket === "spot") {
+          let fCost = totalNotional;
+          if (fCost > marginLimit || fCost > balance) {
+            fCost = Math.min(marginLimit, balance);
+            qty = Math.floor(fCost / entryPrice / qtyStep) * qtyStep;
+            fCost = qty * entryPrice;
+          }
+          document.getElementById("calc-qty").innerText =
+            `${qty.toFixed(decs)} монеты`;
+          document.getElementById("calc-bybit-cost").innerText =
+            `${fCost.toFixed(2)} USDT`;
+        } else {
+          let fCost = Math.min(marginLimit, balance);
+          let reqLev = totalNotional / fCost;
+          if (reqLev < 1) {
+            reqLev = 1;
+            fCost = totalNotional;
+          }
+          if (reqLev > 50) {
+            reqLev = 50;
+            qty = Math.floor((fCost * reqLev) / entryPrice / qtyStep) * qtyStep;
+          }
+          document.getElementById("calc-qty").innerText =
+            `${qty.toFixed(decs)} монеты (~${(qty * entryPrice).toFixed(2)} USDT)`;
+          document.getElementById("calc-leverage").innerText =
+            `${Math.ceil(reqLev)} x`;
+          document.getElementById("calc-bybit-cost").innerText =
+            `${fCost.toFixed(2)} USDT`;
+        }
+      }
+
+      function resetCalculations() {
+        document.getElementById("calc-sl-price").innerText = "-";
+        document.getElementById("calc-tp-price").innerText = "-";
+        document.getElementById("calc-leverage").innerText = "-";
+        document.getElementById("calc-bybit-cost").innerText = "-";
+        document.getElementById("calc-qty").innerText = "-";
+      }
+
+      function executeTrade(side) {
+        if (
+          (parseFloat(document.getElementById("risk-usdt").value) || 0) <= 0 ||
+          (parseFloat(slStepPercentInput.value) || 0) <= 0 ||
+          (parseFloat(document.getElementById("margin-limit").value) || 0) <= 0
+        ) {
+          alert("Ошибка: Заполните все поля ввода!");
+          return;
+        }
+        alert(
+          `Параметры Bybit:\nТип ордера: ${selectValues["order-type"].toUpperCase()}\nНаправление: ${side}\nПара: ${tickerNames[currentMarket][selectValues["ticker"]]}\nРежим: ${(currentMarket === "linear" ? selectValues["margin-mode"] : "SPOT").toUpperCase()}\nМаржа: ${document.getElementById("calc-bybit-cost").innerText}\nSL: ${document.getElementById("calc-sl-price").innerText}\nTP: ${document.getElementById("calc-tp-price").innerText}`,
+        );
+      }
+
+      initCustomSelect("ds-margin-mode", "margin-mode", handleMarginModeChange);
+      initCustomSelect("ds-order-type", "order-type", handleOrderTypeChange);
+      initCustomSelect("ds-ticker", "ticker", handleTickerChange);
+      initCustomSelect("ds-rr", "rr", updateCalculations);
+
+      if (slRecBox) slRecBox.addEventListener("click", applySLRecommendation);
+      initThemeEngine();
+
+      logMessage(`[Система]: Terminal V2 успешно запущен.`);
+      logMessage(
+        `[Риск]: Начальный баланс 100 USDT. Задайте параметры для расчета.`,
+      );
+
+      switchMarket("spot");
+      handleOrderTypeChange("market");
+    </script>
+  </body>
+</html>
+<!-- === КОНЕЦ ЧАСТИ 13 из 13 === -->
