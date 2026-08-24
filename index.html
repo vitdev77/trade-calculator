@@ -1,4 +1,4 @@
-<!-- === НАЧАЛО ЧАСТИ 1 из 14 === -->
+<!-- === НАЧАЛО ЧАСТИ 1 из 20 === -->
 <!doctype html>
 <html lang="ru">
   <head>
@@ -55,8 +55,8 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       }
-      /* === КОНЕЦ ЧАСТИ 1 из 14 === */
-      /* === НАЧАЛО ЧАСТИ 2 из 14 === */
+      /* === КОНЕЦ ЧАСТИ 1 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 2 из 20 === */
       body {
         background-color: var(--bg-main);
         color: var(--text-main);
@@ -117,33 +117,8 @@
       .logo span {
         color: var(--primary);
       }
-      /* === КОНЕЦ ЧАСТИ 2 из 14 === */
-      /* === НАЧАЛО ЧАСТИ 3 из 14 === */
-      .theme-toggle-btn {
-        background: transparent;
-        border: none;
-        color: var(--text-muted);
-        width: 28px;
-        height: 28px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: color 0.15s ease;
-        user-select: none;
-      }
-
-      .theme-toggle-btn svg {
-        width: 20px;
-        height: 20px;
-        fill: currentColor;
-      }
-
-      .theme-toggle-btn:hover {
-        color: var(--text-main);
-      }
-
-      /* 🌟 ИСПРАВЛЕНО: Адаптивный гибкий контейнер вместо капризного Grid */
+      /* === КОНЕЦ ЧАСТИ 2 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 3 из 20 === */
       .tab-dir-flex-row {
         display: flex;
         justify-content: space-between;
@@ -153,7 +128,6 @@
         gap: 12px;
       }
 
-      /* Пропорциональные радиусы вложенности: 11px внешний, 6px внутренний при 5px паддинге */
       .tab-group {
         display: flex;
         flex-grow: 1;
@@ -195,8 +169,34 @@
         box-shadow: 0 0 12px rgba(243, 166, 59, 0.15);
         border-color: rgba(243, 166, 59, 0.25);
       }
-      /* === КОНЕЦ ЧАСТИ 3 из 14 === */
-      /* === НАЧАЛО ЧАСТИ 4 из 14 === */
+
+      /* 🌟 ВОССТАНОВЛЕНО: Стили кнопки переключения цветовой темы Light / Dark */
+      .theme-toggle-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.15s ease;
+        user-select: none;
+      }
+
+      /* Масштабирование и заливка иконки внутри кнопки шапки */
+      .theme-toggle-btn svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+      }
+
+      .theme-toggle-btn:hover {
+        color: var(--text-main);
+      }
+      /* === КОНЕЦ ЧАСТИ 3 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 4 из 20 === */
       .form-group {
         margin-bottom: 10px;
       }
@@ -235,10 +235,51 @@
         border-radius: 6px;
         font-size: 14px;
         outline: none;
-        transition:
-          opacity 0.2s,
-          background-color 0.2s,
-          border-color 0.2s;
+        transition: all 0.3s ease;
+      }
+
+      /* Специальный паддинг для поля отступа Стоп-Лосса под встроенную кнопку */
+      #sl-step-percent {
+        padding-right: 95px;
+      }
+
+      /* Компактная флэтовая кнопка рекомендации внутри инпута отступа */
+      .input-rec-btn {
+        position: absolute;
+        right: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(243, 166, 59, 0.08);
+        border: 1px solid rgba(243, 166, 59, 0.2);
+        border-radius: 4px;
+        color: var(--primary);
+        font-size: 10px;
+        font-weight: bold;
+        padding: 4px 8px;
+        cursor: pointer;
+        z-index: 3;
+        transition: all 0.2s;
+        text-transform: uppercase;
+        letter-spacing: 0.2px;
+      }
+
+      .input-rec-btn:hover {
+        background: rgba(243, 166, 59, 0.18);
+        border-color: var(--primary);
+      }
+
+      /* Выразительная флэтовая подсветка для Тейк Профита */
+      .input-wrapper input.calculated-tp {
+        border-color: var(--green) !important;
+        background: rgba(14, 203, 129, 0.02);
+        box-shadow: 0 0 10px rgba(14, 203, 129, 0.1);
+      }
+
+      /* Выразительная флэтовая подсветка для Стоп Лосса */
+      .input-wrapper input.calculated-sl {
+        border-color: var(--red) !important;
+        background: rgba(246, 70, 93, 0.02);
+        box-shadow: 0 0 10px rgba(246, 70, 93, 0.1);
       }
 
       .input-wrapper input:disabled {
@@ -253,8 +294,8 @@
         border-color: var(--primary);
         box-shadow: 0 0 10px rgba(243, 166, 59, 0.15);
       }
-      /* === КОНЕЦ ЧАСТИ 4 из 14 === */
-      /* === НАЧАЛО ЧАСТИ 5 из 14 === */
+      /* === КОНЕЦ ЧАСТИ 4 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 5 из 20 === */
       .custom-select-container {
         position: relative;
         width: 100%;
@@ -308,8 +349,8 @@
         transform: translateY(-50%) rotate(180deg);
         background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2YzYTYzYiI+PHBhdGggZD0iTTcgMTBsNSA1IDUtNUg3eiIvPjwvc3ZnPg==");
       }
-      /* === КОНЕЦ ЧАСТИ 5 из 14 === */
-      /* === НАЧАЛО ЧАСТИ 6 из 14 === */
+      /* === КОНЕЦ ЧАСТИ 5 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 6 из 20 === */
       .select-options-dropdown {
         position: absolute;
         top: calc(100% + 5px);
@@ -344,7 +385,9 @@
         font-size: 13.5px;
         cursor: pointer;
         border-radius: 6px;
-        transition: background-color 0.15s;
+        transition:
+          background-color 0.15s,
+          color 0.15s;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -354,10 +397,19 @@
       .select-item:last-child {
         margin-bottom: 0;
       }
+
+      /* 🌟 ИСПРАВЛЕНО: Ультра-приглушенный флэтовый Hover без лишней яркости */
       .select-item:hover {
-        background-color: var(--dropdown-hover);
-        color: var(--primary);
+        background-color: rgba(255, 255, 255, 0.03);
+        color: var(--text-main);
       }
+
+      /* Адаптивный легкий hover для контрастной светлой темы */
+      [data-theme="light"] .select-item:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+      }
+
+      /* Оранжевый акцент остается строго только у активного выбранного элемента */
       .select-item.selected {
         background-color: var(--dropdown-selected);
         color: var(--primary);
@@ -390,6 +442,7 @@
         height: 38px;
         border: 1px solid var(--border);
       }
+
       .dir-btn {
         flex: 1;
         background: transparent;
@@ -401,7 +454,18 @@
         font-weight: bold;
         font-size: 11px;
         transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
       }
+
+      .dir-btn span {
+        display: inline-block;
+        line-height: 1;
+        font-size: 10px;
+      }
+
       .dir-btn.active-long {
         background: rgba(14, 203, 129, 0.12);
         color: var(--green);
@@ -412,8 +476,8 @@
         color: var(--red);
         border-color: rgba(246, 70, 93, 0.4);
       }
-      /* === КОНЕЦ ЧАСТИ 6 из 14 === */
-      /* === НАЧАЛО ЧАСТИ 7 из 14 === */
+      /* === КОНЕЦ ЧАСТИ 6 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 7 из 20 === */
       .simulator-box {
         background: rgba(243, 166, 59, 0.02);
         border: 1px solid rgba(243, 166, 59, 0.1);
@@ -446,7 +510,6 @@
         font-weight: 500;
       }
 
-      /* Стили динамического фильтра макроэкономических рисков */
       .filter-warning {
         background: rgba(246, 70, 93, 0.04) !important;
         border-color: rgba(246, 70, 93, 0.3) !important;
@@ -621,6 +684,7 @@
         border-radius: 10px;
       }
 
+      /* 🌟 ЖЕСТКИЙ ПРИОРИТЕТ ДЛЯ СКРЫТИЯ ЭЛЕМЕНТОВ ТЕРМИНАЛА */
       .hidden {
         display: none !important;
       }
@@ -635,8 +699,8 @@
     </style>
   </head>
   <body>
-    <!-- === КОНЕЦ ЧАСТИ 7 из 14 === -->
-    <!-- === НАЧАЛО ЧАСТИ 8 из 14 === -->
+    <!-- === КОНЕЦ ЧАСТИ 7 из 20 === -->
+    <!-- === НАЧАЛО ЧАСТИ 8 из 20 === -->
     <div class="terminal-container">
       <div class="header">
         <div class="logo">BYBIT<span>.pro</span></div>
@@ -656,24 +720,24 @@
 
       <!-- ЛЕВАЯ КОЛОНКА (Интерфейс трейдера) -->
       <div class="left-panel">
-        <!-- 🌟 ПЕРЕМЕЩЕНО: Позиция (Направление) теперь встроена в один ряд с рынками -->
         <div class="tab-dir-flex-row">
           <div class="tab-group">
             <button class="tab-btn active" onclick="switchMarket('spot')">
-              Спот (Spot)
+              Спот
             </button>
             <button class="tab-btn" onclick="switchMarket('linear')">
-              Фьючерсы (Futures)
+              Фьючерсы
             </button>
           </div>
-          <div class="direction-group" id="trade-direction-group">
+          <div class="direction-group hidden" id="trade-direction-group">
+            <!-- 🌟 ИСПРАВЛЕНО: Симметричное расположение иконок (LONG — иконка перед текстом, SHORT — иконка после текста) -->
             <button
               type="button"
               id="dir-long-btn"
               class="dir-btn active-long"
               onclick="setDirection('long')"
             >
-              LONG
+              <span>▲</span> LONG
             </button>
             <button
               type="button"
@@ -681,7 +745,7 @@
               class="dir-btn"
               onclick="setDirection('short')"
             >
-              SHORT
+              SHORT <span>▼</span>
             </button>
           </div>
         </div>
@@ -706,6 +770,7 @@
               <input
                 type="number"
                 id="margin-limit"
+                value="25"
                 placeholder="Например: 25"
                 oninput="updateCalculations()"
               />
@@ -716,10 +781,15 @@
             >
           </div>
         </div>
-
+        <!-- === КОНЕЦ ЧАСТИ 8 из 20 === -->
+        <!-- === НАЧАЛО ЧАСТИ 9 из 20 === -->
         <div class="grid-2">
-          <div class="form-group" id="margin-mode-group">
-            <label>Режим маржи</label>
+          <div
+            class="form-group"
+            id="margin-mode-group"
+            style="grid-column: span 2"
+          >
+            <label>Тип маржи</label>
             <div class="custom-select-container" id="ds-margin-mode">
               <div class="select-trigger" id="margin-mode-trigger">
                 Изолированная
@@ -735,40 +805,54 @@
               >⚠️ Риск: Ликвидация всего баланса!</span
             >
           </div>
+        </div>
 
-          <div class="form-group" id="order-type-group">
+        <div class="grid-2">
+          <div
+            class="form-group"
+            id="order-type-group"
+            style="grid-column: span 2"
+          >
             <label>Тип ордера</label>
             <div class="custom-select-container" id="ds-order-type">
+              <!-- 🌟 ИСПРАВЛЕНО: Лимитный ордер теперь идет первым во всем жизненном цикле -->
               <div class="select-trigger" id="order-type-trigger">
-                Рыночный (Market)
+                Лимитный (Limit)
               </div>
               <div class="select-options-dropdown">
-                <div class="select-item selected" data-value="market">
-                  Рыночный (Market)
-                </div>
-                <div class="select-item" data-value="limit">
+                <div class="select-item selected" data-value="limit">
                   Лимитный (Limit)
+                </div>
+                <div class="select-item" data-value="market">
+                  Рыночный (Market)
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Единая динамическая зона переключения цены -->
+        <!-- === КОНЕЦ ЧАСТИ 9 из 20 === -->
+        <!-- === НАЧАЛО ЧАСТИ 10 из 20 === -->
+        <!-- Единая динамическая зона бесшовного замещения цены входа -->
         <div
           class="full-width-column"
           id="dynamic-price-zone"
           style="margin-bottom: 10px"
         >
-          <!-- 🌟 МОДЕРНИЗИРОВАНО: Блок симулятора приведен к единому плоскому стилю обычного инпута -->
-          <div
-            class="form-group"
-            id="simulator-price-box"
-            style="margin-bottom: 0"
-          >
-            <label for="sim-market-price"
-              >Симулятор рыночной цены (Поток Bybit)</label
-            >
+          <div class="form-group" id="entry-price-box">
+            <label for="entry-price">Цена</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="entry-price"
+                placeholder="Введите цену ордера"
+                oninput="updateCalculations()"
+              />
+              <span class="input-suffix">USDT</span>
+            </div>
+          </div>
+
+          <div class="form-group hidden" id="simulator-price-box">
+            <label for="sim-market-price">Рыночная цена (Поток Bybit)</label>
             <div class="input-wrapper">
               <input
                 type="number"
@@ -779,28 +863,8 @@
               <span class="input-suffix">USDT</span>
             </div>
           </div>
-
-          <!-- Инпут Цена входа для Лимитного ордера -->
-          <div
-            class="form-group hidden"
-            id="entry-price-box"
-            style="margin-bottom: 0"
-          >
-            <label for="entry-price">Цена лимитного входа</label>
-            <div class="input-wrapper">
-              <input
-                type="number"
-                id="entry-price"
-                placeholder="Цена лимита ордера"
-                oninput="updateCalculations()"
-              />
-              <span class="input-suffix">USDT</span>
-            </div>
-          </div>
         </div>
-        <!-- === КОНЕЦ ЧАСТИ 8 из 14 === -->
-        <!-- === НАЧАЛО ЧАСТИ 9 из 14 === -->
-        <!-- 🌟 ПОДТЯНУТО В ОДИН РЯД: Пара и заблокированное поле округления лота -->
+
         <div class="grid-2">
           <div class="form-group">
             <label>Торговая пара</label>
@@ -834,168 +898,137 @@
             </div>
           </div>
         </div>
+        <!-- === КОНЕЦ ЧАСТИ 10 из 20 === -->
+        <!-- === НАЧАЛО ЧАСТИ 11 из 20 === -->
+        <div class="grid-2" id="bybit-dynamic-inputs-row">
+          <div class="form-group" id="coin-qty-group">
+            <label id="lbl-coin-qty">Количество в BTC</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="coin-qty-input"
+                placeholder="0.00"
+                oninput="handleCoinQtyInput()"
+              />
+              <span class="input-suffix" id="sfx-coin-qty">BTC</span>
+            </div>
+          </div>
+          <div class="form-group" id="order-cost-group">
+            <label id="lbl-order-cost">Стоимость ордера</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="order-cost-input"
+                placeholder="0.00"
+                oninput="handleOrderCostInput()"
+              />
+              <span class="input-suffix">USDT</span>
+            </div>
+          </div>
+        </div>
 
         <div class="grid-2">
-          <div class="form-group">
-            <label for="risk-usdt">Риск на сделку</label>
+          <div class="form-group" id="risk-usdt-group">
+            <label for="risk-usdt">Риск (USDT) для SL</label>
             <div class="input-wrapper">
               <input
                 type="number"
                 id="risk-usdt"
-                placeholder="В USDT"
+                placeholder="Например, 2"
                 oninput="updateCalculations()"
               />
               <span class="input-suffix">USDT</span>
             </div>
           </div>
           <div class="form-group">
-            <label>Соотношение R:R</label>
+            <label>Risk/Reward</label>
             <div class="custom-select-container" id="ds-rr">
               <div class="select-trigger" id="rr-trigger">
-                1 : 3.0 (Классический)
+                1 : 3 (Классический)
               </div>
               <div class="select-options-dropdown">
                 <div class="select-item" data-value="1.5">
                   1 : 1.5 (Скальпинг)
                 </div>
-                <div class="select-item" data-value="2">
-                  1 : 2.0 (Умеренный)
-                </div>
+                <div class="select-item" data-value="2">1 : 2 (Умеренный)</div>
                 <div class="select-item selected" data-value="3">
-                  1 : 3.0 (Классический)
+                  1 : 3 (Классический)
                 </div>
                 <div class="select-item" data-value="4">
-                  1 : 4.0 (Агрессивный)
+                  1 : 4 (Агрессивный)
                 </div>
-                <div class="select-item" data-value="5">
-                  1 : 5.0 (Трендовый)
-                </div>
+                <div class="select-item" data-value="5">1 : 5 (Трендовый)</div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="form-group" style="margin-bottom: 0">
-          <label for="sl-step-percent">Шаг стопа (отступ от входа)</label>
+        <div class="form-group">
+          <label id="lbl-sl-step" for="sl-step-percent"
+            >Отступ Стоп-Лосса (%)</label
+          >
           <div class="input-wrapper">
             <input
               type="number"
               id="sl-step-percent"
-              placeholder="Ширина стопа в %"
+              placeholder="Ширина в %"
               min="0.1"
               step="0.1"
               oninput="updateCalculations()"
             />
-            <span class="input-suffix">%</span>
-          </div>
-          <span class="hint-text" style="cursor: pointer" id="sl-rec-box"
-            >Рекомендация: <span id="rec-sl-value">1.5</span>%</span
-          >
-        </div>
-
-        <!-- Интеллектуальный фильтр рыночных условий и календаря -->
-        <div
-          class="simulator-box"
-          id="trade-filter-box"
-          style="
-            margin-top: 10px;
-            border-color: rgba(246, 70, 93, 0.15);
-            background: rgba(246, 70, 93, 0.01);
-          "
-        >
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              margin-bottom: 6px;
-            "
-          >
-            <div
-              class="simulator-title"
-              id="filter-title"
-              style="color: var(--text-muted); margin-bottom: 0"
-            >
-              🛡️ Интеллектуальный фильтр рынка
-            </div>
-            <button
-              type="button"
-              id="toggle-calendar-btn"
-              onclick="toggleCalendarView()"
-              style="
-                background: transparent;
-                border: none;
-                color: var(--primary);
-                font-size: 10px;
-                font-weight: bold;
-                cursor: pointer;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-              "
-            >
-              🗓️ События
+            <!-- 🌟 ИСПРАВЛЕНО: Кнопка рекомендации встроена прямо в поле ввода -->
+            <button type="button" class="input-rec-btn" id="sl-rec-box">
+              Рек: <span id="rec-sl-value">1.5</span>%
             </button>
           </div>
-          <span
-            class="hint-text"
-            id="filter-status"
-            style="color: var(--text-muted); font-weight: 500"
-            >Ожидание ввода параметров сделки...</span
-          >
-
-          <div
-            id="macro-schedule-list"
-            class="hidden"
-            style="
-              margin-top: 10px;
-              border-top: 1px dashed var(--border);
-              padding-top: 8px;
-              display: flex;
-              flex-direction: column;
-              gap: 4px;
-              font-size: 10px;
-              color: var(--text-muted);
-              font-family: monospace;
-            "
-          >
-            <div
-              style="
-                color: var(--primary);
-                font-weight: bold;
-                margin-bottom: 2px;
-              "
-            >
-              ⚠️ Критические триггеры волатильности 2026:
+        </div>
+        <!-- === КОНЕЦ ЧАСТИ 11 из 20 === -->
+        <!-- === НАЧАЛО ЧАСТИ 12 из 20 === -->
+        <!-- Активные редактируемые поля TP/SL с чистым полноразмерным вводом и обновленными лаконичными названиями -->
+        <div
+          class="grid-2"
+          id="bybit-interactive-tpsl-row"
+          style="margin-bottom: 10px"
+        >
+          <div class="form-group">
+            <label>Тейк Профит (TP)</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="interactive-tp-input"
+                step="any"
+                placeholder="Ожидание расчета"
+              />
             </div>
-            <div>• 26.08.2026 — Публикация ВВП США (GDP Q2)</div>
-            <div>• 04.09.2026 — Данные по рынку труда США (NFP)</div>
-            <div>• 11.09.2026 — Инфляция в США (CPI)</div>
-            <div>• 16.09.2026 — Решение по процентной ставке ФРС (FOMC)</div>
-            <div>• 25.09.2026 — Квартальная экспирация деривативов Bybit</div>
+          </div>
+          <div class="form-group">
+            <label>Стоп Лосс (SL)</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="interactive-sl-input"
+                step="any"
+                placeholder="Ожидание расчета"
+              />
+            </div>
           </div>
         </div>
-
-        <div class="trade-buttons">
+        <!-- === КОНЕЦ ЧАСТИ 12 из 20 === -->
+        <!-- === НАЧАЛО ЧАСТИ 13 из 20 === -->
+        <div class="trade-buttons" id="bybit-action-buttons-zone">
           <button
             id="main-buy-btn"
             class="btn-action btn-buy"
+            style="grid-column: span 2"
             onclick="executeTrade('Buy')"
           >
-            Long / Buy
-          </button>
-          <button
-            id="main-sell-btn"
-            class="btn-action btn-sell"
-            disabled
-            onclick="executeTrade('Sell')"
-          >
-            Short / Sell
+            Купить
           </button>
         </div>
       </div>
-      <!-- === КОНЕЦ ЧАСТИ 9 из 14 === -->
-      <!-- === НАЧАЛО ЧАСТИ 10 из 14 === -->
-      <!-- ПРАВАЯ КОЛОНКА (Информационная панель рисков и логи ордеров) -->
+      <!-- === КОНЕЦ ЧАСТИ 13 из 20 === -->
+      <!-- === НАЧАЛО ЧАСТИ 14 из 20 === -->
+      <!-- ПРАВАЯ КОЛОНКА (Информационный счетчик рисков и история) -->
       <div class="right-panel">
         <div class="risk-box">
           <div class="risk-row row-sl">
@@ -1045,7 +1078,8 @@
         </div>
       </div>
     </div>
-
+    <!-- === КОНЕЦ ЧАСТИ 14 из 20 === -->
+    <!-- === НАЧАЛО ЧАСТИ 15 из 20 === -->
     <script>
       let currentMarket = "spot";
       let currentDirection = "long";
@@ -1053,7 +1087,8 @@
       // Внутреннее независимое ядро памяти терминала
       const selectValues = {
         "margin-mode": "isolated",
-        "order-type": "market",
+        leverage: "10",
+        "order-type": "limit",
         ticker: "BTCUSDT",
         rr: "3",
         qty: "0.001_BTC",
@@ -1073,7 +1108,8 @@
           XAUTUSDT: "XAUTUSDT",
         },
       };
-
+      /* === КОНЕЦ ЧАСТИ 15 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 16 из 20 === */
       const tickerToQtyValue = {
         BTCUSDT: "0.001_BTC",
         XAUTUSDT: "0.001_XAUT",
@@ -1086,16 +1122,13 @@
         "0.01_ETH": "0.01 (ETH)",
         "0.1_SOL": "0.1 (SOL)",
       };
-
-      // Округление цен Bybit по тикерам для защиты от ошибок API
       const tickerPriceDecimals = {
         BTCUSDT: 1,
         ETHUSDT: 2,
         SOLUSDT: 2,
         XAUTUSDT: 2,
       };
-      /* === КОНЕЦ ЧАСТИ 10 из 14 === */
-      /* === НАЧАЛО ЧАСТИ 11 из 14 === */
+
       const tickerToRecommendedSL = {
         spot: { BTCUSDT: 2.5, ETHUSDT: 3.0, SOLUSDT: 4.0, XAUTUSDT: 1.0 },
         linear: { BTCUSDT: 1.0, ETHUSDT: 1.5, SOLUSDT: 2.0, XAUTUSDT: 0.3 },
@@ -1106,28 +1139,15 @@
         SOLUSDT: 180,
         XAUTUSDT: 2400,
       };
-
-      const entryPriceInput = document.getElementById("entry-price");
-      const slStepPercentInput = document.getElementById("sl-step-percent");
-      const simMarketPriceInput = document.getElementById("sim-market-price");
-      const simulatorPriceBox = document.getElementById("simulator-price-box");
-      const crossWarning = document.getElementById("cross-warning");
-      const marginModeGroup = document.getElementById("margin-mode-group");
-      const orderTypeGroup = document.getElementById("order-type-group");
-      const tradeDirectionGroup = document.getElementById(
-        "trade-direction-group",
-      );
-      const recSlValue = document.getElementById("rec-sl-value");
-      const slRecBox = document.getElementById("sl-rec-box");
-      const dirLongBtn = document.getElementById("dir-long-btn");
-      const dirShortBtn = document.getElementById("dir-short-btn");
-      const mainBuyBtn = document.getElementById("main-buy-btn");
-      const mainSellBtn = document.getElementById("main-sell-btn");
-      const themeToggleBtn = document.getElementById("theme-toggle");
-
+      /* === КОНЕЦ ЧАСТИ 16 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 17 из 20 === */
       function initThemeEngine() {
+        const themeToggleBtn = document.getElementById("theme-toggle");
+        if (!themeToggleBtn) return;
+
         const savedTheme = localStorage.getItem("bybit-pro-theme") || "dark";
         document.documentElement.setAttribute("data-theme", savedTheme);
+
         themeToggleBtn.addEventListener("click", () => {
           const currentTheme =
             document.documentElement.getAttribute("data-theme");
@@ -1139,13 +1159,13 @@
           );
         });
       }
-      /* === КОНЕЦ ЧАСТИ 11 из 14 === */
-      /* === НАЧАЛО ЧАСТИ 12 из 14 === */
+
       function initCustomSelect(containerId, storageKey, callback) {
         const container = document.getElementById(containerId);
         if (!container) return;
         const trigger = container.querySelector(".select-trigger");
         const items = container.querySelectorAll(".select-item");
+
         trigger.addEventListener("click", (e) => {
           e.stopPropagation();
           document
@@ -1155,6 +1175,7 @@
             });
           container.classList.toggle("open");
         });
+
         items.forEach((item) => {
           item.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -1174,29 +1195,208 @@
           .forEach((el) => el.classList.remove("open"));
       });
 
-      function setDirection(direction, isSystem = false) {
-        if (!isSystem && currentDirection === direction) return;
-        currentDirection = direction;
-        if (direction === "long") {
-          dirLongBtn.classList.add("active-long");
-          dirShortBtn.classList.remove("active-short");
-          mainBuyBtn.disabled = false;
-          mainSellBtn.disabled = true;
-          if (!isSystem) logMessage(`[Инфо]: Направление переключено в LONG.`);
-        } else {
-          dirShortBtn.classList.add("active-short");
-          dirLongBtn.classList.remove("active-long");
-          mainBuyBtn.disabled = true;
-          mainSellBtn.disabled = false;
-          if (!isSystem) logMessage(`[Инфо]: Направление переключено в SHORT.`);
+      function copyToClipboard(inputId) {
+        const inputEl = document.getElementById(inputId);
+        if (!inputEl || !inputEl.value) {
+          logMessage("[Ошибка]: Поле пустое, нечего копировать.");
+          return;
+        }
+        inputEl.select();
+        inputEl.setSelectionRange(0, 99999);
+        navigator.clipboard
+          .writeText(inputEl.value)
+          .then(() => {
+            logMessage(`[Система]: Цена копирована в буфер: ${inputEl.value}`);
+          })
+          .catch(() => {
+            document.execCommand("copy");
+            logMessage(
+              `[Система]: Цена копирована в буфер (резерв): ${inputEl.value}`,
+            );
+          });
+      }
+      /* === КОНЕЦ ЧАСТИ 17 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 18 из 20 === */
+      function getTargetEntryPrice() {
+        const simMarketPriceInput = document.getElementById("sim-market-price");
+        const entryPriceInput = document.getElementById("entry-price");
+        return selectValues["order-type"] === "market"
+          ? simMarketPriceInput
+            ? parseFloat(simMarketPriceInput.value) ||
+              marketPrices[selectValues["ticker"]]
+            : marketPrices[selectValues["ticker"]]
+          : entryPriceInput
+            ? parseFloat(entryPriceInput.value) || 0
+            : 0;
+      }
+
+      function handleCoinQtyInput() {
+        const entryPrice = getTargetEntryPrice();
+        const coinQtyInput = document.getElementById("coin-qty-input");
+        const coinQty = coinQtyInput ? parseFloat(coinQtyInput.value) || 0 : 0;
+        const orderCostInput = document.getElementById("order-cost-input");
+
+        if (
+          entryPrice > 0 &&
+          coinQty > 0 &&
+          orderCostInput &&
+          document.activeElement.id === "coin-qty-input"
+        ) {
+          orderCostInput.value = (coinQty * entryPrice).toFixed(2);
         }
         updateCalculations();
       }
 
-      function syncSimulatorPlaceholder() {
-        const selectedTicker = selectValues["ticker"];
-        if (simMarketPriceInput)
-          simMarketPriceInput.placeholder = `Тек. цена ${selectedTicker.replace("USDT", "")}: ${marketPrices[selectedTicker]}`;
+      function handleOrderCostInput() {
+        const entryPrice = getTargetEntryPrice();
+        const orderCostInput = document.getElementById("order-cost-input");
+        const orderCost = orderCostInput
+          ? parseFloat(orderCostInput.value) || 0
+          : 0;
+        const currentQtyKey = selectValues["qty"] || "0.001_BTC";
+        const qtyString = currentQtyKey.split("_");
+        const qtyStep = parseFloat(qtyString) || 0.001;
+        const coinQtyInput = document.getElementById("coin-qty-input");
+
+        if (
+          entryPrice > 0 &&
+          orderCost > 0 &&
+          coinQtyInput &&
+          document.activeElement.id === "order-cost-input"
+        ) {
+          let calculatedQty = orderCost / entryPrice;
+          calculatedQty = Math.floor(calculatedQty / qtyStep) * qtyStep;
+          const decs = qtyString[0].includes(".")
+            ? qtyString[0].split(".")[1].length
+            : 0;
+          coinQtyInput.value = calculatedQty.toFixed(decs);
+        }
+        updateCalculations();
+      }
+
+      function setDirection(direction, isSystem = false) {
+        if (!isSystem && currentDirection === direction) return;
+        currentDirection = direction;
+        const dirLongBtn = document.getElementById("dir-long-btn");
+        const dirShortBtn = document.getElementById("dir-short-btn");
+        const mainBuyBtn = document.getElementById("main-buy-btn");
+        const mainSellBtn = document.getElementById("main-sell-btn");
+
+        if (direction === "long") {
+          if (dirLongBtn) dirLongBtn.classList.add("active-long");
+          if (dirShortBtn) dirShortBtn.classList.remove("active-short");
+          if (mainBuyBtn) mainBuyBtn.disabled = false;
+          if (mainSellBtn) mainSellBtn.disabled = true;
+          if (!isSystem) logMessage(`[Инфо]: Направление переключено в LONG.`);
+        } else {
+          if (dirShortBtn) dirShortBtn.classList.add("active-short");
+          if (dirLongBtn) dirLongBtn.classList.remove("active-long");
+          if (mainBuyBtn) mainBuyBtn.disabled = true;
+          if (mainSellBtn) mainSellBtn.disabled = false;
+          if (!isSystem) logMessage(`[Инфо]: Направление переключено в SHORT.`);
+        }
+        updateCalculations();
+      }
+      /* === КОНЕЦ ЧАСТИ 18 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 19 из 20 === */
+      function handleOrderTypeChange(val) {
+        const entryPriceBox = document.getElementById("entry-price-box");
+        const simulatorPriceBox = document.getElementById(
+          "simulator-price-box",
+        );
+        const entryPriceInput = document.getElementById("entry-price");
+        if (!entryPriceBox || !simulatorPriceBox) return;
+
+        if (val === "market") {
+          simulatorPriceBox.classList.remove("hidden");
+          entryPriceBox.classList.add("hidden");
+          if (entryPriceInput) entryPriceInput.value = "";
+          logMessage(
+            `[Инфо]: Включен Рыночный ордер. Цена берется из стакана.`,
+          );
+        } else {
+          simulatorPriceBox.classList.add("hidden");
+          entryPriceBox.classList.remove("hidden");
+          logMessage(`[Инфо]: Включен Лимитный ордер. Введите цену входа.`);
+        }
+
+        if (currentMarket === "spot") {
+          const coinQtyGroup = document.getElementById("coin-qty-group");
+          if (val === "market") {
+            if (coinQtyGroup) coinQtyGroup.classList.add("hidden");
+          } else {
+            if (coinQtyGroup) coinQtyGroup.classList.remove("hidden");
+          }
+        }
+      }
+
+      function switchMarket(market) {
+        currentMarket = market;
+        const tabs = document.querySelectorAll(".tab-btn");
+        tabs.forEach((btn) => btn.classList.remove("active"));
+        tabs.forEach((btn) => {
+          if (market === "spot" && btn.innerText.includes("Спот"))
+            btn.classList.add("active");
+          if (market === "linear" && btn.innerText.includes("Фьючерсы"))
+            btn.classList.add("active");
+        });
+
+        const slStepPercentInput = document.getElementById("sl-step-percent");
+        if (slStepPercentInput) slStepPercentInput.value = "";
+
+        const levRow = document.getElementById("leverage-row");
+        const levSelectGroup = document.getElementById("leverage-select-group");
+        const actionButtonsZone = document.getElementById(
+          "bybit-action-buttons-zone",
+        );
+        const coinQtyGroup = document.getElementById("coin-qty-group");
+        const orderTypeGroup = document.getElementById("order-type-group");
+        const tradeDirectionGroup = document.getElementById(
+          "trade-direction-group",
+        );
+        const marginModeGroup = document.getElementById("margin-mode-group");
+
+        if (market === "spot") {
+          if (levRow) levRow.classList.add("hidden");
+          if (marginModeGroup) marginModeGroup.classList.add("hidden");
+          if (levSelectGroup) levSelectGroup.classList.add("hidden");
+          if (orderTypeGroup) orderTypeGroup.classList.add("full-width-column");
+          if (tradeDirectionGroup) tradeDirectionGroup.classList.add("hidden");
+
+          if (actionButtonsZone) {
+            actionButtonsZone.innerHTML = `<button id="main-buy-btn" class="btn-action btn-buy" style="grid-column: span 2;" onclick="executeTrade('Buy')">Купить</button>`;
+          }
+          if (selectValues["order-type"] === "market") {
+            if (coinQtyGroup) coinQtyGroup.classList.add("hidden");
+          } else {
+            if (coinQtyGroup) coinQtyGroup.classList.remove("hidden");
+          }
+          setDirection("long", true);
+          logMessage(`[Режим]: Включен рынок СПОТ. Интерфейс адаптирован.`);
+        } else {
+          if (levRow) levRow.classList.remove("hidden");
+          if (marginModeGroup) marginModeGroup.classList.remove("hidden");
+          if (levSelectGroup) levSelectGroup.classList.remove("hidden");
+          if (orderTypeGroup)
+            orderTypeGroup.classList.remove("full-width-column");
+          if (coinQtyGroup) coinQtyGroup.classList.remove("hidden");
+          if (tradeDirectionGroup)
+            tradeDirectionGroup.classList.remove("hidden");
+
+          if (actionButtonsZone) {
+            actionButtonsZone.innerHTML = `
+              <button id="main-buy-btn" class="btn-action btn-buy" onclick="executeTrade('Long / Buy')">LONG</button>
+              <button id="main-sell-btn" class="btn-action btn-sell" onclick="executeTrade('Short / Sell')">SHORT</button>
+            `;
+          }
+          setDirection("long", true);
+          logMessage(
+            `[Режим]: Включен рынок ФЬЮЧЕРСЫ. Выбор направлений активен.`,
+          );
+        }
+        updateTickerDisplayNames();
+        syncSimulatorPlaceholder();
+        updateSLRecommendationText();
       }
 
       function updateTickerDisplayNames() {
@@ -1214,20 +1414,44 @@
         });
       }
 
+      function syncSimulatorPlaceholder() {
+        const selectedTicker = selectValues["ticker"];
+        const simMarketPriceInput = document.getElementById("sim-market-price");
+        if (simMarketPriceInput)
+          simMarketPriceInput.placeholder = `Тек. цена ${selectedTicker.replace("USDT", "")}: ${marketPrices[selectedTicker]}`;
+      }
+
       function updateSLRecommendationText() {
         const selectedTicker = selectValues["ticker"];
         const marketKey = currentMarket === "spot" ? "spot" : "linear";
+        const recSlValue = document.getElementById("rec-sl-value");
         if (recSlValue)
           recSlValue.innerText =
             tickerToRecommendedSL[marketKey][selectedTicker] || 2.0;
       }
-      /* === КОНЕЦ ЧАСТИ 12 из 14 === */
-      /* === НАЧАЛО ЧАСТИ 13 из 14 === */
+
+      function logMessage(text) {
+        const logBox = document.getElementById("terminal-logs");
+        if (!logBox) return;
+        const now = new Date();
+        const pad = (num) => String(num).padStart(2, "0");
+        const dStr = `${pad(now.getDate())}.${pad(now.getMonth() + 1)}.${now.getFullYear()}`;
+        const tStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        const stamp = `<span style="color: var(--text-muted); font-size: 10px;">[${dStr} ${tStr}]</span>`;
+        logBox.innerHTML =
+          logBox.innerHTML === ""
+            ? `${stamp} ${text}`
+            : `${logBox.innerHTML}<br>${stamp} ${text}`;
+        logBox.scrollTop = logBox.scrollHeight;
+      }
+      /* === КОНЕЦ ЧАСТИ 19 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 20.1 из 20 === */
       function applySLRecommendation() {
         const selectedTicker = selectValues["ticker"];
         const marketKey = currentMarket === "spot" ? "spot" : "linear";
         const recommendedVal =
           tickerToRecommendedSL[marketKey][selectedTicker] || 2.0;
+        const slStepPercentInput = document.getElementById("sl-step-percent");
         if (slStepPercentInput) {
           slStepPercentInput.value = recommendedVal;
           logMessage(
@@ -1237,26 +1461,175 @@
         }
       }
 
-      function handleOrderTypeChange(val) {
-        const entryPriceBox = document.getElementById("entry-price-box");
-        if (!entryPriceBox || !simulatorPriceBox) return;
+      function updateCalculations() {
+        const balanceInputEl = document.getElementById("current-balance");
+        const balance = balanceInputEl
+          ? parseFloat(balanceInputEl.value) || 0
+          : 0;
+        const marginLimit =
+          parseFloat(document.getElementById("margin-limit").value) || 0;
+        const riskUsdt =
+          parseFloat(document.getElementById("risk-usdt").value) || 0;
+        const rr = parseFloat(selectValues["rr"]) || 1;
+        const slStepPercentInput = document.getElementById("sl-step-percent");
+        const slPercent = slStepPercentInput
+          ? parseFloat(slStepPercentInput.value) || 0
+          : 0;
 
-        if (val === "market") {
-          simulatorPriceBox.classList.remove("hidden");
-          entryPriceBox.classList.add("hidden");
-          entryPriceInput.value = "";
-          logMessage(`[Инфо]: Включен симулятор рыночного входа.`);
-        } else {
-          simulatorPriceBox.classList.add("hidden");
-          entryPriceBox.classList.remove("hidden");
-          logMessage(
-            `[Инфо]: Переключено на лимитный вход. Введите цену вручную.`,
-          );
+        const currentQtyKey = selectValues["qty"] || "0.001_BTC";
+        const qtyString = currentQtyKey.split("_");
+        const qtyStep = parseFloat(qtyString) || 0.001;
+
+        const recMarginEl = document.getElementById("rec-margin");
+        if (recMarginEl) {
+          const safeBalance = balance > 0 ? balance : 100;
+          recMarginEl.innerText = (safeBalance / 4).toFixed(2);
         }
-        updateCalculations();
+
+        let entryPrice = getTargetEntryPrice();
+
+        const intTpInput = document.getElementById("interactive-tp-input");
+        const intSlInput = document.getElementById("interactive-sl-input");
+
+        if (
+          entryPrice <= 0 ||
+          slPercent <= 0 ||
+          riskUsdt <= 0 ||
+          marginLimit <= 0
+        ) {
+          resetCalculations();
+          // Снимаем подсвечивающие фокус-классы при очистке
+          if (intTpInput) intTpInput.classList.remove("calculated-tp");
+          if (intSlInput) intSlInput.classList.remove("calculated-sl");
+          return;
+        }
+
+        const slDist = entryPrice * (slPercent / 100);
+        let slP, tpP;
+
+        if (currentMarket === "linear" && currentDirection === "short") {
+          slP = entryPrice + slDist;
+          tpP = entryPrice - slDist * rr;
+        } else {
+          slP = entryPrice - slDist;
+          tpP = entryPrice + slDist * rr;
+        }
+
+        const pDecs = tickerPriceDecimals[selectValues["ticker"]] || 2;
+        document.getElementById("calc-sl-price").innerText =
+          `${slP.toFixed(pDecs)} USDT`;
+        const potentialProfitUsdt = (riskUsdt * rr).toFixed(2);
+        document.getElementById("calc-tp-price").innerText =
+          `${tpP.toFixed(pDecs)} USDT | +${potentialProfitUsdt} USDT`;
+
+        if (intTpInput && document.activeElement !== intTpInput) {
+          intTpInput.value = tpP.toFixed(pDecs);
+          // Включаем мягкую зеленую флэтовую подсветку рассчитанного тейка
+          intTpInput.classList.add("calculated-tp");
+        }
+        if (intSlInput && document.activeElement !== intSlInput) {
+          intSlInput.value = slP.toFixed(pDecs);
+          // Включаем мягкую красную флэтовую подсветку рассчитанного стопа
+          intSlInput.classList.add("calculated-sl");
+        }
+        /* === КОНЕЦ ЧАСТИ 20.1 из 20 === */
+        /* === НАЧАЛО ЧАСТИ 20.2 из 20 === */
+        let qty = riskUsdt / slDist;
+        const decs = qtyString.includes(".") ? qtyString.split(".").length : 0;
+        qty = Math.floor(qty / qtyStep) * qtyStep;
+        if (qty <= 0) qty = qtyStep;
+
+        let totalNotional = qty * entryPrice;
+        document.getElementById("calc-notional").innerText =
+          `${totalNotional.toFixed(2)} USDT`;
+
+        if (currentMarket === "spot") {
+          // На Споте кредитное плечо всегда равно 1х (торговля только на свои средства)
+          let fCost = totalNotional;
+          if (fCost > marginLimit || fCost > balance) {
+            fCost = Math.min(marginLimit, balance);
+            qty = Math.floor(fCost / entryPrice / qtyStep) * qtyStep;
+            fCost = qty * entryPrice;
+            document.getElementById("calc-notional").innerText =
+              `${fCost.toFixed(2)} USDT`;
+          }
+          document.getElementById("calc-qty").innerText =
+            `${qty.toFixed(decs)} монеты`;
+          document.getElementById("calc-leverage").innerText = "1 x";
+          document.getElementById("calc-bybit-cost").innerText =
+            `${fCost.toFixed(2)} USDT`;
+        } else {
+          // 🌟 ФЬЮЧЕРСЫ: Автоматический динамический расчет кредитного плеча по ТЗ
+          // Задаем лимит маржи как стоимость ордера для Bybit
+          let fCost = marginLimit;
+
+          if (fCost > balance) {
+            fCost = balance;
+          }
+
+          // Вычисляем точное плечо, необходимое для удержания позиции при таком лимите маржи
+          // Формула: Плечо = Номинальный объем / Маржа
+          let calculatedLeverage = totalNotional / fCost;
+
+          // Ограничиваем максимальное плечо биржи Bybit (например, до 100x), чтобы избежать ошибок
+          if (calculatedLeverage > 100) {
+            calculatedLeverage = 100;
+            // Если плечо уперлось в лимит биржи, подрезаем номинальный объем позиции под риск
+            totalNotional = fCost * calculatedLeverage;
+            qty = Math.floor(totalNotional / entryPrice / qtyStep) * qtyStep;
+            totalNotional = qty * entryPrice;
+            document.getElementById("calc-notional").innerText =
+              `${totalNotional.toFixed(2)} USDT`;
+          }
+
+          // Ограничиваем минимальное плечо (не может быть меньше 1х)
+          if (calculatedLeverage < 1) {
+            calculatedLeverage = 1;
+            fCost = totalNotional;
+          }
+
+          document.getElementById("calc-qty").innerText =
+            `${qty.toFixed(decs)} монеты`;
+          document.getElementById("calc-leverage").innerText =
+            `${calculatedLeverage.toFixed(1)} x`;
+          document.getElementById("calc-bybit-cost").innerText =
+            `${fCost.toFixed(2)} USDT`;
+        }
+      }
+      /* === КОНЕЦ ЧАСТИ 20.2 из 20 === */
+      /* === НАЧАЛО ЧАСТИ 20.3 из 20 === */
+      function resetCalculations() {
+        document.getElementById("calc-sl-price").innerText = "-";
+        document.getElementById("calc-tp-price").innerText = "-";
+        document.getElementById("calc-leverage").innerText = "-";
+        document.getElementById("calc-bybit-cost").innerText = "-";
+        document.getElementById("calc-qty").innerText = "-";
+        document.getElementById("calc-notional").innerText = "-";
+
+        const intTpInput = document.getElementById("interactive-tp-input");
+        const intSlInput = document.getElementById("interactive-sl-input");
+        if (intTpInput) intTpInput.value = "";
+        if (intSlInput) intSlInput.value = "";
+      }
+
+      function executeTrade(side) {
+        if (
+          (parseFloat(document.getElementById("risk-usdt").value) || 0) <= 0 ||
+          (parseFloat(document.getElementById("sl-step-percent").value) || 0) <=
+            0 ||
+          (parseFloat(document.getElementById("margin-limit").value) || 0) <= 0
+        ) {
+          alert("Ошибка: Заполните все поля ввода!");
+          return;
+        }
+        alert(
+          `Ордер Bybit отправлен:\nТип ордера: ${selectValues["order-type"].toUpperCase()}\nНаправление: ${side}\nПара: ${tickerNames[currentMarket][selectValues["ticker"]]}\nНоминал: ${document.getElementById("calc-notional").innerText}\nМаржа: ${document.getElementById("calc-bybit-cost").innerText}\nSL: ${document.getElementById("calc-sl-price").innerText}\nTP: ${document.getElementById("calc-tp-price").innerText}`,
+        );
       }
 
       function handleMarginModeChange(val) {
+        const crossWarning = document.getElementById("cross-warning");
+        if (!crossWarning) return;
         if (val === "cross") {
           crossWarning.classList.remove("hidden");
           logMessage(`[⚠️ РИСК]: Включен режим Кросс-маржи!`);
@@ -1268,296 +1641,39 @@
       }
 
       function handleTickerChange(val) {
+        const slStepPercentInput = document.getElementById("sl-step-percent");
         if (slStepPercentInput) slStepPercentInput.value = "";
         selectValues["ticker"] = val;
         const targetQtyValue = tickerToQtyValue[val];
         selectValues["qty"] = targetQtyValue;
+
         const roundedInput = document.getElementById("qty-rounding-display");
-        if (roundedInput) {
-          roundedInput.value = qtyValuesToText[targetQtyValue];
-        }
+        if (roundedInput) roundedInput.value = qtyValuesToText[targetQtyValue];
+
+        const coinName = targetQtyValue.split("_");
+        const lblCoinQty = document.getElementById("lbl-coin-qty");
+        const sfxCoinQty = document.getElementById("sfx-coin-qty");
+
+        if (lblCoinQty) lblCoinQty.innerText = `Количество в ${coinName}`;
+        if (sfxCoinQty) sfxCoinQty.innerText = coinName;
+
         logMessage(
-          `[Инфо]: Пара изменена на ${tickerNames[currentMarket][val]}. Шаг округления зафиксирован.`,
+          `[Инфо]: Пара изменена на ${tickerNames[currentMarket][val]}.`,
         );
         syncSimulatorPlaceholder();
         updateSLRecommendationText();
         updateCalculations();
       }
 
-      // 🌟 МОДЕРНИЗИРОВАНО: Корректное скрытие направления без деформации табов
-      function switchMarket(market) {
-        currentMarket = market;
-        const tabs = document.querySelectorAll(".tab-btn");
-        tabs.forEach((btn) => btn.classList.remove("active"));
-        if (
-          window.event &&
-          window.event.target &&
-          window.event.target.classList
-        )
-          window.event.target.classList.add("active");
-        else {
-          tabs.forEach((btn) => {
-            if (market === "spot" && btn.innerText.includes("Спот"))
-              btn.classList.add("active");
-            if (market === "linear" && btn.innerText.includes("Фьючерсы"))
-              btn.classList.add("active");
-          });
-        }
-        if (slStepPercentInput) slStepPercentInput.value = "";
-        const levRow = document.getElementById("leverage-row");
-
-        if (market === "spot") {
-          if (levRow) levRow.classList.add("hidden");
-          if (marginModeGroup) marginModeGroup.classList.add("hidden");
-
-          // Полностью скрываем блок LONG/SHORT, чтобы флекс-табы растянулись на 100%
-          if (tradeDirectionGroup) tradeDirectionGroup.classList.add("hidden");
-          if (orderTypeGroup) orderTypeGroup.classList.add("full-width-column");
-          setDirection("long", true);
-        } else {
-          if (levRow) levRow.classList.remove("hidden");
-          if (marginModeGroup) marginModeGroup.classList.remove("hidden");
-
-          // Возвращаем блок LONG/SHORT на законное место справа
-          if (tradeDirectionGroup)
-            tradeDirectionGroup.classList.remove("hidden");
-          if (orderTypeGroup)
-            orderTypeGroup.classList.remove("full-width-column");
-          setDirection("long", true);
-        }
-        updateTickerDisplayNames();
-        syncSimulatorPlaceholder();
-        updateSLRecommendationText();
-        logMessage(
-          `[Режим]: Переключено на рынок ${market === "spot" ? "СПОТ" : "ФЬЮЧЕРСЫ"}.`,
-        );
-        updateCalculations();
-      }
-
-      function toggleCalendarView() {
-        const scheduleList = document.getElementById("macro-schedule-list");
-        const toggleBtn = document.getElementById("toggle-calendar-btn");
-        if (!scheduleList || !toggleBtn) return;
-
-        if (scheduleList.classList.contains("hidden")) {
-          scheduleList.classList.remove("hidden");
-          toggleBtn.innerText = "Скрыть";
-          logMessage(
-            "[Инфо]: Развернут список критических макроэкономических дат.",
-          );
-        } else {
-          scheduleList.classList.add("hidden");
-          toggleBtn.innerText = "События";
-        }
-      }
-
-      function logMessage(text) {
-        const logBox = document.getElementById("terminal-logs");
-        if (!logBox) return;
-        const now = new Date();
-        const pad = (num) => String(num).padStart(2, "0");
-        const dStr = `${pad(now.getDate())}.${pad(now.getMonth() + 1)}.${now.getFullYear()}`;
-        const tStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-        const stamp = `<span style="color: var(--text-muted); font-size: 10px;">[${dStr} ${tStr}]</span>`;
-        if (logBox.innerHTML === "") logBox.innerHTML = `${stamp} ${text}`;
-        else logBox.innerHTML += `<br>${stamp} ${text}`;
-        logBox.scrollTop = logBox.scrollHeight;
-      }
-      /* === КОНЕЦ ЧАСТИ 13 из 14 === */
-      /* === НАЧАЛО ЧАСТИ 14 из 14 === */
-      function updateCalculations() {
-        const balance =
-          parseFloat(document.getElementById("current-balance").value) || 0;
-        const marginLimit =
-          parseFloat(document.getElementById("margin-limit").value) || 0;
-        const riskUsdt =
-          parseFloat(document.getElementById("risk-usdt").value) || 0;
-        const rr = parseFloat(selectValues["rr"]) || 1;
-        const slPercent = parseFloat(slStepPercentInput.value) || 0;
-
-        const qtyString = selectValues["qty"].split("_");
-        const qtyStep = parseFloat(qtyString) || 0.001;
-
-        if (document.getElementById("rec-margin"))
-          document.getElementById("rec-margin").innerText = (
-            balance / 4
-          ).toFixed(2);
-
-        let entryPrice =
-          selectValues["order-type"] === "market"
-            ? parseFloat(simMarketPriceInput.value) ||
-              marketPrices[selectValues["ticker"]]
-            : parseFloat(entryPriceInput.value) || 0;
-
-        if (
-          entryPrice <= 0 ||
-          slPercent <= 0 ||
-          riskUsdt <= 0 ||
-          marginLimit <= 0
-        ) {
-          resetCalculations();
-          const filterBox = document.getElementById("trade-filter-box");
-          if (filterBox) {
-            filterBox.classList.remove("filter-warning");
-            document.getElementById("filter-title").style.color =
-              "var(--text-muted)";
-            document.getElementById("filter-status").innerText =
-              "Ожидание ввода параметров сделки...";
-            document.getElementById("filter-status").style.color =
-              "var(--text-muted)";
-          }
-          return;
-        }
-
-        const slDist = entryPrice * (slPercent / 100);
-        let slP, tpP;
-        if (currentDirection === "long") {
-          slP = entryPrice - slDist;
-          tpP = entryPrice + slDist * rr;
-        } else {
-          slP = entryPrice + slDist;
-          tpP = entryPrice - slDist * rr;
-        }
-
-        const pDecs = tickerPriceDecimals[selectValues["ticker"]] || 2;
-
-        document.getElementById("calc-sl-price").innerText =
-          `${slP.toFixed(pDecs)} USDT (${currentDirection === "long" ? "-" : "+"}${slPercent}%)`;
-
-        const potentialProfitUsdt = (riskUsdt * rr).toFixed(2);
-        document.getElementById("calc-tp-price").innerText =
-          `${tpP.toFixed(pDecs)} USDT (${currentDirection === "long" ? "+" : "-"}${(slPercent * rr).toFixed(1)}%) | +${potentialProfitUsdt} USDT`;
-
-        let qty = riskUsdt / slDist;
-
-        const decs = qtyString.includes(".") ? qtyString.split(".").length : 0;
-        qty = Math.floor(qty / qtyStep) * qtyStep;
-        if (qty <= 0) qty = qtyStep;
-
-        let totalNotional = qty * entryPrice;
-        document.getElementById("calc-notional").innerText =
-          `${totalNotional.toFixed(2)} USDT`;
-
-        let calculatedLeverage = 1;
-        let finalCost = 0;
-
-        if (currentMarket === "spot") {
-          finalCost = totalNotional;
-          if (finalCost > marginLimit || finalCost > balance) {
-            finalCost = Math.min(marginLimit, balance);
-            qty = Math.floor(finalCost / entryPrice / qtyStep) * qtyStep;
-            finalCost = qty * entryPrice;
-            document.getElementById("calc-notional").innerText =
-              `${finalCost.toFixed(2)} USDT`;
-          }
-          document.getElementById("calc-qty").innerText =
-            `${qty.toFixed(decs)} монеты`;
-          document.getElementById("calc-bybit-cost").innerText =
-            `${finalCost.toFixed(2)} USDT`;
-        } else {
-          finalCost = Math.min(marginLimit, balance);
-          let reqLev = totalNotional / finalCost;
-          if (reqLev < 1) {
-            reqLev = 1;
-            finalCost = totalNotional;
-          }
-          if (reqLev > 50) {
-            reqLev = 50;
-            qty =
-              Math.floor((finalCost * reqLev) / entryPrice / qtyStep) * qtyStep;
-            document.getElementById("calc-notional").innerText =
-              `${(qty * entryPrice).toFixed(2)} USDT`;
-          }
-          calculatedLeverage = Math.ceil(reqLev);
-          document.getElementById("calc-qty").innerText =
-            `${qty.toFixed(decs)} монеты`;
-          document.getElementById("calc-leverage").innerText =
-            `${calculatedLeverage} x`;
-          document.getElementById("calc-bybit-cost").innerText =
-            `${finalCost.toFixed(2)} USDT`;
-        }
-
-        const filterBox = document.getElementById("trade-filter-box");
-        const filterTitle = document.getElementById("filter-title");
-        const filterStatus = document.getElementById("filter-status");
-
-        if (filterBox && filterStatus && filterTitle) {
-          let warningMessage = "";
-
-          const now = new Date();
-          const currentDay = now.getDay();
-          const currentHour = now.getHours();
-          const currentMonth = now.getMonth() + 1;
-          const currentDate = now.getDate();
-
-          const pad = (n) => String(n).padStart(2, "0");
-          const dateStr = `${pad(currentDate)}.${pad(currentMonth)}`;
-
-          const blacklistedMacroDates2026 = [
-            "26.08", // GDP США
-            "04.09", // Non-Farm Payrolls
-            "11.09", // CPI США
-            "16.09", // FOMC
-            "25.09", // Квартальная экспирация фьючерсов
-          ];
-
-          if (blacklistedMacroDates2026.includes(dateStr)) {
-            warningMessage = `❌ НЕ ТОРГОВАТЬ (Критический день новостей): Сегодня (${dateStr}) публикация важных макроданных США. Книга ордеров Bybit пустеет, велик риск проскальзывания стоп-лосса!`;
-          } else if (currentDay === 6 || currentDay === 0) {
-            warningMessage = `❌ НЕ ТОРГОВАТЬ (Выходные дни): Ликвидность снижена. Высокая вероятность ложных пробоев и ценовых "вертолетов" маркетмейкеров.`;
-          } else if (currentDay === 1 && currentHour < 15) {
-            warningMessage = `⚠️ НЕ РЕКОМЕНДУЕТСЯ (Утро понедельника): Американская сессия еще не открылась, хаотичное распределение объемов.`;
-          } else if (currentDay === 5 && currentHour >= 18) {
-            warningMessage = `⚠️ ВНИМАНИЕ (Вечер пятницы): Крупные фонды фиксируют позиции перед выходными. Опасность непредсказуемых ложных выносов.`;
-          } else if (riskUsdt > balance * 0.05) {
-            warningMessage = `❌ НЕ ТОРГОВАТЬ (Критический риск): Риск сделки (${riskUsdt} USDT) выше безопасных 5% от депо. Серия стопов сольет баланс.`;
-          } else if (currentMarket === "linear" && calculatedLeverage > 25) {
-            warningMessage = `❌ НЕ ТОРГОВАТЬ (Высокое плечо): Расчетное плечо ${calculatedLeverage}x слишком опасно для внутридневных сделок.`;
-          }
-
-          if (warningMessage !== "") {
-            filterBox.classList.add("filter-warning");
-            filterTitle.style.color = "var(--red)";
-            filterStatus.innerText = warningMessage;
-            filterStatus.style.color = "var(--red)";
-          } else {
-            filterBox.classList.remove("filter-warning");
-            filterTitle.style.color = "var(--primary)";
-            filterStatus.innerText =
-              "✅ Рыночное окно оптимально. Торговые объемы в стаканах Bybit стабильны, критические новости отсутствуют.";
-            filterStatus.style.color = "var(--green)";
-          }
-        }
-      }
-
-      function resetCalculations() {
-        document.getElementById("calc-sl-price").innerText = "-";
-        document.getElementById("calc-tp-price").innerText = "-";
-        document.getElementById("calc-leverage").innerText = "-";
-        document.getElementById("calc-bybit-cost").innerText = "-";
-        document.getElementById("calc-qty").innerText = "-";
-        document.getElementById("calc-notional").innerText = "-";
-      }
-
-      function executeTrade(side) {
-        if (
-          (parseFloat(document.getElementById("risk-usdt").value) || 0) <= 0 ||
-          (parseFloat(slStepPercentInput.value) || 0) <= 0 ||
-          (parseFloat(document.getElementById("margin-limit").value) || 0) <= 0
-        ) {
-          alert("Ошибка: Заполните все поля ввода!");
-          return;
-        }
-        alert(
-          `Параметры Bybit:\nТип ордера: ${selectValues["order-type"].toUpperCase()}\nНаправление: ${side}\nПара: ${tickerNames[currentMarket][selectValues["ticker"]]}\nРежим: ${(currentMarket === "linear" ? selectValues["margin-mode"] : "SPOT").toUpperCase()}\nНоминал: ${document.getElementById("calc-notional").innerText}\nМаржа: ${document.getElementById("calc-bybit-cost").innerText}\nSL: ${document.getElementById("calc-sl-price").innerText}\nTP: ${document.getElementById("calc-tp-price").innerText}`,
-        );
-      }
-
+      // 👑 СТРОГИЙ ЖИЗНЕННЫЙ ЦИКЛ ЗАПУСКА Терминала Bybit
+      // Навешиваем слушатели только на существующие селекторы
       initCustomSelect("ds-margin-mode", "margin-mode", handleMarginModeChange);
       initCustomSelect("ds-order-type", "order-type", handleOrderTypeChange);
       initCustomSelect("ds-ticker", "ticker", handleTickerChange);
       initCustomSelect("ds-rr", "rr", updateCalculations);
 
+      // Ленивая привязка клика встроенной кнопки рекомендации
+      const slRecBox = document.getElementById("sl-rec-box");
       if (slRecBox) slRecBox.addEventListener("click", applySLRecommendation);
       initThemeEngine();
 
@@ -1566,9 +1682,10 @@
         `[Риск]: Начальный баланс 100 USDT. Задайте параметры для расчета.`,
       );
 
+      // Инициализируем переключение в самый последний момент, исключая конфликты DOM
       switchMarket("spot");
-      handleOrderTypeChange("market");
+      handleOrderTypeChange("limit");
     </script>
   </body>
 </html>
-<!-- === КОНЕЦ ЧАСТИ 14 из 14 === -->
+<!-- === КОНЕЦ ЧАСТИ 20.3 из 20 === -->
