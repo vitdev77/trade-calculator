@@ -1,18 +1,18 @@
+<!-- НАЧАЛО ЧАСТИ 1 -->
 <!doctype html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bybit PRO Risk Manager</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="layout-container">
-      <!-- Левая колонка: Ввод параметров сделки -->
       <div class="calculator-panel">
         <div class="header">
           <h2>Bybit Risk Manager <span class="pro-badge">PRO</span></h2>
         </div>
-
         <div class="tabs">
           <button id="tab-spot" class="tab active" onclick="setMarket('spot')">
             Спот
@@ -21,7 +21,6 @@
             Фьючерсы
           </button>
         </div>
-
         <div id="side-selector" class="mode-selector" style="display: none">
           <button
             id="btn-long"
@@ -38,10 +37,9 @@
             Short (Продажа)
           </button>
         </div>
-
         <div class="grid-2">
           <div class="input-group" id="group-balance">
-            <label>Текущий баланс (USDT)</label>
+            <label>Баланс (USDT)</label>
             <div class="input-wrapper">
               <input
                 type="number"
@@ -52,7 +50,7 @@
             </div>
           </div>
           <div class="input-group">
-            <label>Торговая пара</label>
+            <label>Пара</label>
             <div class="input-wrapper">
               <select id="pair" onchange="handlePairChange()">
                 <option value="BTC" data-price="92000" data-round="4">
@@ -77,27 +75,26 @@
             </div>
           </div>
         </div>
-
-        <div class="input-group">
-          <label>Тип входа на Bybit (Влияет на комиссию)</label>
+        <div class="input-group" id="order-type-row" style="display: none">
+          <label>Тип входа на Bybit</label>
           <div class="tabs order-type-tabs">
             <button
               id="order-limit"
               class="tab active"
               onclick="setOrderType('limit')"
             >
-              Лимитный (Maker)
-            </button>
-            <button
+              Лимит (Maker)</button
+            ><button
               id="order-market"
               class="tab"
               onclick="setOrderType('market')"
             >
-              Рыночный (Taker)
+              Рынок (Taker)
             </button>
           </div>
         </div>
-
+        <!-- КОНЕЦ ЧАСТИ 1 -->
+        <!-- НАЧАЛО ЧАСТИ 2 -->
         <div class="input-group" id="group-entry">
           <label>Цена входа (Entry Price)</label>
           <div class="input-wrapper">
@@ -111,7 +108,6 @@
             />
           </div>
         </div>
-
         <div class="tpsl-container">
           <div class="tpsl-title">Настройки ордеров выхода (TP/SL)</div>
           <div class="tpsl-row">
@@ -141,7 +137,6 @@
             </div>
           </div>
         </div>
-
         <div class="input-group" id="group-risk">
           <label>Риск на сделку (% от баланса)</label>
           <div class="input-wrapper">
@@ -153,155 +148,261 @@
             />
           </div>
           <div class="quick-risk">
-            <button class="quick-btn" onclick="setRisk(1)">1% (Сейв)</button>
-            <button class="quick-btn" onclick="setRisk(2)">2% (Норма)</button>
-            <button class="quick-btn" onclick="setRisk(5)">
-              5% (Агрессивный)
-            </button>
+            <button class="quick-btn" onclick="setRisk(1)">1%</button
+            ><button class="quick-btn" onclick="setRisk(2)">2%</button
+            ><button class="quick-btn" onclick="setRisk(5)">5%</button>
           </div>
         </div>
-
         <div class="input-group">
-          <label>Автозаполнение Тейка по соотношению Риск/Награда</label>
+          <label>Автозаполнение Тейка</label>
           <div class="quick-risk">
-            <button class="quick-btn" onclick="applyRR(2)">1:2</button>
-            <button class="quick-btn" onclick="applyRR(3)">1:3 (Идеал)</button>
-            <button class="quick-btn" onclick="applyRR(4)">1:4</button>
+            <button class="quick-btn" onclick="applyRR(2)">1:2</button
+            ><button class="quick-btn" onclick="applyRR(3)">1:3</button
+            ><button class="quick-btn" onclick="applyRR(4)">1:4</button>
           </div>
         </div>
-
+        <div class="input-group">
+          <button
+            id="btn-toggle-grid"
+            class="mode-btn"
+            onclick="toggleGridMode()"
+          >
+            📊 Разбить на сетку (3 ведра)
+          </button>
+        </div>
         <div class="canvas-container">
           <canvas id="rrChart" width="400" height="70"></canvas>
         </div>
+        <div id="tip-text">Загрузка...</div>
       </div>
-
-      <!-- Правая колонка: Результаты и копирование на биржу -->
+      <!-- КОНЕЦ ЧАСТИ 2 -->
+      <!-- НАЧАЛО ЧАСТИ 3 -->
       <div class="results-panel">
         <div id="copy-block" class="bybit-copy-group">
-          <div class="group-title">📋 ДАННЫЕ ДЛЯ ВСТАВКИ НА BYBIT</div>
-
+          <div class="group-title">
+            📋 ДАННЫЕ ДЛЯ ВСТАВКИ НА BYBIT (ОДИН ВХОД)
+          </div>
           <div class="res-row">
             <div class="res-left">
               <span>Размер позиции (<span id="coin-label">BTC</span>):</span
               ><span class="res-meta">Поле "Количество"</span>
             </div>
             <div class="res-right">
-              <span class="res-val highlight" id="res-qty">0.00</span>
-              <button class="copy-btn" onclick="copyValue('res-qty', this)">
-                <span class="tooltip">Copied!</span>
-                <svg class="icon-copy" viewBox="0 0 24 24">
+              <span class="res-val highlight" id="res-qty">0.00</span
+              ><button class="copy-btn" onclick="copyValue('res-qty', this)">
+                <span class="tooltip">Copied!</span
+                ><svg class="icon-copy" viewBox="0 0 24 24">
                   <path
                     d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
-                  />
-                </svg>
-                <svg class="icon-check" viewBox="0 0 24 24">
+                  /></svg
+                ><svg class="icon-check" viewBox="0 0 24 24">
                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                 </svg>
               </button>
             </div>
           </div>
-
           <div class="res-row">
             <div class="res-left">
               <span>Маржа ордера (USDT):</span
               ><span class="res-meta">Поле "Стоимость"</span>
             </div>
             <div class="res-right">
-              <span class="res-val" id="res-cost-val">0.00</span>
-              <button
+              <span class="res-val" id="res-cost-val">0.00</span
+              ><button
                 class="copy-btn"
                 onclick="copyValue('res-cost-val', this)"
               >
-                <span class="tooltip">Copied!</span>
-                <svg class="icon-copy" viewBox="0 0 24 24">
+                <span class="tooltip">Copied!</span
+                ><svg class="icon-copy" viewBox="0 0 24 24">
                   <path
                     d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
-                  />
-                </svg>
-                <svg class="icon-check" viewBox="0 0 24 24">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="res-row">
-            <div class="res-left">
-              <span>Ордер защиты (Stop Loss):</span
-              ><span class="res-meta">Поле "Стоп-лосс"</span>
-            </div>
-            <div class="res-right">
-              <span class="res-val bad" id="res-sl-val">0.00</span>
-              <button class="copy-btn" onclick="copyValue('res-sl-val', this)">
-                <span class="tooltip">Copied!</span>
-                <svg class="icon-copy" viewBox="0 0 24 24">
-                  <path
-                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
-                  />
-                </svg>
-                <svg class="icon-check" viewBox="0 0 24 24">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="res-row">
-            <div class="res-left">
-              <span>Ордер цели (Take Profit):</span
-              ><span class="res-meta">Поле "Тейк-профит"</span>
-            </div>
-            <div class="res-right">
-              <span class="res-val good" id="res-tp-val">0.00</span>
-              <button class="copy-btn" onclick="copyValue('res-tp-val', this)">
-                <span class="tooltip">Copied!</span>
-                <svg class="icon-copy" viewBox="0 0 24 24">
-                  <path
-                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
-                  />
-                </svg>
-                <svg class="icon-check" viewBox="0 0 24 24">
+                  /></svg
+                ><svg class="icon-check" viewBox="0 0 24 24">
                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                 </svg>
               </button>
             </div>
           </div>
         </div>
-
+        <div
+          id="grid-copy-block"
+          class="bybit-copy-group"
+          style="
+            display: none;
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.02);
+          "
+        >
+          <div class="group-title" style="color: #3498db">
+            🛒 СЕТКА ЛИМИТНЫХ ВЕДЕР (ВХОД ЧАСТЯМИ)
+          </div>
+          <div class="grid-bucket-row">
+            <div class="bucket-num">1</div>
+            <div class="bucket-data">
+              Цена: <span id="v1-price" class="bold-val">0</span> | Кол-во:
+              <span id="v1-qty" class="bold-val">0</span>
+            </div>
+            <div class="bucket-actions">
+              <button
+                class="copy-btn"
+                onclick="copyDirectText('v1-price', this)"
+              >
+                <span class="tooltip">Copied!</span
+                ><svg class="icon-copy" viewBox="0 0 24 24">
+                  <path
+                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                  /></svg
+                ><svg class="icon-check" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg></button
+              ><button
+                class="copy-btn"
+                onclick="copyDirectText('v1-qty', this)"
+              >
+                <span class="tooltip">Copied!</span
+                ><svg class="icon-copy" viewBox="0 0 24 24">
+                  <path
+                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                  /></svg
+                ><svg class="icon-check" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="grid-bucket-row">
+            <div class="bucket-num">2</div>
+            <div class="bucket-data">
+              Цена: <span id="v2-price" class="bold-val">0</span> | Кол-во:
+              <span id="v2-qty" class="bold-val">0</span>
+            </div>
+            <div class="bucket-actions">
+              <button
+                class="copy-btn"
+                onclick="copyDirectText('v2-price', this)"
+              >
+                <span class="tooltip">Copied!</span
+                ><svg class="icon-copy" viewBox="0 0 24 24">
+                  <path
+                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                  /></svg
+                ><svg class="icon-check" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg></button
+              ><button
+                class="copy-btn"
+                onclick="copyDirectText('v2-qty', this)"
+              >
+                <span class="tooltip">Copied!</span
+                ><svg class="icon-copy" viewBox="0 0 24 24">
+                  <path
+                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                  /></svg
+                ><svg class="icon-check" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="grid-bucket-row">
+            <div class="bucket-num">3</div>
+            <div class="bucket-data">
+              Цена: <span id="v3-price" class="bold-val">0</span> | Кол-во:
+              <span id="v3-qty" class="bold-val">0</span>
+            </div>
+            <div class="bucket-actions">
+              <button
+                class="copy-btn"
+                onclick="copyDirectText('v3-price', this)"
+              >
+                <span class="tooltip">Copied!</span
+                ><svg class="icon-copy" viewBox="0 0 24 24">
+                  <path
+                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                  /></svg
+                ><svg class="icon-check" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg></button
+              ><button
+                class="copy-btn"
+                onclick="copyDirectText('v3-qty', this)"
+              >
+                <span class="tooltip">Copied!</span
+                ><svg class="icon-copy" viewBox="0 0 24 24">
+                  <path
+                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                  /></svg
+                ><svg class="icon-check" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          id="general-out-block"
+          class="bybit-copy-group"
+          style="margin-top: -6px"
+        >
+          <div class="res-row">
+            <div class="res-left"><span>Ордер защиты (Stop Loss):</span></div>
+            <div class="res-right">
+              <span class="res-val bad" id="res-sl-val">0.00</span
+              ><button class="copy-btn" onclick="copyValue('res-sl-val', this)">
+                <span class="tooltip">Copied!</span
+                ><svg class="icon-copy" viewBox="0 0 24 24">
+                  <path
+                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                  /></svg
+                ><svg class="icon-check" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="res-row">
+            <div class="res-left"><span>Ордер цели (Take Profit):</span></div>
+            <div class="res-right">
+              <span class="res-val good" id="res-tp-val">0.00</span
+              ><button class="copy-btn" onclick="copyValue('res-tp-val', this)">
+                <span class="tooltip">Copied!</span
+                ><svg class="icon-copy" viewBox="0 0 24 24">
+                  <path
+                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                  /></svg
+                ><svg class="icon-check" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="analytics-group">
           <div class="group-title" style="color: var(--text-muted)">
             📊 Аналитика сделки
           </div>
           <div class="res-row" id="leverage-row" style="display: none">
-            <div class="res-left"><span>Рекомендуемое плечо Bybit:</span></div>
+            <div class="res-left"><span>Рекомендуемое плечо:</span></div>
             <div class="res-right">
               <span class="res-val highlight" id="res-lev">1x</span>
             </div>
           </div>
-
           <div class="res-row" id="liq-row" style="display: none">
-            <div class="res-left">
-              <span>Цена ликвидации (Изолированная):</span>
-            </div>
+            <div class="res-left"><span>Цена ликвидации:</span></div>
             <div class="res-right">
               <span class="res-val" id="res-liq" style="color: #ff9f43"
                 >0.00</span
               >
             </div>
           </div>
-
           <div class="res-row">
-            <div class="res-left">
-              <span>Чистый убыток при SL (+комса):</span>
-            </div>
+            <div class="res-left"><span>Чистый убыток при SL:</span></div>
             <div class="res-right">
               <span class="res-val bad" id="res-loss">0.00 USDT</span>
             </div>
           </div>
           <div class="res-row">
-            <div class="res-left">
-              <span>Чистый профит при TP (-комса):</span>
-            </div>
+            <div class="res-left"><span>Чистый профит при TP:</span></div>
             <div class="res-right">
               <span class="res-val good" id="res-profit">0.00 USDT</span>
             </div>
@@ -309,842 +410,7 @@
         </div>
       </div>
     </div>
-    <style>
-      :root {
-        --bg-main: #111214;
-        --bg-card: #17191e;
-        --bg-input: #20242c;
-        --brand: #f7a600;
-        --text-main: #ffffff;
-        --text-muted: #848e9c;
-        --green: #0ecb81;
-        --red: #f6465d;
-        --border: #2b313a;
-        --bg-tooltip: #2c3138;
-        --text-tooltip: #9ea9b3;
-      }
-
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: sans-serif;
-      }
-      body {
-        background-color: var(--bg-main);
-        color: var(--text-main);
-        padding: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-      }
-
-      .layout-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        width: 100%;
-        max-width: 960px;
-      }
-      .calculator-panel,
-      .results-panel {
-        background-color: var(--bg-card);
-        border-radius: 16px;
-        padding: 24px;
-        border: 1px solid var(--border);
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-      .header h2 {
-        font-size: 20px;
-        font-weight: 700;
-        letter-spacing: -0.3px;
-      }
-      .pro-badge {
-        background: var(--brand);
-        color: #000;
-        font-size: 11px;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-weight: 800;
-        margin-left: 6px;
-      }
-
-      .tabs {
-        display: flex;
-        background: var(--bg-input);
-        border-radius: 8px;
-        padding: 4px;
-        margin-bottom: 15px;
-      }
-      .tab {
-        flex: 1;
-        background: none;
-        border: none;
-        color: var(--text-muted);
-        padding: 10px;
-        font-weight: bold;
-        cursor: pointer;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-      }
-      .tab.active {
-        background: var(--bg-card);
-        color: var(--text-main);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      }
-
-      .order-type-tabs {
-        margin-bottom: 0;
-        background: rgba(0, 0, 0, 0.15);
-        border: 1px solid var(--border);
-      }
-
-      .mode-selector {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
-      }
-      .mode-btn {
-        flex: 1;
-        padding: 12px;
-        border-radius: 6px;
-        border: 1px solid var(--border);
-        background: none;
-        color: var(--text-muted);
-        cursor: pointer;
-        font-weight: bold;
-        transition: all 0.2s ease;
-      }
-      .mode-btn.active.long {
-        background: rgba(14, 203, 129, 0.12);
-        color: var(--green);
-        border-color: var(--green);
-      }
-      .mode-btn.active.short {
-        background: rgba(246, 70, 93, 0.12);
-        color: var(--red);
-        border-color: var(--red);
-      }
-
-      .grid-2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
-      .input-group {
-        margin-bottom: 14px;
-      }
-      .input-group label {
-        display: block;
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-bottom: 6px;
-        font-weight: 500;
-        transition: color 0.2s;
-      }
-
-      .input-wrapper {
-        position: relative;
-        display: flex;
-        align-items: center;
-        width: 100%;
-      }
-      .input-wrapper input,
-      .input-wrapper select {
-        width: 100%;
-        background: var(--bg-input);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 12px;
-        color: #fff;
-        font-size: 14px;
-        outline: none;
-        transition: all 0.2s ease;
-      }
-      .input-wrapper select {
-        appearance: none;
-        cursor: pointer;
-      }
-      .input-wrapper input:focus,
-      .input-wrapper select:focus {
-        border-color: var(--brand);
-        box-shadow: 0 0 0 2px rgba(247, 166, 0, 0.1);
-      }
-
-      /* МЯГКАЯ ПОДСВЕТКА ОШИБОК ВВОДА */
-      .input-group.has-error input {
-        border-color: var(--red) !important;
-        background: rgba(246, 70, 93, 0.04) !important;
-      }
-      .input-group.has-error label {
-        color: #ff6b7e !important;
-        font-weight: bold;
-      }
-      .tpsl-field.has-error input {
-        border-color: var(--red) !important;
-        background: rgba(246, 70, 93, 0.04) !important;
-      }
-      .tpsl-field.has-error label {
-        color: #ff6b7e !important;
-      }
-
-      .input-wrapper input::-webkit-outer-spin-button,
-      .input-wrapper input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
-      .input-wrapper input[type="number"] {
-        -moz-appearance: none;
-        appearance: none;
-      }
-
-      .tpsl-container {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 12px;
-        background: rgba(255, 255, 255, 0.01);
-        margin-bottom: 14px;
-      }
-      .tpsl-title {
-        font-size: 11px;
-        color: var(--text-muted);
-        font-weight: bold;
-        margin-bottom: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-      .tpsl-row {
-        display: flex;
-        gap: 12px;
-      }
-      .tpsl-field {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-      }
-      .tpsl-field label {
-        font-size: 11px;
-        margin-bottom: 4px;
-        font-weight: bold;
-        transition: color 0.2s;
-      }
-
-      .tpsl-field.sl-side label {
-        color: #ff6b7e;
-      }
-      .tpsl-field.sl-side input {
-        border-left: 4px solid var(--red);
-        padding-left: 10px;
-      }
-      .tpsl-field.sl-side input:focus {
-        border-color: var(--red);
-        box-shadow: 0 0 0 2px rgba(246, 70, 93, 0.1);
-      }
-
-      .tpsl-field.tp-side label {
-        color: #26e096;
-      }
-      .tpsl-field.tp-side input {
-        border-left: 4px solid var(--green);
-        padding-left: 10px;
-      }
-      .tpsl-field.tp-side input:focus {
-        border-color: var(--green);
-        box-shadow: 0 0 0 2px rgba(14, 203, 129, 0.1);
-      }
-
-      .quick-risk {
-        display: flex;
-        gap: 6px;
-        margin-top: 6px;
-      }
-      .quick-btn {
-        flex: 1;
-        background: var(--bg-input);
-        border: 1px solid var(--border);
-        color: #fff;
-        padding: 8px;
-        font-size: 11px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: all 0.2s ease;
-      }
-      .quick-btn:hover {
-        border-color: var(--brand);
-        background: rgba(247, 166, 0, 0.05);
-      }
-
-      .canvas-container {
-        margin: 8px 0 0 0;
-        background: #0b0c0d;
-        border-radius: 8px;
-        padding: 8px;
-        border: 1px solid var(--border);
-        display: flex;
-        justify-content: center;
-      }
-
-      .bybit-copy-group {
-        background: rgba(247, 166, 0, 0.02);
-        border: 1px solid rgba(247, 166, 0, 0.25);
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 16px;
-        transition: all 0.3s ease;
-      }
-      .bybit-copy-group.blocked {
-        border-color: var(--red) !important;
-        background: rgba(246, 70, 93, 0.03) !important;
-        opacity: 0.5;
-        pointer-events: none;
-      }
-
-      .group-title {
-        font-size: 11px;
-        color: var(--brand);
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        margin-bottom: 14px;
-      }
-
-      .res-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-        font-size: 14px;
-      }
-      .res-row:last-child {
-        margin-bottom: 0;
-      }
-      .res-left {
-        display: flex;
-        flex-direction: column;
-      }
-      .res-meta {
-        font-size: 11px;
-        color: var(--text-muted);
-        margin-top: 2px;
-      }
-      .res-right {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        position: relative;
-      }
-      .res-val {
-        font-weight: 600;
-        font-size: 15px;
-      }
-      .res-val.highlight {
-        color: var(--brand);
-      }
-      .res-val.good {
-        color: var(--green);
-      }
-      .res-val.bad {
-        color: var(--red);
-      }
-
-      .copy-btn {
-        background: none;
-        border: none;
-        padding: 6px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        transition: background 0.15s ease;
-      }
-      .copy-btn svg {
-        width: 16px;
-        height: 16px;
-        fill: var(--text-muted);
-        transition:
-          fill 0.15s ease,
-          transform 0.15s ease;
-      }
-      .copy-btn .icon-check {
-        display: none;
-      }
-      .copy-btn:hover {
-        background: var(--bg-input);
-      }
-      .copy-btn:hover svg.icon-copy {
-        fill: var(--brand);
-        transform: scale(1.05);
-      }
-
-      .copy-btn.copied svg.icon-copy {
-        display: none;
-      }
-      .copy-btn.copied svg.icon-check {
-        display: block;
-        fill: var(--green);
-      }
-
-      .tooltip {
-        position: absolute;
-        bottom: 135%;
-        left: 50%;
-        transform: translateX(-50%) translateY(4px);
-        background: var(--bg-tooltip);
-        color: var(--text-tooltip);
-        border: 1px solid var(--border);
-        padding: 5px 10px;
-        font-size: 11px;
-        border-radius: 4px;
-        font-weight: 500;
-        white-space: nowrap;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.15s ease;
-        pointer-events: none;
-        z-index: 10;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-      }
-      .copy-btn.show-tip .tooltip {
-        opacity: 1;
-        visibility: visible;
-        transform: translateX(-50%) translateY(0);
-      }
-
-      .analytics-group {
-        background: rgba(255, 255, 255, 0.01);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 14px;
-      }
-
-      @media (max-width: 768px) {
-        .layout-container {
-          grid-template-columns: 1fr;
-          gap: 15px;
-        }
-        body {
-          padding: 10px;
-        }
-      }
-    </style>
-    <script>
-      let market = localStorage.getItem("bybit_market") || "spot";
-      let side = "long";
-      let orderType = localStorage.getItem("bybit_orderType") || "limit";
-
-      const pairsData = [
-        { value: "BTC", price: 92000, round: 4 },
-        { value: "ETH", price: 2400, round: 3 },
-        { value: "SOL", price: 180, round: 2 },
-        { value: "XRP", price: 2.4, round: 1 },
-        { value: "PEPE", price: 0.000018, round: 0 },
-        { value: "CUSTOM", price: 10, round: 2 },
-      ];
-
-      function formatNumber(num, isCoinQty = false) {
-        if (isCoinQty) return num.toString();
-        return Number(num.toFixed(6)).toString();
-      }
-
-      function copyValue(elementId, btn) {
-        const text = document.getElementById(elementId).innerText;
-        if (text === "0.00" || text === "" || text === "0") return;
-
-        navigator.clipboard.writeText(text).then(() => {
-          btn.classList.add("show-tip", "copied");
-          setTimeout(() => {
-            btn.classList.remove("show-tip", "copied");
-          }, 1000);
-        });
-      }
-
-      function setOrderType(type) {
-        orderType = type;
-        localStorage.setItem("bybit_orderType", type);
-        document
-          .getElementById("order-limit")
-          .classList.toggle("active", type === "limit");
-        document
-          .getElementById("order-market")
-          .classList.toggle("active", type === "market");
-        calculate();
-      }
-
-      // Отрисовка графического индикатора с учетом валидности
-      function drawChart(entry, sl, tp, isValid = true) {
-        const canvas = document.getElementById("rrChart");
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        if (
-          !isValid ||
-          !entry ||
-          !sl ||
-          !tp ||
-          entry <= 0 ||
-          sl <= 0 ||
-          tp <= 0
-        ) {
-          ctx.fillStyle = "#2b313a";
-          ctx.fillRect(0, 30, canvas.width, 10);
-          ctx.fillStyle = "#848e9c";
-          ctx.font = "11px sans-serif";
-          ctx.textAlign = "left";
-          ctx.fillText("Шкала заблокирована (проверьте ошибки)...", 10, 18);
-          return;
-        }
-
-        const slDist = Math.abs(entry - sl);
-        const tpDist = Math.abs(tp - entry);
-        const slPct = ((slDist / entry) * 100).toFixed(2);
-        const tpPct = ((tpDist / entry) * 100).toFixed(2);
-        const rrRatio = (tpDist / slDist).toFixed(1);
-
-        const totalDist = slDist + tpDist;
-        const slWidth = (slDist / totalDist) * canvas.width;
-        const tpWidth = (tpDist / totalDist) * canvas.width;
-
-        if (side === "long") {
-          ctx.fillStyle = "rgba(246, 70, 93, 0.25)";
-          ctx.fillRect(0, 30, slWidth, 12);
-          ctx.fillStyle = "rgba(14, 203, 129, 0.25)";
-          ctx.fillRect(slWidth, 30, tpWidth, 12);
-          ctx.fillStyle = "#f7a600";
-          ctx.fillRect(slWidth - 1, 20, 2, 32);
-
-          ctx.fillStyle = "#ff6b7e";
-          ctx.font = "bold 11px sans-serif";
-          ctx.textAlign = "left";
-          ctx.fillText(`SL: -${slPct}%`, 5, 18);
-          ctx.fillStyle = "#26e096";
-          ctx.font = "bold 11px sans-serif";
-          ctx.textAlign = "right";
-          ctx.fillText(`TP: +${tpPct}%`, canvas.width - 5, 18);
-        } else {
-          ctx.fillStyle = "rgba(14, 203, 129, 0.25)";
-          ctx.fillRect(0, 30, tpWidth, 12);
-          ctx.fillStyle = "rgba(246, 70, 93, 0.25)";
-          ctx.fillRect(tpWidth, 30, slWidth, 12);
-          ctx.fillStyle = "#f7a600";
-          ctx.fillRect(tpWidth - 1, 20, 2, 32);
-
-          ctx.fillStyle = "#26e096";
-          ctx.font = "bold 11px sans-serif";
-          ctx.textAlign = "left";
-          ctx.fillText(`TP: +${tpPct}%`, 5, 18);
-          ctx.fillStyle = "#ff6b7e";
-          ctx.font = "bold 11px sans-serif";
-          ctx.textAlign = "right";
-          ctx.fillText(`SL: -${slPct}%`, canvas.width - 5, 18);
-        }
-
-        ctx.fillStyle = rrRatio >= 2 ? "#0ecb81" : "#f6465d";
-        ctx.font = "bold 11px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText(
-          `Соотношение R:R = 1 : ${rrRatio} ${rrRatio >= 3 ? "🔥" : ""}`,
-          canvas.width / 2,
-          60,
-        );
-      }
-    </script>
-    <script>
-      function updatePairsSelectDisplay() {
-        const select = document.getElementById("pair");
-        const savedValue =
-          select.value || localStorage.getItem("bybit_pair") || "BTC";
-        select.innerHTML = "";
-
-        pairsData.forEach((p) => {
-          const opt = document.createElement("option");
-          opt.value = p.value;
-          opt.setAttribute("data-price", p.price);
-          opt.setAttribute("data-round", p.round);
-          opt.innerText =
-            market === "futures"
-              ? p.value === "CUSTOM"
-                ? "* Своя цена"
-                : `${p.value}USDT`
-              : p.value === "CUSTOM"
-                ? "* Своя цена"
-                : `${p.value}/USDT`;
-          select.appendChild(opt);
-        });
-        select.value = savedValue;
-      }
-
-      function handleEntryChange() {
-        const entryStr = document.getElementById("entry").value;
-        if (entryStr === "") {
-          document.getElementById("sl").value = "";
-          document.getElementById("tp").value = "";
-          clearResults();
-          drawChart(0, 0, 0, false);
-          return;
-        }
-        const entry = parseFloat(entryStr) || 0;
-        if (entry <= 0) return;
-        const slVal = side === "long" ? entry * 0.98 : entry * 1.02;
-        document.getElementById("sl").value = formatNumber(slVal);
-        applyRR(3);
-      }
-
-      function handlePairChange() {
-        const select = document.getElementById("pair");
-        localStorage.setItem("bybit_pair", select.value);
-        document.getElementById("coin-label").innerText = select.value;
-
-        if (select.value !== "CUSTOM") {
-          const selected = select.options[select.selectedIndex];
-          document.getElementById("entry").value = parseFloat(
-            selected.getAttribute("data-price"),
-          );
-          handleEntryChange();
-        } else {
-          document.getElementById("entry").value = "";
-          handleEntryChange();
-        }
-      }
-
-      function setMarket(m) {
-        market = m;
-        localStorage.setItem("bybit_market", m);
-        document
-          .getElementById("tab-spot")
-          .classList.toggle("active", m === "spot");
-        document
-          .getElementById("tab-futures")
-          .classList.toggle("active", m === "futures");
-        document.getElementById("side-selector").style.display =
-          m === "spot" ? "none" : "flex";
-        document.getElementById("leverage-row").style.display =
-          m === "spot" ? "none" : "flex";
-        document.getElementById("liq-row").style.display =
-          m === "spot" ? "none" : "flex";
-        if (m === "spot") side = "long";
-        updatePairsSelectDisplay();
-        calculate();
-      }
-
-      function setSide(s) {
-        side = s;
-        document
-          .getElementById("btn-long")
-          .classList.toggle("active", s === "long");
-        document
-          .getElementById("btn-short")
-          .classList.toggle("active", s === "short");
-        handleEntryChange();
-      }
-
-      function setRisk(r) {
-        document.getElementById("risk-pct").value = r;
-        calculate();
-      }
-
-      function applyRR(factor) {
-        const entry = parseFloat(document.getElementById("entry").value);
-        if (isNaN(entry) || entry <= 0) return;
-        const sl =
-          parseFloat(document.getElementById("sl").value) ||
-          (side === "long" ? entry * 0.98 : entry * 1.02);
-        const dist = Math.abs(entry - sl);
-        const tpVal =
-          side === "long" ? entry + dist * factor : entry - dist * factor;
-        document.getElementById("tp").value = formatNumber(tpVal);
-        calculate();
-      }
-
-      function clearResults() {
-        document.getElementById("res-qty").innerText = "0.00";
-        document.getElementById("res-cost-val").innerText = "0.00";
-        document.getElementById("res-lev").innerText = "1x";
-        document.getElementById("res-sl-val").innerText = "0.00";
-        document.getElementById("res-tp-val").innerText = "0.00";
-        document.getElementById("res-liq").innerText = "0.00";
-        document.getElementById("res-loss").innerText = "0.00 USDT";
-        document.getElementById("res-profit").innerText = "0.00 USDT";
-        document.getElementById("copy-block").classList.remove("blocked");
-      }
-    </script>
-    <script>
-      function calculate() {
-        document
-          .querySelectorAll(".has-error")
-          .forEach((el) => el.classList.remove("has-error"));
-
-        const balance = parseFloat(document.getElementById("balance").value);
-        const entryStr = document.getElementById("entry").value;
-        const slStr = document.getElementById("sl").value;
-        const tpStr = document.getElementById("tp").value;
-        const riskPct = parseFloat(document.getElementById("risk-pct").value);
-        const select = document.getElementById("pair");
-        const tip = document.getElementById("tip-text");
-        const copyBlock = document.getElementById("copy-block");
-
-        if (
-          entryStr === "" ||
-          slStr === "" ||
-          tpStr === "" ||
-          isNaN(balance) ||
-          isNaN(riskPct)
-        ) {
-          clearResults();
-          drawChart(0, 0, 0, false);
-          tip.innerHTML = `⚠️ <b>Ожидание:</b> Заполните пустые поля ввода котировок.`;
-          return;
-        }
-
-        const entry = parseFloat(entryStr);
-        const sl = parseFloat(slStr);
-        const tp = parseFloat(tpStr);
-
-        let errorMsg = "";
-        if (balance <= 0) {
-          errorMsg = "Баланс должен быть больше 0";
-          document.getElementById("group-balance").classList.add("has-error");
-        } else if (entry <= 0) {
-          errorMsg = "Цена входа должна быть больше 0";
-          document.getElementById("group-entry").classList.add("has-error");
-        } else if (sl <= 0) {
-          errorMsg = "Цена Стоп-Лосса должна быть больше 0";
-          document.getElementById("group-sl").classList.add("has-error");
-        } else if (tp <= 0) {
-          errorMsg = "Цена Тейк-Профита должна быть больше 0";
-          document.getElementById("group-tp").classList.add("has-error");
-        } else if (riskPct <= 0 || riskPct > 50) {
-          errorMsg = "Риск должен быть от 0.1% до 50%";
-          document.getElementById("group-risk").classList.add("has-error");
-        } else if (side === "long" && sl >= entry) {
-          errorMsg = "Для Long Стоп-Лосс должен быть строго НИЖЕ входа!";
-          document.getElementById("group-sl").classList.add("has-error");
-        } else if (side === "long" && tp <= entry) {
-          errorMsg = "Для Long Тейк-Профит должен быть строго ВЫШЕ входа!";
-          document.getElementById("group-tp").classList.add("has-error");
-        } else if (side === "short" && sl <= entry) {
-          errorMsg = "Для Short Стоп-Лосс должен быть строго ВЫШЕ входа!";
-          document.getElementById("group-sl").classList.add("has-error");
-        } else if (side === "short" && tp >= entry) {
-          errorMsg = "Для Short Тейк-Профит должен быть строго НИЖЕ входа!";
-          document.getElementById("group-tp").classList.add("has-error");
-        }
-
-        if (errorMsg !== "") {
-          clearResults();
-          drawChart(0, 0, 0, false);
-          copyBlock.classList.add("blocked");
-          tip.innerHTML = `❌ <b>Ошибка:</b> ${errorMsg}`;
-          return;
-        }
-
-        drawChart(entry, sl, tp, true);
-
-        if (balance > 0) localStorage.setItem("bybit_balance", balance);
-        if (riskPct > 0) localStorage.setItem("bybit_riskPct", riskPct);
-
-        let feeRate =
-          market === "futures"
-            ? orderType === "limit"
-              ? 0.0002
-              : 0.00055
-            : 0.001;
-        const maxLossMoney = balance * (riskPct / 100);
-        let priceChangePct =
-          side === "long" ? (entry - sl) / entry : (sl - entry) / entry;
-
-        let positionVolume = maxLossMoney / (priceChangePct + feeRate * 2);
-        const targetMargin = balance / 5;
-
-        if (market === "spot" && positionVolume > balance) {
-          positionVolume = balance;
-        }
-
-        const qty = positionVolume / entry;
-        const roundDigits =
-          parseInt(
-            select.options[select.selectedIndex].getAttribute("data-round"),
-          ) || 2;
-        document.getElementById("res-qty").innerText = formatNumber(
-          qty.toFixed(roundDigits),
-          true,
-        );
-
-        let leverage = 1;
-        let marginRequired = positionVolume;
-
-        if (market === "futures") {
-          if (positionVolume > targetMargin) {
-            leverage = Math.ceil(positionVolume / targetMargin);
-            if (leverage > 100) leverage = 100;
-            marginRequired = positionVolume / leverage;
-          } else {
-            leverage = 1;
-            marginRequired = positionVolume;
-          }
-          document.getElementById("res-lev").innerText = leverage + "x";
-
-          let liqPrice =
-            side === "long"
-              ? entry * (1 - 1 / leverage + 0.004)
-              : entry * (1 + 1 / leverage - 0.004);
-          document.getElementById("res-liq").innerText = formatNumber(liqPrice);
-
-          const isLiqDangerous =
-            side === "long" ? sl <= liqPrice : sl >= liqPrice;
-          if (isLiqDangerous) {
-            copyBlock.classList.add("blocked");
-            tip.innerHTML = `❌ <b>РИСК:</b> Ликвидация (<b>${formatNumber(liqPrice)}</b>) наступит раньше Стоп-Лосса! Уменьшите риск.`;
-            return;
-          }
-        }
-
-        copyBlock.classList.remove("blocked");
-        const pairName =
-          select.value === "CUSTOM"
-            ? "Контракт"
-            : market === "futures"
-              ? `${select.value}USDT`
-              : `${select.value}/USDT`;
-        tip.innerHTML = `🎯 <b>${pairName}:</b> Все проверки пройдены успешно.`;
-
-        const totalFee = positionVolume * feeRate * 2;
-        const grossLoss = qty * Math.abs(entry - sl);
-        const netLoss = grossLoss + totalFee;
-        const grossProfit = qty * Math.abs(tp - entry);
-        let netProfit =
-          (side === "long" && tp > entry) || (side === "short" && tp < entry)
-            ? grossProfit - totalFee
-            : -grossProfit - totalFee;
-
-        document.getElementById("res-cost-val").innerText =
-          marginRequired.toFixed(2);
-        document.getElementById("res-sl-val").innerText = formatNumber(sl);
-        document.getElementById("res-tp-val").innerText = formatNumber(tp);
-        document.getElementById("res-loss").innerText =
-          "-" + netLoss.toFixed(2) + " USDT";
-        document.getElementById("res-profit").innerText =
-          (netProfit >= 0 ? "+" : "") + netProfit.toFixed(2) + " USDT";
-      }
-
-      if (localStorage.getItem("bybit_balance"))
-        document.getElementById("balance").value =
-          localStorage.getItem("bybit_balance");
-      if (localStorage.getItem("bybit_riskPct"))
-        document.getElementById("risk-pct").value =
-          localStorage.getItem("bybit_riskPct");
-
-      setMarket(market);
-      setOrderType(orderType);
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
+<!-- КОНЕЦ ЧАСТИ 3 -->
