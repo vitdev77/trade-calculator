@@ -250,6 +250,7 @@ html[data-theme="dark"] .input-wrapper select:focus {
   background: rgba(255, 255, 255, 0.01);
   margin-bottom: 14px;
   transition: border-color 0.2s ease;
+  width: 100%;
 }
 .tpsl-title {
   font-size: 11px;
@@ -262,6 +263,7 @@ html[data-theme="dark"] .input-wrapper select:focus {
 .tpsl-row {
   display: flex;
   gap: 12px;
+  width: 100%;
 }
 .tpsl-field {
   flex: 1;
@@ -298,34 +300,42 @@ html[data-theme="dark"] .input-wrapper select:focus {
   box-shadow: 0 0 0 2px rgba(14, 203, 129, 0.1);
 }
 
+/* Контейнеры кнопок теперь гарантированно занимают всю ширину */
 .quick-risk {
   display: flex;
   gap: 8px;
   margin-top: 8px;
+  width: 100%;
 }
 
-/* Строгая фиксация размеров для предотвращения «прыжков» по высоте */
 .risk-inline-row {
   display: flex;
   align-items: stretch;
   gap: 10px;
   height: 45px;
+  width: 100%;
+}
+.risk-inline-row .input-wrapper {
+  height: 100%;
 }
 .risk-inline-row .input-wrapper input {
   height: 100%;
+  width: 100%;
 }
 .quick-risk-inline {
   display: flex;
   gap: 6px;
+  flex-grow: 1;
 }
 
+/* Кнопки равномерно распределяют ширину внутри контейнеров */
 .quick-btn {
   flex: 1;
   background: #2b303c;
   border: 1px solid #434c5e;
   color: #e5e9f0;
   padding: 10px 14px;
-  font-size: 13px; /* Крупный, отлично читаемый шрифт для стандартных кнопок */
+  font-size: 13px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 700;
@@ -342,6 +352,7 @@ html[data-theme="dark"] .input-wrapper select:focus {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 html[data-theme="light"] .quick-btn {
   background: #e8eaed;
@@ -352,12 +363,12 @@ html[data-theme="light"] .quick-btn {
     inset 0 1px 0 #ffffff;
 }
 
-/* Модификатор кнопок для блока риска - шрифт увеличен до 12px */
 .quick-btn.compact-btn {
   padding: 0 10px;
   font-size: 12px;
   border-radius: 6px;
   height: 100%;
+  flex: 1;
 }
 
 .quick-btn:hover {
@@ -446,17 +457,25 @@ html[data-theme="light"] .theme-toggle-circle .theme-icon-dark {
   display: block !important;
 }
 
-/* Стили для Сетки Тейк-Профитов */
-.tp-grid-row {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
+/* ПРОФЕССИОНАЛЬНАЯ ВЕРТИКАЛЬНАЯ СЕТКА ТЕЙКОВ */
+.tp-grid-vertical-container {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
+  width: 100%;
+}
+.tp-grid-vertical-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
   align-items: center;
+  gap: 12px;
+  width: 100%;
 }
 .tp-vol-control {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  width: 100%;
 }
 .tp-vol-control input[type="range"] {
   flex-grow: 1;
@@ -468,11 +487,27 @@ html[data-theme="light"] .theme-toggle-circle .theme-icon-dark {
   font-size: 11px;
   min-width: 32px;
   text-align: right;
-  color: var(--text-muted);
+  color: var(--text-main);
+  font-weight: bold;
 }
 .tp-vol-alert-error {
   color: var(--red) !important;
   font-weight: bold;
+}
+
+/* ЭФФЕКТ ПЛАВНОЙ ДИНАМИКИ ДЛЯ ПЕРЕКЛЮЧЕНИЯ МОДУЛЕЙ */
+.fade-in-slide {
+  animation: fadeInSlide 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .canvas-container {

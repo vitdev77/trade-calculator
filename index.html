@@ -191,7 +191,7 @@
             </div>
           </div>
 
-          <!-- Контейнер сетки 3-х Тейк-Профитов (по умолчанию скрыт) -->
+          <!-- Новая вертикальная структура Сетки Тейк-Профитов -->
           <div
             id="tp-grid-inputs"
             style="
@@ -201,26 +201,34 @@
               border-top: 1px dashed var(--border);
             "
           >
-            <div class="tpsl-row">
-              <div class="tpsl-field sl-side" id="group-sl-grid-mirror">
-                <label>Цена Stop Loss</label>
-                <div class="input-wrapper">
-                  <input
-                    type="number"
-                    id="sl-grid"
-                    value="90000"
-                    step="any"
-                    oninput="
-                      document.getElementById('sl').value = this.value;
-                      calculate();
-                    "
-                  />
-                </div>
+            <div
+              class="tpsl-field sl-side"
+              id="group-sl-grid-mirror"
+              style="margin-bottom: 12px"
+            >
+              <label>Цена Stop Loss</label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="sl-grid"
+                  value="90000"
+                  step="any"
+                  oninput="
+                    document.getElementById('sl').value = this.value;
+                    calculate();
+                  "
+                />
               </div>
-              <div class="tpsl-field tp-side" style="flex: 1.5">
-                <label>Сетка фиксации (Цена / Объем)</label>
+            </div>
 
-                <div class="tp-grid-row" style="margin-bottom: 6px">
+            <div class="tpsl-field tp-side">
+              <label style="margin-bottom: 8px"
+                >Сетка фиксации прибыли (Цена / Объем)</label
+              >
+
+              <div class="tp-grid-vertical-container">
+                <!-- Цель 1 -->
+                <div class="tp-grid-vertical-row">
                   <div class="input-wrapper">
                     <input
                       type="number"
@@ -243,7 +251,8 @@
                   </div>
                 </div>
 
-                <div class="tp-grid-row" style="margin-bottom: 6px">
+                <!-- Цель 2 -->
+                <div class="tp-grid-vertical-row">
                   <div class="input-wrapper">
                     <input
                       type="number"
@@ -266,7 +275,8 @@
                   </div>
                 </div>
 
-                <div class="tp-grid-row">
+                <!-- Цель 3 -->
+                <div class="tp-grid-vertical-row">
                   <div class="input-wrapper">
                     <input
                       type="number"
@@ -288,25 +298,25 @@
                     <span id="tp3-vol-txt">20%</span>
                   </div>
                 </div>
+              </div>
 
-                <div
-                  id="tp-vol-alert"
-                  style="
-                    font-size: 11px;
-                    text-align: right;
-                    margin-top: 6px;
-                    color: var(--green);
-                  "
-                >
-                  Распределено:
-                  <span id="tp-vol-total" style="font-weight: bold">100%</span>
-                </div>
+              <div
+                id="tp-vol-alert"
+                style="
+                  font-size: 11px;
+                  text-align: right;
+                  margin-top: 8px;
+                  color: var(--green);
+                "
+              >
+                Распределено:
+                <span id="tp-vol-total" style="font-weight: bold">100%</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Оптимизированный горизонтальный компактный блок Риска -->
+        <!-- Горизонтальный блок Риска -->
         <div class="input-group" id="group-risk">
           <label>Риск на сделку (% от баланса)</label>
           <div class="risk-inline-row">
@@ -483,6 +493,8 @@
               </button>
             </div>
           </div>
+          <!-- КОНЕЦ ЧАСТИ 3 -->
+          <!-- НАЧАЛО ЧАСТИ 4 -->
           <div class="grid-bucket-row">
             <div class="bucket-num">3</div>
             <div class="bucket-data">
@@ -539,7 +551,9 @@
               </button>
             </div>
           </div>
-          <div class="res-row">
+
+          <!-- Одиночный тейк-профит (скрывается, если включена сетка выходов) -->
+          <div class="res-row" id="res-single-tp-row">
             <div class="res-left"><span>Ордер цели (Take Profit):</span></div>
             <div class="res-right">
               <span class="res-val good" id="res-tp-val">0.00</span
@@ -547,12 +561,99 @@
                 <span class="tooltip">Copied!</span
                 ><svg class="icon-copy" viewBox="0 0 24 24">
                   <path
-                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.8-2-2-2zm0 16H8V7h11v14z"
                   /></svg
                 ><svg class="icon-check" viewBox="0 0 24 24">
                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                 </svg>
               </button>
+            </div>
+          </div>
+
+          <!-- СЕТКА ИЗ 3-Х ТЕЙК-ПРОФИТОВ НА ВЫВОД (ПОКАЗЫВАЕТСЯ ПРИ СЕТКЕ) -->
+          <div
+            id="res-grid-tp-block"
+            style="
+              display: none;
+              border-top: 1px dashed var(--border);
+              margin-top: 8px;
+              padding-top: 8px;
+            "
+          >
+            <div class="res-row">
+              <div class="res-left">
+                <span
+                  >🎯 TP1 (<span id="lbl-tp1-pct">50%</span>) |
+                  Количество:</span
+                ><span class="res-meta" id="res-tp1-qty">0</span>
+              </div>
+              <div class="res-right">
+                <span class="res-val good" id="res-tp1-val">0.00</span
+                ><button
+                  class="copy-btn"
+                  onclick="copyValue('res-tp1-val', this)"
+                >
+                  <svg class="icon-copy" viewBox="0 0 24 24">
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    /></svg
+                  ><svg class="icon-check" viewBox="0 0 24 24">
+                    <path
+                      d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="res-row">
+              <div class="res-left">
+                <span
+                  >🎯 TP2 (<span id="lbl-tp2-pct">30%</span>) |
+                  Количество:</span
+                ><span class="res-meta" id="res-tp2-qty">0</span>
+              </div>
+              <div class="res-right">
+                <span class="res-val good" id="res-tp2-val">0.00</span
+                ><button
+                  class="copy-btn"
+                  onclick="copyValue('res-tp2-val', this)"
+                >
+                  <svg class="icon-copy" viewBox="0 0 24 24">
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    /></svg
+                  ><svg class="icon-check" viewBox="0 0 24 24">
+                    <path
+                      d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="res-row">
+              <div class="res-left">
+                <span
+                  >🎯 TP3 (<span id="lbl-tp3-pct">20%</span>) |
+                  Количество:</span
+                ><span class="res-meta" id="res-tp3-qty">0</span>
+              </div>
+              <div class="res-right">
+                <span class="res-val good" id="res-tp3-val">0.00</span
+                ><button
+                  class="copy-btn"
+                  onclick="copyValue('res-tp3-val', this)"
+                >
+                  <svg class="icon-copy" viewBox="0 0 24 24">
+                    <path
+                      d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                    /></svg
+                  ><svg class="icon-check" viewBox="0 0 24 24">
+                    <path
+                      d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -592,4 +693,4 @@
     <script src="script.js"></script>
   </body>
 </html>
-<!-- КОНЕЦ ЧАСТИ 3 -->
+<!-- КОНЕЦ ЧАСТИ 4 -->
