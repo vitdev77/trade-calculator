@@ -191,7 +191,7 @@
             </div>
           </div>
 
-          <!-- Новая вертикальная структура Сетки Тейк-Профитов -->
+          <!-- Горизонтальная Сетка автоматических readonly Тейк-Профитов -->
           <div
             id="tp-grid-inputs"
             style="
@@ -223,94 +223,38 @@
 
             <div class="tpsl-field tp-side">
               <label style="margin-bottom: 8px"
-                >Сетка фиксации прибыли (Цена / Объем)</label
+                >Автоматическая сетка фиксации прибыли</label
               >
 
-              <div class="tp-grid-vertical-container">
-                <!-- Цель 1 -->
-                <div class="tp-grid-vertical-row">
-                  <div class="input-wrapper">
-                    <input
-                      type="number"
-                      id="tp1"
-                      placeholder="Цена TP1"
-                      step="any"
-                      oninput="calculate()"
-                    />
-                  </div>
-                  <div class="tp-vol-control">
-                    <input
-                      type="range"
-                      id="tp1-vol"
-                      min="0"
-                      max="100"
-                      value="50"
-                      oninput="handleTpVolChange(1)"
-                    />
-                    <span id="tp1-vol-txt">50%</span>
-                  </div>
+              <div class="tp-grid-horizontal-row">
+                <div class="input-wrapper readonly-wrapper">
+                  <input
+                    type="number"
+                    id="tp1"
+                    placeholder="TP1 (50%)"
+                    readonly
+                  />
                 </div>
-
-                <!-- Цель 2 -->
-                <div class="tp-grid-vertical-row">
-                  <div class="input-wrapper">
-                    <input
-                      type="number"
-                      id="tp2"
-                      placeholder="Цена TP2"
-                      step="any"
-                      oninput="calculate()"
-                    />
-                  </div>
-                  <div class="tp-vol-control">
-                    <input
-                      type="range"
-                      id="tp2-vol"
-                      min="0"
-                      max="100"
-                      value="30"
-                      oninput="handleTpVolChange(2)"
-                    />
-                    <span id="tp2-vol-txt">30%</span>
-                  </div>
+                <div class="input-wrapper readonly-wrapper">
+                  <input
+                    type="number"
+                    id="tp2"
+                    placeholder="TP2 (30%)"
+                    readonly
+                  />
                 </div>
-
-                <!-- Цель 3 -->
-                <div class="tp-grid-vertical-row">
-                  <div class="input-wrapper">
-                    <input
-                      type="number"
-                      id="tp3"
-                      placeholder="Цена TP3"
-                      step="any"
-                      oninput="calculate()"
-                    />
-                  </div>
-                  <div class="tp-vol-control">
-                    <input
-                      type="range"
-                      id="tp3-vol"
-                      min="0"
-                      max="100"
-                      value="20"
-                      oninput="handleTpVolChange(3)"
-                    />
-                    <span id="tp3-vol-txt">20%</span>
-                  </div>
+                <div class="input-wrapper readonly-wrapper">
+                  <input
+                    type="number"
+                    id="tp3"
+                    placeholder="TP3 (20%)"
+                    readonly
+                  />
                 </div>
               </div>
 
-              <div
-                id="tp-vol-alert"
-                style="
-                  font-size: 11px;
-                  text-align: right;
-                  margin-top: 8px;
-                  color: var(--green);
-                "
-              >
-                Распределено:
-                <span id="tp-vol-total" style="font-weight: bold">100%</span>
+              <div id="tp-ratio-status" class="tp-ratio-badge status-preset">
+                Объём распределения: 50% / 30% / 20% (Фиксированный пресет)
               </div>
             </div>
           </div>

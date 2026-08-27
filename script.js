@@ -15,7 +15,6 @@ function toggleTpGridMode() {
   const singleRes = document.getElementById("res-single-tp-row");
   const gridRes = document.getElementById("res-grid-tp-block");
 
-  // Сбрасываем и принудительно перезапускаем CSS-анимацию плавного появления
   if (singleRes) singleRes.classList.remove("fade-in-slide");
   if (gridRes) gridRes.classList.remove("fade-in-slide");
 
@@ -26,7 +25,7 @@ function toggleTpGridMode() {
     if (gridInputs) {
       gridInputs.style.display = "block";
       gridInputs.classList.remove("fade-in-slide");
-      void gridInputs.offsetWidth; // Хак для перезапуска анимации в DOM
+      void gridInputs.offsetWidth;
       gridInputs.classList.add("fade-in-slide");
     }
     if (singleRes) singleRes.style.display = "none";
@@ -36,23 +35,33 @@ function toggleTpGridMode() {
       gridRes.classList.add("fade-in-slide");
     }
 
-    // Синхронизируем Stop Loss в зеркальное поле сетки цели
     const slGrid = document.getElementById("sl-grid");
     if (slGrid) slGrid.value = document.getElementById("sl").value;
 
-    // Автозаполнение сетки Тейков от текущей цены входа
     const entry = parseFloat(document.getElementById("entry").value) || 0;
     const sl = parseFloat(document.getElementById("sl").value) || 0;
     if (entry > 0 && sl > 0) {
+      const select = document.getElementById("pair");
+      const pRound = select
+        ? parseInt(
+            select.options[select.selectedIndex].getAttribute("data-pround"),
+          ) || 0
+        : 0;
       const dist = Math.abs(entry - sl);
       document.getElementById("tp1").value = formatNumber(
         side === "long" ? entry + dist * 2 : entry - dist * 2,
+        false,
+        pRound,
       );
       document.getElementById("tp2").value = formatNumber(
         side === "long" ? entry + dist * 3 : entry - dist * 3,
+        false,
+        pRound,
       );
       document.getElementById("tp3").value = formatNumber(
         side === "long" ? entry + dist * 4 : entry - dist * 4,
+        false,
+        pRound,
       );
     }
   } else {
@@ -72,25 +81,12 @@ function toggleTpGridMode() {
     }
     if (gridRes) gridRes.style.display = "none";
 
-    // Возвращаем измененный в сетке Stop Loss обратно в базовое поле
     const slGrid = document.getElementById("sl-grid");
     if (slGrid) document.getElementById("sl").value = slGrid.value;
   }
   calculate();
 }
 
-function handleTpVolChange(index) {
-  const vol = document.getElementById(`tp${index}-vol`).value;
-  document.getElementById(`tp${index}-vol-txt`).innerText = vol + "%";
-
-  // Меняем текст процентов прямо в строках копирования Bybit-панели результатов
-  const label = document.getElementById(`lbl-tp${index}-pct`);
-  if (label) label.innerText = vol + "%";
-
-  calculate();
-}
-
-// Логика определения и установки темы оформления (Светлая / Темная)
 let currentTheme = localStorage.getItem("bybit_theme") || "dark";
 
 function applyTheme(theme) {
@@ -109,17 +105,18 @@ function toggleTheme() {
 applyTheme(currentTheme);
 
 const pairsData = [
-  { value: "BTC", price: 92000, round: 4 },
-  { value: "ETH", price: 2400, round: 3 },
-  { value: "SOL", price: 180, round: 2 },
-  { value: "XRP", price: 2.4, round: 1 },
-  { value: "PEPE", price: 0.000018, round: 0 },
-  { value: "CUSTOM", price: 10, round: 2 },
+  { value: "BTC", price: 92000, round: 4, priceRound: 0 },
+  { value: "ETH", price: 2400, round: 3, priceRound: 0 },
+  { value: "SOL", price: 180, round: 2, priceRound: 0 },
+  { value: "XRP", price: 2.4, round: 1, priceRound: 4 },
+  { value: "PEPE", price: 0.000018, round: 0, priceRound: 8 },
+  { value: "CUSTOM", price: 10, round: 2, priceRound: 4 },
 ];
 
-function formatNumber(num, isCoinQty = false) {
+function formatNumber(num, isCoinQty = false, customDecimals = null) {
   if (isCoinQty) return num.toString();
-  return Number(num.toFixed(6)).toString();
+  const decimals = customDecimals !== null ? customDecimals : 6;
+  return Number(parseFloat(num).toFixed(decimals)).toString();
 }
 
 function copyValue(elementId, btn) {
@@ -158,6 +155,22 @@ function setOrderType(type) {
   calculate();
 }
 
+function toggleGridMode() {
+  isGridMode = !isGridMode;
+  const btn = document.getElementById("btn-toggle-grid");
+  document.getElementById("copy-block").style.display = isGridMode
+    ? "none"
+    : "block";
+  document.getElementById("grid-copy-block").style.display = isGridMode
+    ? "block"
+    : "none";
+  btn.innerText = isGridMode
+    ? "📋 Вернуть один вход"
+    : "📊 Разбить на сетку (3 ведра)";
+  btn.style.borderColor = isGridMode ? "#3498db" : "var(--brand)";
+  btn.style.color = isGridMode ? "#3498db" : "var(--brand)";
+  calculate();
+}
 // КОНЕЦ ЧАСТИ 1
 // НАЧАЛО ЧАСТИ 2
 function drawChart(e, s, t, v = true) {
@@ -179,7 +192,7 @@ function drawChart(e, s, t, v = true) {
     ctx.fillRect(0, 30, c.width, 10);
     ctx.fillStyle = textColor;
     ctx.font = "11px sans-serif";
-    ctx.fillText("Ожидание параметров...", 10, 18);
+    ctx.fillText("Ожидание parameters...", 10, 18);
     return;
   }
   const sd = Math.abs(e - s),
@@ -245,6 +258,7 @@ function updatePairsSelectDisplay() {
     o.value = p.value;
     o.setAttribute("data-price", p.price);
     o.setAttribute("data-round", p.round);
+    o.setAttribute("data-pround", p.priceRound);
     o.innerText =
       market === "futures"
         ? p.value === "CUSTOM"
@@ -259,7 +273,17 @@ function updatePairsSelectDisplay() {
 }
 
 function handleEntryChange() {
-  const eStr = document.getElementById("entry").value;
+  const select = document.getElementById("pair");
+  let pRound = 2;
+  if (select && select.selectedIndex >= 0) {
+    pRound = parseInt(
+      select.options[select.selectedIndex].getAttribute("data-pround"),
+    );
+    if (isNaN(pRound)) pRound = 2;
+  }
+
+  const entryInput = document.getElementById("entry");
+  let eStr = entryInput.value;
   if (eStr === "") {
     document.getElementById("sl").value = "";
     document.getElementById("sl-grid").value = "";
@@ -271,28 +295,38 @@ function handleEntryChange() {
     drawChart(0, 0, 0, false);
     return;
   }
-  const e = parseFloat(eStr) || 0;
+
+  let e = parseFloat(eStr) || 0;
   if (e <= 0) return;
 
-  // Рассчитываем Стоп-Лосс для обоих инпутов (базовый и зеркало в сетке)
-  const slVal = side === "long" ? e * 0.98 : e * 1.02;
-  document.getElementById("sl").value = formatNumber(slVal);
-  document.getElementById("sl-grid").value = formatNumber(slVal);
+  const roundedEntry = formatNumber(e, false, pRound);
+  if (entryInput.value !== roundedEntry) {
+    entryInput.value = roundedEntry;
+    e = parseFloat(roundedEntry);
+  }
 
-  // Рассчитываем базовый Тейк-Профит (пресет 1:3)
+  const slVal = side === "long" ? e * 0.98 : e * 1.02;
+  document.getElementById("sl").value = formatNumber(slVal, false, pRound);
+  document.getElementById("sl-grid").value = formatNumber(slVal, false, pRound);
+
   const d = Math.abs(e - slVal);
   const tpV = side === "long" ? e + d * 3 : e - d * 3;
-  document.getElementById("tp").value = formatNumber(tpV);
+  document.getElementById("tp").value = formatNumber(tpV, false, pRound);
 
-  // ОДНОВРЕМЕННО ОБНОВЛЯЕМ ВСЮ СЕТКУ ТЕЙКОВ под новое направление/цену
   document.getElementById("tp1").value = formatNumber(
     side === "long" ? e + d * 2 : e - d * 2,
+    false,
+    pRound,
   );
   document.getElementById("tp2").value = formatNumber(
     side === "long" ? e + d * 3 : e - d * 3,
+    false,
+    pRound,
   );
   document.getElementById("tp3").value = formatNumber(
     side === "long" ? e + d * 4 : e - d * 4,
+    false,
+    pRound,
   );
 
   calculate();
@@ -342,26 +376,44 @@ function setMarket(m) {
 
   updatePairsSelectDisplay();
 
-  // Тотальный принудительный пересчет базовых полей и полей сетки при прыжках по вкладкам
-  const e = parseFloat(document.getElementById("entry").value) || 0;
-  if (e > 0) {
+  const s = document.getElementById("pair");
+  const eStr = document.getElementById("entry").value;
+  let e = parseFloat(eStr) || 0;
+
+  if (e > 0 && s.selectedIndex >= 0) {
+    const pRound = parseInt(
+      s.options[s.selectedIndex].getAttribute("data-pround"),
+    );
+    const roundedEntry = formatNumber(e, false, isNaN(pRound) ? 2 : pRound);
+    document.getElementById("entry").value = roundedEntry;
+    e = parseFloat(roundedEntry);
+
     const slVal = side === "long" ? e * 0.98 : e * 1.02;
     const d = Math.abs(e - slVal);
     const tpVal = side === "long" ? e + d * 3 : e - d * 3;
 
-    document.getElementById("sl").value = formatNumber(slVal);
-    document.getElementById("sl-grid").value = formatNumber(slVal);
-    document.getElementById("tp").value = formatNumber(tpVal);
+    document.getElementById("sl").value = formatNumber(slVal, false, pRound);
+    document.getElementById("sl-grid").value = formatNumber(
+      slVal,
+      false,
+      pRound,
+    );
+    document.getElementById("tp").value = formatNumber(tpVal, false, pRound);
 
-    // Перезаписываем сетку, чтобы фьючерсные остатки шорта на споте не вызывали ошибку валидации
     document.getElementById("tp1").value = formatNumber(
       side === "long" ? e + d * 2 : e - d * 2,
+      false,
+      pRound,
     );
     document.getElementById("tp2").value = formatNumber(
       side === "long" ? e + d * 3 : e - d * 3,
+      false,
+      pRound,
     );
     document.getElementById("tp3").value = formatNumber(
       side === "long" ? e + d * 4 : e - d * 4,
+      false,
+      pRound,
     );
   }
 
@@ -384,24 +436,42 @@ function setRisk(r) {
 }
 
 function applyRR(f) {
-  const e = parseFloat(document.getElementById("entry").value);
+  const select = document.getElementById("pair");
+  let pRound = 2;
+  if (select && select.selectedIndex >= 0) {
+    pRound =
+      parseInt(
+        select.options[select.selectedIndex].getAttribute("data-pround"),
+      ) || 2;
+  }
+
+  const entryInput = document.getElementById("entry");
+  const e = parseFloat(entryInput.value);
   if (isNaN(e) || e <= 0) return;
-  const sl =
-    parseFloat(document.getElementById("sl").value) ||
-    (side === "long" ? e * 0.98 : e * 1.02);
+
+  const slStr = isTpGridMode
+    ? document.getElementById("sl-grid").value
+    : document.getElementById("sl").value;
+  const sl = parseFloat(slStr) || (side === "long" ? e * 0.98 : e * 1.02);
+
   const d = Math.abs(e - sl);
   const tpV = side === "long" ? e + d * f : e - d * f;
-  document.getElementById("tp").value = formatNumber(tpV);
+  document.getElementById("tp").value = formatNumber(tpV, false, pRound);
 
-  // Принудительно выставляем сетку пропорционально выбранному шагу R:R
   document.getElementById("tp1").value = formatNumber(
     side === "long" ? e + d * (f - 1) : e - d * (f - 1),
+    false,
+    pRound,
   );
   document.getElementById("tp2").value = formatNumber(
     side === "long" ? e + d * f : e - d * f,
+    false,
+    pRound,
   );
   document.getElementById("tp3").value = formatNumber(
     side === "long" ? e + d * (f + 1) : e - d * (f + 1),
+    false,
+    pRound,
   );
 
   calculate();
@@ -467,6 +537,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (tpInput) {
     tpInput.addEventListener("input", syncActiveButtonsState);
   }
+
+  const entryInput = document.getElementById("entry");
+  if (entryInput) {
+    entryInput.addEventListener("change", handleEntryChange);
+  }
 });
 // КОНЕЦ ЧАСТИ 3
 // НАЧАЛО ЧАСТИ 4
@@ -478,12 +553,10 @@ function calculate() {
   const balance = parseFloat(document.getElementById("balance").value);
   const entryStr = document.getElementById("entry").value;
 
-  // Динамически берем Stop Loss из активного в данный момент поля
   const slStr = isTpGridMode
     ? document.getElementById("sl-grid").value
     : document.getElementById("sl").value;
 
-  // Синхронизируем базовые инпуты, чтобы в стейте всегда были актуальные цифры
   if (isTpGridMode) document.getElementById("sl").value = slStr;
   else document.getElementById("sl-grid").value = slStr;
 
@@ -493,12 +566,10 @@ function calculate() {
   const tip = document.getElementById("tip-text");
   const copyBlock = document.getElementById("copy-block");
 
-  // Считываем значения из полей сетки Тейк-Профитов
   const tp1Str = document.getElementById("tp1").value;
   const tp2Str = document.getElementById("tp2").value;
   const tp3Str = document.getElementById("tp3").value;
 
-  // Проверяем пустоту целей в зависимости от режима выхода
   const isTpEmpty = isTpGridMode
     ? tp1Str === "" || tp2Str === "" || tp3Str === ""
     : tpStr === "";
@@ -519,39 +590,33 @@ function calculate() {
     return;
   }
 
-  const entry = parseFloat(entryStr);
-  const sl = parseFloat(slStr);
+  const pRound = parseInt(
+    select.options[select.selectedIndex].getAttribute("data-pround"),
+  );
+  const currentPRound = isNaN(pRound) ? 2 : pRound;
 
-  // ВЫЧИСЛЕНИЕ СРЕДНЕВЗВЕШЕННОГО ТЕЙК-ПРОФИТА
+  let entry = parseFloat(entryStr) || 0;
+  if (entry > 0) entry = parseFloat(entry.toFixed(currentPRound));
+
+  let sl = parseFloat(slStr) || 0;
+  if (sl > 0) sl = parseFloat(sl.toFixed(currentPRound));
+
+  // СРЕДНЕВЗВЕШЕННЫЙ ТЕЙК: ВСЕГДА ЖЕСТКОЕ ПРАВИЛО 50% / 30% / 20%
   let tp = 0;
-  let v1_vol = parseInt(document.getElementById("tp1-vol").value) || 0;
-  let v2_vol = parseInt(document.getElementById("tp2-vol").value) || 0;
-  let v3_vol = parseInt(document.getElementById("tp3-vol").value) || 0;
-  let totalTpVol = v1_vol + v2_vol + v3_vol;
-
   if (isTpGridMode) {
-    const tp1 = parseFloat(tp1Str);
-    const tp2 = parseFloat(tp2Str);
-    const tp3 = parseFloat(tp3Str);
-    if (totalTpVol > 0) {
-      // Формула средней цены выхода: (Цена1 * Объем1 + Цена2 * Объем2 + ...) / Общий Объем
-      tp = (tp1 * v1_vol + tp2 * v2_vol + tp3 * v3_vol) / totalTpVol;
-    } else {
-      tp = tp1;
-    }
+    const tp1 = parseFloat(tp1Str) || 0;
+    const tp2 = parseFloat(tp2Str) || 0;
+    const tp3 = parseFloat(tp3Str) || 0;
+    tp = (tp1 * 50 + tp2 * 30 + tp3 * 20) / 100;
   } else {
-    tp = parseFloat(tpStr);
+    tp = parseFloat(tpStr) || 0;
   }
+  if (tp > 0) tp = parseFloat(tp.toFixed(currentPRound));
 
   let errorMsg = "";
   if (balance <= 0) {
     errorMsg = "Баланс должен быть больше 0";
     document.getElementById("group-balance").classList.add("has-error");
-  } else if (isTpGridMode && totalTpVol !== 100) {
-    // Жесткий блок: если трейдер распределил больше или меньше 100% объема позиции
-    errorMsg = `Сумма объемов Тейк-Профитов должна быть строго 100%! Сейчас: ${totalTpVol}%`;
-    const alertLabel = document.getElementById("tp-vol-alert");
-    if (alertLabel) alertLabel.className = "tp-vol-alert-error";
   } else if (entry <= 0) {
     errorMsg = "Цена входа должна быть больше 0";
     document.getElementById("group-entry").classList.add("has-error");
@@ -619,15 +684,6 @@ function calculate() {
     } else document.getElementById("group-tp").classList.add("has-error");
   }
 
-  // Если всё ок, сбрасываем ошибку алерта ползунков
-  if (errorMsg === "" && isTpGridMode) {
-    const alertLabel = document.getElementById("tp-vol-alert");
-    if (alertLabel) {
-      alertLabel.className = "";
-      document.getElementById("tp-vol-total").innerText = "100% (Идеально)";
-    }
-  }
-
   if (errorMsg !== "") {
     clearResults();
     drawChart(0, 0, 0, false);
@@ -639,7 +695,6 @@ function calculate() {
     return;
   }
 
-  // Передаем рассчитанную средневзвешенную цену тейка в график для честного вывода R:R пропорции
   drawChart(entry, sl, tp, true);
 
   if (balance > 0) localStorage.setItem("bybit_balance", balance);
@@ -649,6 +704,7 @@ function calculate() {
   let feeRate =
     market === "futures" ? (orderType === "limit" ? 0.0002 : 0.00055) : 0.001;
   const maxLossMoney = balance * (riskPct / 100);
+
   let priceChangePct =
     side === "long" ? (entry - sl) / entry : (sl - entry) / entry;
 
@@ -663,6 +719,7 @@ function calculate() {
   const roundDigits =
     parseInt(select.options[select.selectedIndex].getAttribute("data-round")) ||
     2;
+
   document.getElementById("res-qty").innerText = formatNumber(
     qty.toFixed(roundDigits),
     true,
@@ -686,14 +743,18 @@ function calculate() {
       side === "long"
         ? entry * (1 - 1 / leverage + 0.004)
         : entry * (1 + 1 / leverage - 0.004);
-    document.getElementById("res-liq").innerText = formatNumber(liqPrice);
+    document.getElementById("res-liq").innerText = formatNumber(
+      liqPrice,
+      false,
+      currentPRound,
+    );
 
     const isLiqDangerous = side === "long" ? sl <= liqPrice : sl >= liqPrice;
     if (isLiqDangerous) {
       if (copyBlock) copyBlock.classList.add("blocked");
       if (tip) {
         tip.className = "status-error";
-        tip.innerHTML = `🛑 <span><b>КРИТИЧЕСКИЙ РИСК:</b> Выбранное плечо убьет маржу! Ликвидация (<b>${formatNumber(liqPrice)}</b>) наступит раньше, чем сработает Стоп-Лосс. Ордера заблокированы.</span>`;
+        tip.innerHTML = `🛑 <span><b>КРИТИЧЕСКИЙ РИСК:</b> Выбранное плечо убьет маржу! Ликвидация (<b>${formatNumber(liqPrice, false, currentPRound)}</b>) наступит раньше, чем сработает Стоп-Лосс. Ордера заблокированы.</span>`;
       }
       return;
     }
@@ -711,7 +772,6 @@ function calculate() {
     tip.innerHTML = `🛡️ <span><b>${pairName}:</b> Риск-менеджмент успешно пройден. Математическое преимущество на вашей стороне, ордера полностью готовы к безопасному переносу на Bybit!</span>`;
   }
 
-  // Расчет математической сетки 3-х ведер усреднения входа
   let v1_p = entry;
   let v2_p =
     side === "long"
@@ -722,9 +782,21 @@ function calculate() {
       ? entry - Math.abs(entry - sl) * 0.7
       : entry + Math.abs(entry - sl) * 0.7;
 
-  document.getElementById("v1-price").innerText = formatNumber(v1_p);
-  document.getElementById("v2-price").innerText = formatNumber(v2_p);
-  document.getElementById("v3-price").innerText = formatNumber(v3_p);
+  document.getElementById("v1-price").innerText = formatNumber(
+    v1_p,
+    false,
+    currentPRound,
+  );
+  document.getElementById("v2-price").innerText = formatNumber(
+    v2_p,
+    false,
+    currentPRound,
+  );
+  document.getElementById("v3-price").innerText = formatNumber(
+    v3_p,
+    false,
+    currentPRound,
+  );
   document.getElementById("v1-qty").innerText = formatNumber(
     (qty * 0.2).toFixed(roundDigits),
     true,
@@ -748,52 +820,78 @@ function calculate() {
       : -grossProfit - totalFee;
 
   document.getElementById("res-cost-val").innerText = marginRequired.toFixed(2);
-  document.getElementById("res-sl-val").innerText = formatNumber(sl);
+  document.getElementById("res-sl-val").innerText = formatNumber(
+    sl,
+    false,
+    currentPRound,
+  );
   document.getElementById("res-loss").innerText =
     "-" + netLoss.toFixed(2) + " USDT";
   document.getElementById("res-profit").innerText =
     (netProfit >= 0 ? "+" : "") + netProfit.toFixed(2) + " USDT";
 
-  // ДИНАМИЧЕСКИЙ ВЫВОД ЗНАЧЕНИЙ ДЛЯ СЕТКИ 3-Х ТЕЙК-ПРОФИТОВ НА BYBIT-ПАНЕЛЬ
-  if (isTpGridMode) {
-    // Выводим средневзвешенное значение в скрытое одиночное поле для совместимости
-    document.getElementById("res-tp-val").innerText = formatNumber(tp);
+  const singleTpRow = document.getElementById("res-single-tp-row");
+  const gridTpBlock = document.getElementById("res-grid-tp-block");
 
-    // Считываем текущие цены целей из левых инпутов
+  if (isTpGridMode) {
+    if (singleTpRow) singleTpRow.style.display = "none";
+    if (gridTpBlock) gridTpBlock.style.display = "block";
+
+    document.getElementById("res-tp-val").innerText = formatNumber(
+      tp,
+      false,
+      currentPRound,
+    );
+
     const tp1_val = parseFloat(document.getElementById("tp1").value) || 0;
     const tp2_val = parseFloat(document.getElementById("tp2").value) || 0;
     const tp3_val = parseFloat(document.getElementById("tp3").value) || 0;
 
-    // Записываем точные цены целей в правые блоки для копирования
-    document.getElementById("res-tp1-val").innerText = formatNumber(tp1_val);
-    document.getElementById("res-tp2-val").innerText = formatNumber(tp2_val);
-    document.getElementById("res-tp3-val").innerText = formatNumber(tp3_val);
+    document.getElementById("res-tp1-val").innerText = formatNumber(
+      tp1_val,
+      false,
+      currentPRound,
+    );
+    document.getElementById("res-tp2-val").innerText = formatNumber(
+      tp2_val,
+      false,
+      currentPRound,
+    );
+    document.getElementById("res-tp3-val").innerText = formatNumber(
+      tp3_val,
+      false,
+      currentPRound,
+    );
 
-    // Рассчитываем и выводим точное количество монет под каждую цель на основе ползунков объема
+    // ВСЕГДА ВЫВОДИМ 50% / 30% / 20%
     document.getElementById("res-tp1-qty").innerText = formatNumber(
-      (qty * (v1_vol / 100)).toFixed(roundDigits),
+      (qty * 0.5).toFixed(roundDigits),
       true,
     );
     document.getElementById("res-tp2-qty").innerText = formatNumber(
-      (qty * (v2_vol / 100)).toFixed(roundDigits),
+      (qty * 0.3).toFixed(roundDigits),
       true,
     );
     document.getElementById("res-tp3-qty").innerText = formatNumber(
-      (qty * (v3_vol / 100)).toFixed(roundDigits),
+      (qty * 0.2).toFixed(roundDigits),
       true,
     );
   } else {
-    // В обычном режиме просто выводим цену одиночной цели целиком
-    document.getElementById("res-tp-val").innerText = formatNumber(tp);
+    if (singleTpRow) singleTpRow.style.display = "flex";
+    if (gridTpBlock) gridTpBlock.style.display = "none";
+
+    document.getElementById("res-tp-val").innerText = formatNumber(
+      tp,
+      false,
+      currentPRound,
+    );
   }
 
-  // Проверяем соответствие кнопок R:R пресетам при каждом цикле расчета
   if (typeof syncActiveButtonsState === "function") {
     syncActiveButtonsState();
   }
 }
 
-// Восстановление сохраненного состояния из памяти браузера при загрузке
 if (localStorage.getItem("bybit_balance")) {
   const savedBalance = document.getElementById("balance");
   if (savedBalance) savedBalance.value = localStorage.getItem("bybit_balance");
@@ -806,6 +904,5 @@ if (localStorage.getItem("bybit_riskPct")) {
 setMarket(market);
 setOrderType(orderType);
 
-// Синхронизируем состояние темы после инициализации интерфейса
 applyTheme(currentTheme);
 // КОНЕЦ ЧАСТИ 5
