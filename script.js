@@ -19,8 +19,7 @@ function toggleTpGridMode() {
   if (gridRes) gridRes.classList.remove("fade-in-slide");
 
   if (isTpGridMode) {
-    btn.innerText = "🎯 Одиночный TP";
-    btn.classList.add("active");
+    if (btn) btn.classList.add("active");
     if (singleInput) singleInput.style.display = "none";
     if (gridInputs) {
       gridInputs.style.display = "block";
@@ -65,8 +64,7 @@ function toggleTpGridMode() {
       );
     }
   } else {
-    btn.innerText = "🎯 Сетка Тейков (3 TP)";
-    btn.classList.remove("active");
+    if (btn) btn.classList.remove("active");
     if (singleInput) {
       singleInput.style.display = "flex";
       singleInput.classList.remove("fade-in-slide");
@@ -125,9 +123,10 @@ function copyValue(elementId, btn) {
 
   navigator.clipboard.writeText(text).then(() => {
     btn.classList.add("show-tip", "copied");
+    // ФИКС ЗАДЕРЖКИ: Увеличено до 2500мс для комфортного контроля галочки
     setTimeout(() => {
       btn.classList.remove("show-tip", "copied");
-    }, 1000);
+    }, 2500);
   });
 }
 
@@ -137,9 +136,10 @@ function copyDirectText(elementId, btn) {
 
   navigator.clipboard.writeText(text).then(() => {
     btn.classList.add("show-tip", "copied");
+    // ФИКС ЗАДЕРЖКИ: Увеличено до 2500мс для комфортного контроля галочки
     setTimeout(() => {
       btn.classList.remove("show-tip", "copied");
-    }, 1000);
+    }, 2500);
   });
 }
 
@@ -158,6 +158,8 @@ function setOrderType(type) {
 function toggleGridMode() {
   isGridMode = !isGridMode;
   const btn = document.getElementById("btn-toggle-grid");
+  if (btn) btn.classList.toggle("active", isGridMode);
+
   document.getElementById("copy-block").style.display = isGridMode
     ? "none"
     : "block";
@@ -167,8 +169,6 @@ function toggleGridMode() {
   btn.innerText = isGridMode
     ? "📋 Вернуть один вход"
     : "📊 Разбить на сетку (3 ведра)";
-  btn.style.borderColor = isGridMode ? "#3498db" : "var(--brand)";
-  btn.style.color = isGridMode ? "#3498db" : "var(--brand)";
   calculate();
 }
 // КОНЕЦ ЧАСТИ 1
@@ -179,72 +179,308 @@ function drawChart(e, s, t, v = true) {
   const ctx = c.getContext("2d");
   ctx.clearRect(0, 0, c.width, c.height);
 
-  // Получаем динамические цвета темы для отрисовки холста
   const isLight =
     document.documentElement.getAttribute("data-theme") === "light";
-  const axisColor = isLight ? "#e8eaed" : "#2b313a";
+
+  // Ультрасовременные финтех-компоненты палитры Bybit PRO
+  const axisColor = isLight
+    ? "rgba(0, 0, 0, 0.12)"
+    : "rgba(255, 255, 255, 0.05)";
   const textColor = isLight ? "#5f6368" : "#848e9c";
-  const greenColor = isLight ? "#137333" : "#0ecb81";
-  const redColor = isLight ? "#c5221f" : "#f6465d";
+  const greenColor = isLight ? "#00b574" : "#0ecb81";
+  const redColor = isLight ? "#ff4d4d" : "#f6465d";
+  const entryColor = isLight ? "#1a73e8" : "#f7a600";
 
   if (!v || !e || !s || !t || e <= 0 || s <= 0 || t <= 0) {
-    ctx.fillStyle = axisColor;
-    ctx.fillRect(0, 30, c.width, 10);
     ctx.fillStyle = textColor;
-    ctx.font = "11px sans-serif";
-    ctx.fillText("Ожидание parameters...", 10, 18);
+    ctx.font = "500 13px sans-serif";
+    ctx.fillText("Ожидание параметров модели риска...", 14, 28);
     return;
   }
+
+  // Расчет дельт и процентов
   const sd = Math.abs(e - s),
     td = Math.abs(t - e);
-  const sp = ((sd / e) * 100).toFixed(2),
-    tp = ((td / e) * 100).toFixed(2),
-    rr = (td / sd).toFixed(1);
+  const sp = ((sd / e) * 100).toFixed(1),
+    tp = ((td / e) * 100).toFixed(1);
+
   const w = c.width,
-    sw = (sd / (sd + td)) * w,
+    h = c.height,
+    barH = 6,
+    barY = 64;
+
+  const sw = (sd / (sd + td)) * w,
     tw = (td / (sd + td)) * w;
+
+  const select = document.getElementById("pair");
+  const pRound = select
+    ? parseInt(
+        select.options[select.selectedIndex].getAttribute("data-pround"),
+      ) || 0
+    : 2;
+
+  // Форматирование строк котировок без моноширинных пробелов
+  const entryPriceText = Number(e.toFixed(pRound)).toLocaleString();
+  const slPriceText = Number(s.toFixed(pRound)).toLocaleString();
+  const tpPriceText = Number(t.toFixed(pRound)).toLocaleString();
+  const slDeltaText = Number(sd.toFixed(pRound)).toLocaleString();
+  const tpDeltaText = Number(td.toFixed(pRound)).toLocaleString();
+
+  let entryX = side === "long" ? sw : tw;
+
+  // ==========================================================================
+  // СЛОЙ 1: ФОНОВЫЕ ЭЛЕМЕНТЫ И КООРДИНАТНЫЕ ОСИ (Рисуем в первую очередь)
+  // ==========================================================================
+
+  // Выразительный и четкий сквозной пунктир (на светлой теме плотнее и темнее)
+  ctx.strokeStyle = isLight
+    ? "rgba(26, 115, 232, 0.45)"
+    : "rgba(247, 166, 0, 0.25)";
+  ctx.lineWidth = 0.5;
+  ctx.setLineDash([2, 3]); // Шаг пунктира: 2px точка, 3px пропуск
+  ctx.beginPath();
+  ctx.moveTo(entryX, 6);
+  ctx.lineTo(entryX, 134);
+  ctx.stroke();
+  ctx.setLineDash([]); // Сразу сбрасываем пунктир, чтобы не испортить другие линии
+
+  // 1. ОТРИСОВКА СКВОЗНОЙ ГРАФИЧЕСКОЙ ШКАЛЫ
+  const gradRed = ctx.createLinearGradient(0, barY, w, barY);
+  const gradGreen = ctx.createLinearGradient(0, barY, w, barY);
+
   if (side === "long") {
-    ctx.fillStyle = isLight
-      ? "rgba(197, 34, 31, 0.15)"
-      : "rgba(246, 70, 93, 0.25)";
-    ctx.fillRect(0, 30, sw, 12);
-    ctx.fillStyle = isLight
-      ? "rgba(19, 115, 51, 0.15)"
-      : "rgba(14, 203, 129, 0.25)";
-    ctx.fillRect(sw, 30, tw, 12);
-    ctx.fillStyle = isLight ? "#1a73e8" : "#f7a600";
-    ctx.fillRect(sw - 1, 20, 2, 32);
-    ctx.fillStyle = isLight ? "#c5221f" : "#ff6b7e";
-    ctx.font = "bold 11px sans-serif";
-    ctx.fillText(`SL: -${sp}%`, 5, 18);
-    ctx.fillStyle = isLight ? "#137333" : "#26e096";
-    ctx.font = "bold 11px sans-serif";
-    ctx.textAlign = "right";
-    ctx.fillText(`TP: +${tp}%`, w - 5, 18);
+    gradRed.addColorStop(0, "transparent");
+    gradRed.addColorStop(
+      sw / w,
+      isLight ? "rgba(255, 77, 77, 0.25)" : "rgba(246, 70, 93, 0.35)",
+    );
+    gradGreen.addColorStop(
+      sw / w,
+      isLight ? "rgba(0, 181, 116, 0.3)" : "rgba(14, 203, 129, 0.35)",
+    );
+    gradGreen.addColorStop(1, "transparent");
+
+    ctx.fillStyle = gradRed;
+    ctx.fillRect(0, barY, sw, barH);
+    ctx.fillStyle = gradGreen;
+    ctx.fillRect(sw, barY, tw, barH);
   } else {
-    ctx.fillStyle = isLight
-      ? "rgba(19, 115, 51, 0.15)"
-      : "rgba(14, 203, 129, 0.25)";
-    ctx.fillRect(0, 30, tw, 12);
-    ctx.fillStyle = isLight
-      ? "rgba(197, 34, 31, 0.15)"
-      : "rgba(246, 70, 93, 0.25)";
-    ctx.fillRect(tw, 30, sw, 12);
-    ctx.fillStyle = isLight ? "#1a73e8" : "#f7a600";
-    ctx.fillRect(tw - 1, 20, 2, 32);
-    ctx.fillStyle = isLight ? "#137333" : "#26e096";
-    ctx.font = "bold 11px sans-serif";
-    ctx.fillText(`TP: +${tp}%`, 5, 18);
-    ctx.fillStyle = isLight ? "#c5221f" : "#ff6b7e";
-    ctx.font = "bold 11px sans-serif";
-    ctx.textAlign = "right";
-    ctx.fillText(`SL: -${sp}%`, w - 5, 18);
+    gradGreen.addColorStop(0, "transparent");
+    gradGreen.addColorStop(
+      tw / w,
+      isLight ? "rgba(0, 181, 116, 0.3)" : "rgba(14, 203, 129, 0.35)",
+    );
+    gradRed.addColorStop(
+      tw / w,
+      isLight ? "rgba(255, 77, 77, 0.25)" : "rgba(246, 70, 93, 0.35)",
+    );
+    gradRed.addColorStop(1, "transparent");
+
+    ctx.fillStyle = gradGreen;
+    ctx.fillRect(0, barY, tw, barH);
+    ctx.fillStyle = gradRed;
+    ctx.fillRect(tw, barY, sw, barH);
   }
-  ctx.fillStyle = rr >= 2 ? greenColor : redColor;
+
+  // Яркий аппаратный маркер-точка на пересечении шкал
+  ctx.shadowBlur = 4;
+  ctx.shadowColor = entryColor;
+  ctx.fillStyle = entryColor;
+  ctx.beginPath();
+  ctx.arc(entryX, barY + barH / 2, 3.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Тонкие боковые засечки шкалы по краям
+  ctx.strokeStyle = axisColor;
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(1, barY - 6);
+  ctx.lineTo(1, barY + barH + 6);
+  ctx.moveTo(w - 1, barY - 6);
+  ctx.lineTo(w - 1, barY + barH + 6);
+  ctx.stroke();
+
+  // ==========================================================================
+  // СЛОЙ 2: ПЕРЕДНИЙ ПЛАН — КАРТОЧКИ ГЛАССМОРФИЗМА (Перекрывают фон)
+  // ==========================================================================
+
+  function drawGlassTag(type, price, subText, x, y, bgCol, textColor, align) {
+    ctx.font = "bold 12.5px sans-serif";
+    const w1 = ctx.measureText(price).width;
+    ctx.font = "bold 10px sans-serif";
+    const w2 = ctx.measureText(subText).width;
+
+    const maxW = Math.max(w1, w2);
+    const padH = 10;
+    const boxW = maxW + padH * 2 + 14;
+    const boxH = 30;
+
+    let boxX = x;
+    if (align === "center") boxX = x - boxW / 2;
+    if (align === "right") boxX = x - boxW;
+
+    // Контрастная теневая подложка для светлой темы и неоновая аура для темной
+    ctx.shadowBlur = isLight ? 5 : 6;
+    ctx.shadowColor = isLight ? "rgba(0, 0, 0, 0.08)" : bgCol;
+    if (isLight) {
+      ctx.shadowOffsetY = 2; // Легкое смещение тени вниз на светлом фоне для объема
+    }
+
+    ctx.beginPath();
+    ctx.roundRect(boxX, y, boxW, boxH, 6);
+
+    // Плотный задний фон карточек для светлой темы исключает прозрачное размытие
+    ctx.fillStyle = isLight
+      ? "rgba(255, 255, 255, 0.98)"
+      : "rgba(22, 25, 30, 0.6)";
+    ctx.strokeStyle = isLight
+      ? "rgba(0, 0, 0, 0.12)"
+      : "rgba(255, 255, 255, 0.06)";
+    ctx.lineWidth = 1;
+    ctx.fill();
+    ctx.stroke();
+
+    // Сброс теней и смещений для отрисовки текста
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
+
+    const iX = boxX + padH + 3;
+    const iY = y + boxH / 2;
+    ctx.fillStyle = textColor;
+
+    if (type === "tp") {
+      ctx.beginPath();
+      ctx.moveTo(iX, iY - 3.5);
+      ctx.lineTo(iX + 4, iY + 3.5);
+      ctx.lineTo(iX - 4, iY + 3.5);
+      ctx.closePath();
+      ctx.fill();
+    } else if (type === "sl") {
+      ctx.beginPath();
+      ctx.moveTo(iX, iY + 3.5);
+      ctx.lineTo(iX + 4, iY - 3.5);
+      ctx.lineTo(iX - 4, iY - 3.5);
+      ctx.closePath();
+      ctx.fill();
+    } else if (type === "entry") {
+      ctx.beginPath();
+      ctx.moveTo(iX, iY - 3.5);
+      ctx.lineTo(iX + 3.5, iY);
+      ctx.lineTo(iX, iY + 3.5);
+      ctx.lineTo(iX - 3.5, iY);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    ctx.textAlign = "left";
+    ctx.font = "bold 12.5px sans-serif";
+    ctx.fillStyle = isLight ? "#1a1c1e" : "#ffffff";
+    ctx.fillText(price, boxX + padH + 14, y + 13);
+
+    ctx.font = "bold 10px sans-serif";
+    ctx.fillStyle = textColor;
+    ctx.fillText(subText, boxX + padH + 14, y + 25);
+
+    return boxW;
+  }
+
+  const slBg = isLight ? "rgba(197, 34, 31, 0.05)" : "rgba(246, 70, 93, 0.12)";
+  const slTxtColor = isLight ? "#c5221f" : "#ff6b7e";
+  const tpBg = isLight ? "rgba(19, 115, 51, 0.05)" : "rgba(14, 203, 129, 0.12)";
+  const tpTxtColor = isLight ? "#137333" : "#26e096";
+  const entryBg = isLight
+    ? "rgba(26, 115, 232, 0.05)"
+    : "rgba(247, 166, 0, 0.14)";
+
+  // ВЕРХНИЙ УРОВЕНЬ (Y = 10, По краям — 100% защита от наездов)
+  if (side === "long") {
+    drawGlassTag(
+      "sl",
+      slPriceText,
+      `SL -${sp}%`,
+      4,
+      10,
+      slBg,
+      slTxtColor,
+      "left",
+    );
+    drawGlassTag(
+      "tp",
+      tpPriceText,
+      `TP +${tp}%`,
+      w - 4,
+      10,
+      tpBg,
+      tpTxtColor,
+      "right",
+    );
+  } else {
+    drawGlassTag(
+      "tp",
+      tpPriceText,
+      `TP +${tp}%`,
+      4,
+      10,
+      tpBg,
+      tpTxtColor,
+      "left",
+    );
+    drawGlassTag(
+      "sl",
+      slPriceText,
+      `SL -${sp}%`,
+      w - 4,
+      10,
+      slBg,
+      slTxtColor,
+      "right",
+    );
+  }
+
+  // НИЖНИЙ УРОВЕНЬ (Y = 94, Свободный горизонтальный коридор для цены Входа)
+  const targetDeltaText =
+    side === "long" ? `+${tpDeltaText}$` : `-${slDeltaText}$`;
+  const entrySubText = `Зазор: ${side === "long" ? `-${slDeltaText}$` : `+${tpDeltaText}$`}`;
+
+  // Рендерим парящую плашку входа под шкалой
+  const currentTagW = drawGlassTag(
+    "entry",
+    entryPriceText,
+    entrySubText,
+    entryX,
+    94,
+    entryBg,
+    entryColor,
+    "center",
+  );
+
+  // Смещение подписи чистой финансовой дельты
+  let textLabelX = entryX + currentTagW / 2 + 14;
+  let textLabelAlign = "left";
+
+  if (entryX > w - 130) {
+    textLabelX = entryX - currentTagW / 2 - 14;
+    textLabelAlign = "right";
+  }
+
+  // Финансовая цель рендерится поверх пунктирной оси
+  ctx.textAlign = textLabelAlign;
   ctx.font = "bold 11px sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText(`R:R = 1 : ${rr} ${rr >= 3 ? "🔥" : ""}`, w / 2, 60);
-  ctx.textAlign = "left";
+  ctx.fillStyle = side === "long" ? greenColor : redColor;
+
+  // Создаем небольшую чистую подложку под текст цели, чтобы пунктир не просвечивал
+  const targetText = `Цель: ${targetDeltaText}`;
+  const textW = ctx.measureText(targetText).width;
+  ctx.fillStyle = isLight
+    ? "rgba(240, 242, 255, 0.95)"
+    : "rgba(23, 25, 30, 0.95)"; // Фон под цвет body для идеального скрытия
+  let bgX = textLabelAlign === "left" ? textLabelX - 4 : textLabelX - textW - 4;
+  ctx.fillRect(bgX, 103, textW + 8, 14);
+
+  // Выводим сам текст цели
+  ctx.fillStyle = side === "long" ? greenColor : redColor;
+  ctx.fillText(targetText, textLabelX, 113);
 }
 // КОНЕЦ ЧАСТИ 2
 // НАЧАЛО ЧАСТИ 3
@@ -353,8 +589,16 @@ function setMarket(m) {
   market = m;
   localStorage.setItem("bybit_market", m);
 
+  // Фикс рассинхронизации: если фьючерсы — считываем реальный статус кнопок направления из DOM
   if (m === "spot") {
     side = "long";
+  } else {
+    const shortBtn = document.getElementById("btn-short");
+    if (shortBtn && shortBtn.classList.contains("active")) {
+      side = "short";
+    } else {
+      side = "long";
+    }
   }
 
   document.getElementById("tab-spot").classList.toggle("active", m === "spot");
@@ -431,7 +675,9 @@ function setSide(s) {
 
 function setRisk(r) {
   const riskInput = document.getElementById("risk-pct");
-  riskInput.value = r;
+  if (riskInput) {
+    riskInput.value = r;
+  }
   calculate();
 }
 
@@ -497,10 +743,9 @@ function syncActiveButtonsState() {
     const container = document.getElementById("group-risk");
     if (container) {
       container.querySelectorAll(".quick-btn").forEach((btn) => {
-        btn.classList.toggle(
-          "active",
-          parseFloat(btn.innerText) === currentRisk,
-        );
+        // Фикс поиска: вычленяем чистый процент из текста кнопки
+        const btnVal = parseFloat(btn.innerText) || 0;
+        btn.classList.toggle("active", btnVal === currentRisk);
       });
     }
   }

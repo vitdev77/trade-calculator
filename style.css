@@ -37,13 +37,15 @@ html[data-theme="light"] {
   padding: 0;
   font-family: sans-serif;
 }
+
 body {
   background-color: var(--bg-main);
   color: var(--text-main);
   padding: 20px;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
+  min-height: 100vh;
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
@@ -55,6 +57,7 @@ body {
   gap: 20px;
   width: 100%;
   max-width: 960px;
+  align-items: flex-start; /* Панели сохраняют плотность изначального дизайна */
 }
 
 .calculator-panel,
@@ -215,6 +218,28 @@ html[data-theme="dark"] .input-wrapper input:focus,
 html[data-theme="dark"] .input-wrapper select:focus {
   box-shadow: 0 0 0 2px rgba(247, 166, 0, 0.1);
 }
+
+/* ==========================================================================
+   УЛЬТРА-АДАПТИВНОСТЬ: Перестраивание сетки для идеального мобильного UI
+   ========================================================================== */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+    align-items: flex-start; /* Даем странице скроллиться на смартфонах */
+  }
+
+  .layout-container {
+    grid-template-columns: 1fr; /* Колонки складываются в одну вертикальную линию */
+    gap: 16px;
+    max-width: 100%;
+  }
+
+  .calculator-panel,
+  .results-panel {
+    padding: 16px; /* Чуть уменьшаем внутренние поля карточек для экономии места */
+    border-radius: 12px;
+  }
+}
 /* КОНЕЦ ЧАСТИ 1 */
 /* НАЧАЛО ЧАСТИ 2 */
 .input-group.has-error input {
@@ -300,29 +325,38 @@ html[data-theme="dark"] .input-wrapper select:focus {
   box-shadow: 0 0 0 2px rgba(14, 203, 129, 0.1);
 }
 
-/* Контейнеры кнопок теперь гарантированно занимают всю ширину */
-.quick-risk {
+/* Единая матрица управления Риск / R:R */
+.control-matrix-group {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 14px;
   display: flex;
-  gap: 8px;
-  margin-top: 8px;
-  width: 100%;
+  flex-direction: column;
+  gap: 10px;
+}
+html[data-theme="dark"] .control-matrix-group {
+  background: rgba(255, 255, 255, 0.01);
 }
 
-.risk-inline-row {
+.matrix-row {
   display: flex;
-  align-items: stretch;
-  gap: 10px;
-  height: 45px;
-  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
-.risk-inline-row .input-wrapper {
-  height: 100%;
+
+.matrix-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 65px;
 }
-.risk-inline-row .input-wrapper input {
-  height: 100%;
-  width: 100%;
-}
-.quick-risk-inline {
+
+.matrix-buttons {
   display: flex;
   gap: 6px;
   flex-grow: 1;
@@ -334,21 +368,22 @@ html[data-theme="dark"] .input-wrapper select:focus {
   background: #2b303c;
   border: 1px solid #434c5e;
   color: #e5e9f0;
-  padding: 10px 14px;
-  font-size: 13px;
-  border-radius: 8px;
+  /* ОПТИМИЗАЦИЯ: Добавили сбалансированные вертикальные и горизонтальные паддинги */
+  padding: 8px 12px;
+  font-size: 12px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.3px;
   box-shadow:
-    0 4px 6px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    0 2px 4px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition:
     background 0.15s ease,
     border-color 0.15s ease,
     box-shadow 0.15s ease;
-  height: 45px;
+  height: 34px; /* Намертво фиксированная высота */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -359,12 +394,12 @@ html[data-theme="light"] .quick-btn {
   border-color: #bdc1c6;
   color: #3c4043;
   box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 #ffffff;
 }
 
 .quick-btn.compact-btn {
-  padding: 0 10px;
+  padding: 8px 10px;
   font-size: 12px;
   border-radius: 6px;
   height: 100%;
@@ -374,41 +409,150 @@ html[data-theme="light"] .quick-btn {
 .quick-btn:hover {
   border-color: var(--brand);
   background: #3b4252;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 html[data-theme="light"] .quick-btn:hover {
   background: #f1f3f4;
   border-color: var(--brand);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .quick-btn:active {
   background: #21252e;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.3);
 }
 html[data-theme="light"] .quick-btn:active {
   background: #dcdcdc;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
+/* Фирменный градиентный актив Bybit для темной темы */
 .quick-btn.active {
   background: linear-gradient(135deg, var(--brand), #ffb726) !important;
   border-color: var(--brand) !important;
   color: #000000 !important;
   box-shadow:
-    0 0 14px rgba(247, 166, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    0 0 10px rgba(247, 166, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
+
+/* Фирменный градиентный актив Google для светлой темы */
 html[data-theme="light"] .quick-btn.active {
   background: linear-gradient(135deg, var(--brand), #4285f4) !important;
   border-color: var(--brand) !important;
   color: #ffffff !important;
   box-shadow:
-    0 0 14px rgba(26, 115, 232, 0.3),
+    0 0 10px rgba(26, 115, 232, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
 /* КОНЕЦ ЧАСТИ 2 */
 /* НАЧАЛО ЧАСТИ 3 */
+/* Шапка настроек TP/SL для идеального распределения пространства без сжатия */
+.tpsl-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+  width: 100%;
+}
+.tpsl-title-row span {
+  flex-grow: 1; /* Текст занимает всю свободную ширину слева */
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Компактный и изящный переключатель Сетки Тейков (Защищен от сжатия) */
+.grid-toggle-trigger-btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  margin: 0;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Запрещает браузеру сжимать кнопку */
+  box-sizing: border-box;
+}
+.grid-toggle-trigger-btn:hover {
+  border-color: var(--brand);
+  color: var(--text-main);
+  background: rgba(128, 128, 128, 0.04);
+}
+/* Активное состояние сетки тейков с мягким брендовым свечением */
+.grid-toggle-trigger-btn.active {
+  border-color: var(--brand) !important;
+  color: var(--brand) !important;
+  background: rgba(247, 166, 0, 0.05) !important;
+  box-shadow: 0 0 8px rgba(247, 166, 0, 0.15);
+}
+html[data-theme="light"] .grid-toggle-trigger-btn.active {
+  background: rgba(26, 115, 232, 0.05) !important;
+  box-shadow: 0 0 8px rgba(26, 115, 232, 0.15);
+}
+
+/* Расстояния от шапки до инпутов одиночного режима */
+.tpsl-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* Внутренние поля контейнера TP/SL */
+.tpsl-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ФИКС ЗАЗОРОВ: Намертво раздвигаем Стоп-Лосс и Автоматическую сетку Тейков по вертикали внутри блока 3 TP */
+#tp-grid-inputs {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
+#tp-grid-inputs .tpsl-field {
+  margin-bottom: 14px; /* Гарантирует жирный, красивый отступ между Стопом и Сеткой Тейков */
+}
+#tp-grid-inputs .tpsl-field:last-child {
+  margin-bottom: 0; /* Убирает лишний отступ у самого нижнего элемента */
+}
+
+/* Переключатель режима 3-х ведер входа (Интеграция в общую высоту 34px) */
+.grid-entry-toggle-btn {
+  width: 100%;
+  border-color: var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: 0.3px;
+  background: var(--bg-input);
+}
+.grid-entry-toggle-btn:hover {
+  border-color: #3498db;
+  color: var(--text-main);
+  background: rgba(128, 128, 128, 0.04);
+}
+/* Высокотехнологичный активный Web3-градиент для режима включенной Сетки Входов */
+.grid-entry-toggle-btn.active {
+  background: linear-gradient(135deg, #3498db, #2980b9) !important;
+  border-color: #2471a3 !important;
+  color: #ffffff !important;
+  box-shadow:
+    0 0 12px rgba(52, 152, 219, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
 /* ГЕОМЕТРИЧЕСКАЯ КНОПКА ТЕМЫ ИЗ GOOGLE TRANSLATE */
 .theme-toggle-circle {
   background: transparent;
@@ -471,7 +615,7 @@ html[data-theme="light"] .theme-toggle-circle .theme-icon-dark {
   background: rgba(255, 255, 255, 0.02) !important;
   color: rgba(132, 142, 156, 0.6) !important;
   cursor: default !important;
-  border: 1px solid rgba(67, 76, 94, 0.5) !important; /* Четкая сплошная линия вместо пунктира */
+  border: 1px solid rgba(67, 76, 94, 0.5) !important;
 }
 html[data-theme="light"] .readonly-wrapper input {
   background: #f8f9fa !important;
@@ -495,7 +639,8 @@ html[data-theme="light"] .readonly-wrapper input {
   border-color: rgba(247, 166, 0, 0.15);
   color: #f7a600;
 }
-
+/* КОНЕЦ ЧАСТИ 3 */
+/* НАЧАЛО ЧАСТИ 4 */
 /* ЭФФЕКТ ПЛАВНОЙ ДИНАМИКИ ДЛЯ ПЕРЕКЛЮЧЕНИЯ МОДУЛЕЙ */
 .fade-in-slide {
   animation: fadeInSlide 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -511,6 +656,7 @@ html[data-theme="light"] .readonly-wrapper input {
   }
 }
 
+/* Перевод фона холста на системный контрастный var(--bg-input) */
 .canvas-container {
   margin: 8px 0 0 0;
   background: #0b0c0d;
@@ -524,7 +670,7 @@ html[data-theme="light"] .readonly-wrapper input {
     border-color 0.2s ease;
 }
 html[data-theme="light"] .canvas-container {
-  background: #ffffff;
+  background: var(--bg-input);
 }
 
 .bybit-copy-group {
@@ -636,7 +782,9 @@ html[data-theme="light"] .bybit-copy-group {
   color: var(--red);
 }
 
+/* ФИКС: Добавлено позиционирование relative, чтобы Copied! не улетал от кнопки */
 .copy-btn {
+  position: relative;
   background: none;
   border: none;
   padding: 6px;
@@ -646,6 +794,9 @@ html[data-theme="light"] .bybit-copy-group {
   justify-content: center;
   border-radius: 6px;
   transition: background 0.15s ease;
+}
+.copy-btn browser-reset {
+  outline: none;
 }
 .copy-btn svg {
   width: 16px;
@@ -674,6 +825,7 @@ html[data-theme="light"] .bybit-copy-group {
   fill: var(--green);
 }
 
+/* Тултип теперь жестко центрируется строго над кнопкой */
 .tooltip {
   position: absolute;
   bottom: 135%;
@@ -755,4 +907,11 @@ html[data-theme="light"] #tip-text.status-waiting {
     border-color: rgba(246, 70, 93, 0.25);
   }
 }
-/* КОНЕЦ ЧАСТИ 3 */
+
+.log-action-container {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  width: 100%;
+}
+/* КОНЕЦ ЧАСТИ 4 */
