@@ -12,6 +12,30 @@
       <div class="calculator-panel">
         <div class="header">
           <h2>Bybit Risk Manager <span class="pro-badge">PRO</span></h2>
+          <!-- Геометрическая круглая кнопка переключения темы точь-в-точь как в Google Translate -->
+          <button
+            id="theme-toggle-btn"
+            class="theme-toggle-circle"
+            onclick="toggleTheme()"
+            title="Переключить тему"
+          >
+            <!-- Геометрическая иконка Луны (Dark Mode) -->
+            <svg class="theme-icon-dark" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+            <!-- Геометрическая иконка Солнца (Light Mode) -->
+            <svg class="theme-icon-light" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+          </button>
         </div>
         <div class="tabs">
           <button id="tab-spot" class="tab active" onclick="setMarket('spot')">
@@ -109,8 +133,38 @@
           </div>
         </div>
         <div class="tpsl-container">
-          <div class="tpsl-title">Настройки ордеров выхода (TP/SL)</div>
-          <div class="tpsl-row">
+          <div
+            class="tpsl-title"
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <span>Настройки ордеров выхода (TP/SL)</span>
+            <button
+              id="btn-toggle-tp-grid"
+              type="button"
+              class="quick-btn"
+              onclick="toggleTpGridMode()"
+              style="
+                margin: 0;
+                padding: 2px 8px;
+                font-size: 11px;
+                border-color: var(--brand);
+                color: var(--brand);
+                width: auto;
+                flex: none;
+                box-shadow: none;
+                text-transform: none;
+                letter-spacing: 0;
+                height: auto;
+              "
+            >
+              🎯 Сетка Тейков (3 TP)
+            </button>
+          </div>
+          <div class="tpsl-row" id="single-tp-row-input">
             <div class="tpsl-field sl-side" id="group-sl">
               <label>Цена Stop Loss</label>
               <div class="input-wrapper">
@@ -136,23 +190,148 @@
               </div>
             </div>
           </div>
+
+          <!-- Контейнер сетки 3-х Тейк-Профитов (по умолчанию скрыт) -->
+          <div
+            id="tp-grid-inputs"
+            style="
+              display: none;
+              margin-top: 10px;
+              padding-top: 10px;
+              border-top: 1px dashed var(--border);
+            "
+          >
+            <div class="tpsl-row">
+              <div class="tpsl-field sl-side" id="group-sl-grid-mirror">
+                <label>Цена Stop Loss</label>
+                <div class="input-wrapper">
+                  <input
+                    type="number"
+                    id="sl-grid"
+                    value="90000"
+                    step="any"
+                    oninput="
+                      document.getElementById('sl').value = this.value;
+                      calculate();
+                    "
+                  />
+                </div>
+              </div>
+              <div class="tpsl-field tp-side" style="flex: 1.5">
+                <label>Сетка фиксации (Цена / Объем)</label>
+
+                <div class="tp-grid-row" style="margin-bottom: 6px">
+                  <div class="input-wrapper">
+                    <input
+                      type="number"
+                      id="tp1"
+                      placeholder="Цена TP1"
+                      step="any"
+                      oninput="calculate()"
+                    />
+                  </div>
+                  <div class="tp-vol-control">
+                    <input
+                      type="range"
+                      id="tp1-vol"
+                      min="0"
+                      max="100"
+                      value="50"
+                      oninput="handleTpVolChange(1)"
+                    />
+                    <span id="tp1-vol-txt">50%</span>
+                  </div>
+                </div>
+
+                <div class="tp-grid-row" style="margin-bottom: 6px">
+                  <div class="input-wrapper">
+                    <input
+                      type="number"
+                      id="tp2"
+                      placeholder="Цена TP2"
+                      step="any"
+                      oninput="calculate()"
+                    />
+                  </div>
+                  <div class="tp-vol-control">
+                    <input
+                      type="range"
+                      id="tp2-vol"
+                      min="0"
+                      max="100"
+                      value="30"
+                      oninput="handleTpVolChange(2)"
+                    />
+                    <span id="tp2-vol-txt">30%</span>
+                  </div>
+                </div>
+
+                <div class="tp-grid-row">
+                  <div class="input-wrapper">
+                    <input
+                      type="number"
+                      id="tp3"
+                      placeholder="Цена TP3"
+                      step="any"
+                      oninput="calculate()"
+                    />
+                  </div>
+                  <div class="tp-vol-control">
+                    <input
+                      type="range"
+                      id="tp3-vol"
+                      min="0"
+                      max="100"
+                      value="20"
+                      oninput="handleTpVolChange(3)"
+                    />
+                    <span id="tp3-vol-txt">20%</span>
+                  </div>
+                </div>
+
+                <div
+                  id="tp-vol-alert"
+                  style="
+                    font-size: 11px;
+                    text-align: right;
+                    margin-top: 6px;
+                    color: var(--green);
+                  "
+                >
+                  Распределено:
+                  <span id="tp-vol-total" style="font-weight: bold">100%</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- Оптимизированный горизонтальный компактный блок Риска -->
         <div class="input-group" id="group-risk">
           <label>Риск на сделку (% от баланса)</label>
-          <div class="input-wrapper">
-            <input
-              type="number"
-              id="risk-pct"
-              value="2"
-              oninput="calculate()"
-            />
-          </div>
-          <div class="quick-risk">
-            <button class="quick-btn" onclick="setRisk(1)">1%</button
-            ><button class="quick-btn" onclick="setRisk(2)">2%</button
-            ><button class="quick-btn" onclick="setRisk(5)">5%</button>
+          <div class="risk-inline-row">
+            <div class="input-wrapper" style="flex: 1.5">
+              <input
+                type="number"
+                id="risk-pct"
+                value="2"
+                oninput="calculate()"
+              />
+            </div>
+            <div class="quick-risk-inline" style="flex: 1.8">
+              <button class="quick-btn compact-btn" onclick="setRisk(1)">
+                1%
+              </button>
+              <button class="quick-btn compact-btn" onclick="setRisk(2)">
+                2%
+              </button>
+              <button class="quick-btn compact-btn" onclick="setRisk(5)">
+                5%
+              </button>
+            </div>
           </div>
         </div>
+
         <div class="input-group">
           <label>Автозаполнение Тейка</label>
           <div class="quick-risk">

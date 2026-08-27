@@ -4,6 +4,26 @@ let side = "long";
 let orderType = localStorage.getItem("bybit_orderType") || "limit";
 let isGridMode = false;
 
+// Логика определения и установки темы оформления (Светлая / Темная)
+let currentTheme = localStorage.getItem("bybit_theme") || "dark";
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  // Запускаем перерасчет и перерисовку графика под новые цвета осей
+  if (typeof calculate === "function") {
+    calculate();
+  }
+}
+
+function toggleTheme() {
+  currentTheme = currentTheme === "light" ? "dark" : "light";
+  localStorage.setItem("bybit_theme", currentTheme);
+  applyTheme(currentTheme);
+}
+
+// Применяем сохраненную тему немедленно при парсинге скрипта
+applyTheme(currentTheme);
+
 const pairsData = [
   { value: "BTC", price: 92000, round: 4 },
   { value: "ETH", price: 2400, round: 3 },
@@ -77,10 +97,19 @@ function drawChart(e, s, t, v = true) {
   if (!c) return;
   const ctx = c.getContext("2d");
   ctx.clearRect(0, 0, c.width, c.height);
+
+  // Получаем динамические цвета темы для отрисовки холста
+  const isLight =
+    document.documentElement.getAttribute("data-theme") === "light";
+  const axisColor = isLight ? "#e8eaed" : "#2b313a";
+  const textColor = isLight ? "#5f6368" : "#848e9c";
+  const greenColor = isLight ? "#137333" : "#0ecb81";
+  const redColor = isLight ? "#c5221f" : "#f6465d";
+
   if (!v || !e || !s || !t || e <= 0 || s <= 0 || t <= 0) {
-    ctx.fillStyle = "#2b313a";
+    ctx.fillStyle = axisColor;
     ctx.fillRect(0, 30, c.width, 10);
-    ctx.fillStyle = "#848e9c";
+    ctx.fillStyle = textColor;
     ctx.font = "11px sans-serif";
     ctx.fillText("Ожидание параметров...", 10, 18);
     return;
@@ -94,35 +123,43 @@ function drawChart(e, s, t, v = true) {
     sw = (sd / (sd + td)) * w,
     tw = (td / (sd + td)) * w;
   if (side === "long") {
-    ctx.fillStyle = "rgba(246, 70, 93, 0.25)";
+    ctx.fillStyle = isLight
+      ? "rgba(197, 34, 31, 0.15)"
+      : "rgba(246, 70, 93, 0.25)";
     ctx.fillRect(0, 30, sw, 12);
-    ctx.fillStyle = "rgba(14, 203, 129, 0.25)";
+    ctx.fillStyle = isLight
+      ? "rgba(19, 115, 51, 0.15)"
+      : "rgba(14, 203, 129, 0.25)";
     ctx.fillRect(sw, 30, tw, 12);
-    ctx.fillStyle = "#f7a600";
+    ctx.fillStyle = isLight ? "#1a73e8" : "#f7a600";
     ctx.fillRect(sw - 1, 20, 2, 32);
-    ctx.fillStyle = "#ff6b7e";
+    ctx.fillStyle = isLight ? "#c5221f" : "#ff6b7e";
     ctx.font = "bold 11px sans-serif";
     ctx.fillText(`SL: -${sp}%`, 5, 18);
-    ctx.fillStyle = "#26e096";
+    ctx.fillStyle = isLight ? "#137333" : "#26e096";
     ctx.font = "bold 11px sans-serif";
     ctx.textAlign = "right";
     ctx.fillText(`TP: +${tp}%`, w - 5, 18);
   } else {
-    ctx.fillStyle = "rgba(14, 203, 129, 0.25)";
+    ctx.fillStyle = isLight
+      ? "rgba(19, 115, 51, 0.15)"
+      : "rgba(14, 203, 129, 0.25)";
     ctx.fillRect(0, 30, tw, 12);
-    ctx.fillStyle = "rgba(246, 70, 93, 0.25)";
+    ctx.fillStyle = isLight
+      ? "rgba(197, 34, 31, 0.15)"
+      : "rgba(246, 70, 93, 0.25)";
     ctx.fillRect(tw, 30, sw, 12);
-    ctx.fillStyle = "#f7a600";
+    ctx.fillStyle = isLight ? "#1a73e8" : "#f7a600";
     ctx.fillRect(tw - 1, 20, 2, 32);
-    ctx.fillStyle = "#26e096";
+    ctx.fillStyle = isLight ? "#137333" : "#26e096";
     ctx.font = "bold 11px sans-serif";
     ctx.fillText(`TP: +${tp}%`, 5, 18);
-    ctx.fillStyle = "#ff6b7e";
+    ctx.fillStyle = isLight ? "#c5221f" : "#ff6b7e";
     ctx.font = "bold 11px sans-serif";
     ctx.textAlign = "right";
     ctx.fillText(`SL: -${sp}%`, w - 5, 18);
   }
-  ctx.fillStyle = rr >= 2 ? "#0ecb81" : "#f6465d";
+  ctx.fillStyle = rr >= 2 ? greenColor : redColor;
   ctx.font = "bold 11px sans-serif";
   ctx.textAlign = "center";
   ctx.fillText(`R:R = 1 : ${rr} ${rr >= 3 ? "🔥" : ""}`, w / 2, 60);
@@ -164,9 +201,15 @@ function handleEntryChange() {
   }
   const e = parseFloat(eStr) || 0;
   if (e <= 0) return;
+
   const slVal = side === "long" ? e * 0.98 : e * 1.02;
   document.getElementById("sl").value = formatNumber(slVal);
-  applyRR(3);
+
+  const d = Math.abs(e - slVal);
+  const tpV = side === "long" ? e + d * 3 : e - d * 3;
+  document.getElementById("tp").value = formatNumber(tpV);
+
+  calculate();
 }
 
 function handlePairChange() {
@@ -189,10 +232,18 @@ function handlePairChange() {
 function setMarket(m) {
   market = m;
   localStorage.setItem("bybit_market", m);
+
+  // КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Если переходим на спот, жестко ставим Long
+  if (m === "spot") {
+    side = "long";
+  }
+
   document.getElementById("tab-spot").classList.toggle("active", m === "spot");
   document
     .getElementById("tab-futures")
     .classList.toggle("active", m === "futures");
+
+  // Скрываем или показываем элементы фьючерсного рынка
   document.getElementById("side-selector").style.display =
     m === "spot" ? "none" : "flex";
   document.getElementById("leverage-row").style.display =
@@ -205,8 +256,20 @@ function setMarket(m) {
       m === "spot" ? "none" : "block";
   }
 
-  if (m === "spot") side = "long";
   updatePairsSelectDisplay();
+
+  // ЖЕСТКАЯ КОРРЕКЦИЯ КОТИРОВОК: Пересчитываем SL и TP под правила Long,
+  // чтобы фьючерсные цены Шорта не ломали валидатор Спота
+  const e = parseFloat(document.getElementById("entry").value) || 0;
+  if (e > 0) {
+    const slVal = side === "long" ? e * 0.98 : e * 1.02;
+    const d = Math.abs(e - slVal);
+    const tpVal = side === "long" ? e + d * 3 : e - d * 3;
+
+    document.getElementById("sl").value = formatNumber(slVal);
+    document.getElementById("tp").value = formatNumber(tpVal);
+  }
+
   calculate();
 }
 
@@ -219,9 +282,9 @@ function setSide(s) {
   handleEntryChange();
 }
 
-// Функции установки рисков и соотношений
 function setRisk(r) {
-  document.getElementById("risk-pct").value = r;
+  const riskInput = document.getElementById("risk-pct");
+  riskInput.value = r;
   calculate();
 }
 
@@ -249,6 +312,55 @@ function clearResults() {
   if (document.getElementById("copy-block"))
     document.getElementById("copy-block").classList.remove("blocked");
 }
+
+function syncActiveButtonsState() {
+  const riskInput = document.getElementById("risk-pct");
+  if (riskInput) {
+    const currentRisk = parseFloat(riskInput.value);
+    const container = document.getElementById("group-risk");
+    if (container) {
+      container.querySelectorAll(".quick-btn").forEach((btn) => {
+        btn.classList.toggle(
+          "active",
+          parseFloat(btn.innerText) === currentRisk,
+        );
+      });
+    }
+  }
+
+  const e = parseFloat(document.getElementById("entry").value);
+  const sl = parseFloat(document.getElementById("sl").value);
+  const tp = parseFloat(document.getElementById("tp").value);
+
+  if (!isNaN(e) && !isNaN(sl) && !isNaN(tp) && e > 0) {
+    const targetDist = Math.abs(e - sl);
+    if (targetDist > 0) {
+      const currentRR = parseFloat((Math.abs(tp - e) / targetDist).toFixed(1));
+      document.querySelectorAll(".quick-risk").forEach((group) => {
+        if (!group.closest("#group-risk")) {
+          group.querySelectorAll(".quick-btn").forEach((btn) => {
+            const btnVal = parseFloat(btn.innerText.split(":").pop()) || 0;
+            btn.classList.toggle("active", Math.abs(btnVal - currentRR) <= 0.1);
+          });
+        }
+      });
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  syncActiveButtonsState();
+
+  const riskInput = document.getElementById("risk-pct");
+  if (riskInput) {
+    riskInput.addEventListener("input", syncActiveButtonsState);
+  }
+
+  const tpInput = document.getElementById("tp");
+  if (tpInput) {
+    tpInput.addEventListener("input", syncActiveButtonsState);
+  }
+});
 // КОНЕЦ ЧАСТИ 3
 // НАЧАЛО ЧАСТИ 4
 function calculate() {
@@ -440,6 +552,9 @@ function calculate() {
     "-" + netLoss.toFixed(2) + " USDT";
   document.getElementById("res-profit").innerText =
     (netProfit >= 0 ? "+" : "") + netProfit.toFixed(2) + " USDT";
+
+  // Принудительно проверяем соответствие кнопок R:R пресетам при каждом цикле расчета цены
+  syncActiveButtonsState();
 }
 
 // Восстановление сохраненного состояния из памяти браузера при загрузке
@@ -454,4 +569,7 @@ if (localStorage.getItem("bybit_riskPct")) {
 
 setMarket(market);
 setOrderType(orderType);
+
+// Синхронизируем текст кнопки темы после инициализации интерфейса
+applyTheme(currentTheme);
 // КОНЕЦ ЧАСТИ 5
